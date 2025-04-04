@@ -66,8 +66,12 @@ _Review Project File Structure [here](#file-structure)_.
 3. Start the Angular development server by running the following command:
 
    ```bash
-   ng serve -o
+   npm run start:dev
    ```
+
+4. Open your web browser and navigate to `http://localhost:4200` to view the application.
+
+**🌟Tip**: if you will do any changes on codebase, try to run `npm run format` before committing it to follow codebase formatting rules.
 
 _Now your setup is ready! Enjoy Exploring the app!_
 
