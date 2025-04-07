@@ -5,6 +5,10 @@ VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestin.Api", "Nestin.Api\Nestin.Api.csproj", "{56D295DB-9489-48D7-B4FE-567F66788484}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestin.Core", "Nestin.Core\Nestin.Core.csproj", "{5845DCF2-E769-4C61-8674-248EF48AF707}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestin.Infrastructure", "Nestin.Infrastructure\Nestin.Infrastructure.csproj", "{96B2F723-4D95-44D5-A9B1-FBADD97F22DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{56D295DB-9489-48D7-B4FE-567F66788484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56D295DB-9489-48D7-B4FE-567F66788484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56D295DB-9489-48D7-B4FE-567F66788484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5845DCF2-E769-4C61-8674-248EF48AF707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5845DCF2-E769-4C61-8674-248EF48AF707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5845DCF2-E769-4C61-8674-248EF48AF707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5845DCF2-E769-4C61-8674-248EF48AF707}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96B2F723-4D95-44D5-A9B1-FBADD97F22DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96B2F723-4D95-44D5-A9B1-FBADD97F22DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B2F723-4D95-44D5-A9B1-FBADD97F22DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B2F723-4D95-44D5-A9B1-FBADD97F22DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

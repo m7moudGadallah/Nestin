@@ -10,4 +10,14 @@
     <ProjectReference Include="..\Nestin.Core\Nestin.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Configurations\" />
+    <Folder Include="Data\Seeds\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
+  </ItemGroup>
+
 </Project>
