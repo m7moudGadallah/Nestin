@@ -1,6 +1,1 @@
 @Nestin.Api_HostAddress = http://localhost:5218
-
-GET {{Nestin.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
