@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nestin.Core.Entities;
 using System.Reflection;
 
 namespace Nestin.Infrastructure.Data
@@ -12,5 +13,7 @@ namespace Nestin.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
+        public virtual DbSet<Region> Regions { get; set; }
     }
 }
