@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Data;
+using Nestin.Infrastructure.Shared;
 
 namespace Nestin.Infrastructure
 {
@@ -11,6 +13,8 @@ namespace Nestin.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options
                     => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

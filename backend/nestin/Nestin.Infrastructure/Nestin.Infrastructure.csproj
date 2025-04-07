@@ -15,7 +15,6 @@
     <Folder Include="Data\Configurations\" />
     <Folder Include="Data\Seeds\" />
     <Folder Include="Utils\" />
-    <Folder Include="Shared\" />
   </ItemGroup>
 
   <ItemGroup>
