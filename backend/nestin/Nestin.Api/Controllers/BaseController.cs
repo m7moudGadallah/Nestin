@@ -5,7 +5,7 @@ namespace Nestin.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         protected readonly IUnitOfWork _unitOfWork;
 
