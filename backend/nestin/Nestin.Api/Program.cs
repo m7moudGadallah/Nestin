@@ -1,3 +1,4 @@
+using Nestin.Api.Filters;
 using Nestin.Infrastructure;
 
 namespace Nestin.Api
@@ -11,7 +12,11 @@ namespace Nestin.Api
             // Add services to the container.
             builder.Services.ConfigureInfrastructure(builder.Configuration);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ErrorHandlingFilter>();
+            });
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
