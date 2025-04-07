@@ -1,3 +1,5 @@
+using Nestin.Infrastructure;
+
 namespace Nestin.Api
 {
     public class Program
@@ -7,6 +9,7 @@ namespace Nestin.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.ConfigureInfrastructure(builder.Configuration);
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
