@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Nestin.Core\Nestin.Core.csproj" />
+  </ItemGroup>
+
 </Project>
