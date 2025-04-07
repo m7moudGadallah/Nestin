@@ -11,7 +11,7 @@ Nestin is an online platform (similar to Airbnb) where people can rent homes or 
 
 ## Tech Stack
 
-- **Frontend**: Angular, TypeScript, Bootstrap, HTML, CSS
+- **Frontend**: Angular, TypeScript, Bootstrap, HTML, SCSS
 - **Backend**: ASP.NET Core, C#, Entity Framework Core.
 - **Database**: SQL Server
 - **Integration**: Stripe for payment processing.
