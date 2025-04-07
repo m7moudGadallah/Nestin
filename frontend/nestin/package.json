@@ -21,6 +21,8 @@
     "@angular/router": "^19.2.0",
     "bootstrap": "^5.3.5",
     "lucide-angular": "^0.487.0",
+    "nestin": "file:",
+    "ng-leaflet-universal": "^15.2.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
