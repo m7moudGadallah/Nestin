@@ -31,7 +31,6 @@ obj/
 idb/
 so/
 lib/
-.log
 
 # Visual Studio profiler
 *.psess
@@ -79,16 +78,16 @@ _ScaffoldTemp/
 # Logs and databases
 *.log
 *.sqlite3
+logs/
 
 # NuGet Packages
 packages/
 
+# NuGet Cache
+.nuget/packages/
+
 # Solution-Level Files
 *.sln.docstates
-
-# Configuration Files
-appsettings.json
-appsettings.json
 
 # Temporary Files
 [Tt]humbs.db
@@ -96,14 +95,19 @@ appsettings.json
 *.temp
 *.bak
 
-# Logs and Reports
-logs/
-*.log
-*.csv
-*.xml
+# appsettings files
+!appsettings.json
+appsettings.Development.json
+appsettings.*.json
 
-# NuGet Cache
-.nuget/packages/
+# Ignore coverage output
+coverage/
 
 # VS Code Workspace Settings
 .vscode/
+
+# JetBrains Rider
+.idea/
+
+# Local NuGet packages
+*.nupkg
