@@ -11,7 +11,7 @@ namespace Nestin.Core.Dtos.Accounts
 
         [Required]
         [DataType(DataType.Password)]
-        [MaxLength(12)]
+        [MinLength(12)]
         public string Password { get; set; }
     }
 }
