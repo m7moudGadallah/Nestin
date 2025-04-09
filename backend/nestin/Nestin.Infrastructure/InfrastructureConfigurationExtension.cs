@@ -26,6 +26,7 @@ namespace Nestin.Infrastructure
             }).AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IIdentityFactory, IdentityFactory>();
 
             return services;
         }
