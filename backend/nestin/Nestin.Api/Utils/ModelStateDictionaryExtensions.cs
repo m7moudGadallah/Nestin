@@ -2,13 +2,15 @@
 
 namespace Nestin.Api.Utils
 {
-    public static class ModelStateDictionaryExtensions
+    public static class ModelStateExtensions
     {
-        public static List<string> ExtractErrorList(this ModelStateDictionary model)
+        public static List<string> ExtractErrorList(this ModelStateDictionary modelState)
         {
-            return model.Where(kv => kv.Value.Errors.Any()) // Only include fields with errors
-                .SelectMany(kv => kv.Value.Errors.Select(e => e.ErrorMessage)) // Extract error messages
+            return modelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage) ? "Invalid input" : e.ErrorMessage)
                 .ToList();
         }
     }
+
 }
