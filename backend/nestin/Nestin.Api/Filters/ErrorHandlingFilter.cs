@@ -15,41 +15,35 @@ namespace Nestin.Api.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            // Handle validation errors before controller logic
+            // Handle model validation errors early
             if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult(context.ModelState.ExtractErrorList());
+                var errors = context.ModelState.ExtractErrorList();
+                context.Result = new BadRequestObjectResult(errors);
             }
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            // If result is a non-success HTTP code (e.g., 4xx or 5xx)
+            // Skip if there was an exception — handled in OnException
+            if (context.Exception != null) return;
+
+            // Check for ObjectResult with error status code
             if (context.Result is ObjectResult objectResult)
             {
                 var statusCode = objectResult.StatusCode ?? 200;
 
                 if (statusCode >= 400)
                 {
-                    // If not already a list of string, wrap into one
+                    // Prevent re-wrapping if already List<string>
                     if (objectResult.Value is not List<string>)
                     {
-                        var errorList = new List<string>();
-
-                        switch (objectResult.Value)
+                        var errorList = objectResult.Value switch
                         {
-                            case string str:
-                                errorList.Add(str);
-                                break;
-
-                            case IEnumerable<string> strList:
-                                errorList.AddRange(strList);
-                                break;
-
-                            default:
-                                errorList.Add("An unexpected error occurred.");
-                                break;
-                        }
+                            string str => new List<string> { str },
+                            IEnumerable<string> strList => strList.ToList(),
+                            _ => new List<string> { "An unexpected error occurred." }
+                        };
 
                         context.Result = new ObjectResult(errorList)
                         {
@@ -69,14 +63,14 @@ namespace Nestin.Api.Filters
                 "An error occurred while processing your request."
             };
 
-            // Detailed error depends on environment
-            if (_env.IsProduction())
+            // In development, include full exception details
+            if (!_env.IsProduction())
             {
-                errorMessages.Add(context.Exception.Message);
+                errorMessages.Add(context.Exception.ToString());
             }
             else
             {
-                errorMessages.Add(context.Exception.ToString());
+                errorMessages.Add(context.Exception.Message);
             }
 
             context.Result = new ObjectResult(errorMessages)

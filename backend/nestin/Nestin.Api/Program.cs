@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Nestin.Api.Filters;
 using Nestin.Infrastructure;
 
@@ -15,6 +16,11 @@ namespace Nestin.Api
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add<ErrorHandlingFilter>();
+            });
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
             });
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
