@@ -1,4 +1,4 @@
-﻿using Nestin.Core.Dtos;
+﻿using Nestin.Core.Dtos.Regions;
 using Nestin.Core.Entities;
 
 namespace Nestin.Core.Mappings

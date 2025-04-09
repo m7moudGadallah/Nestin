@@ -1,4 +1,4 @@
-﻿namespace Nestin.Core.Dtos
+﻿namespace Nestin.Core.Dtos.Regions
 {
     public class RegionDto
     {
