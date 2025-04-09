@@ -3,9 +3,9 @@
     /// <summary>
     /// Base Entity for Entities in our system 
     /// </summary>
-    /// <typeparam name="T">Represents type of entity Id (`string` or `int`)</typeparam>
-    public abstract class BaseEntity<T>
+    /// <typeparam name="TKey">Represents type of entity Id (`string` or `int`)</typeparam>
+    public abstract class BaseEntity<Tkey>
     {
-        public T Id { get; set; }
+        public Tkey Id { get; set; }
     }
 }

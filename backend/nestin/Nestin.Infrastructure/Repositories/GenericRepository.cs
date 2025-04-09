@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class GenericRepository<TEntity, T> : IGenericRepository<TEntity, T> where TEntity : BaseEntity<T>
+    public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         private readonly AppDbContext _dbContext;
 
@@ -22,7 +22,7 @@ namespace Nestin.Infrastructure.Repositories
             _dbContext.Add(entity);
         }
 
-        public virtual async Task DeleteAsync(T id)
+        public virtual async Task DeleteAsync(TKey id)
         {
             var entity = await GetByIdAsync(id);
 
@@ -41,12 +41,12 @@ namespace Nestin.Infrastructure.Repositories
             return GetPaginatedResultAsync(queryDto, includes);
         }
 
-        public virtual Task<TEntity?> GetByIdAsync(T id)
+        public virtual Task<TEntity?> GetByIdAsync(TKey id)
         {
             throw new NotImplementedException();
         }
 
-        public virtual Task<TEntity?> GetByIdAsync(T id, params Expression<Func<TEntity, object>>[] includes)
+        public virtual Task<TEntity?> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
             throw new NotImplementedException();
         }
