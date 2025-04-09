@@ -23,6 +23,8 @@ namespace Nestin.Infrastructure
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 12;
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedAccount = false;
             }).AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
