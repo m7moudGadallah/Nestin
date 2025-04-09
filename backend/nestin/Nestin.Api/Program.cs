@@ -20,6 +20,17 @@ namespace Nestin.Api
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,8 +42,9 @@ namespace Nestin.Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors(builder.Configuration["Cors:Policy"]);
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
