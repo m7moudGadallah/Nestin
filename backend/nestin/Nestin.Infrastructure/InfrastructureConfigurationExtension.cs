@@ -43,14 +43,15 @@ namespace Nestin.Infrastructure
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidAudience = configuration["JWT:Audiance"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SigningKey"]))
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audiance"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]))
                 };
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
+            services.AddScoped<IServiceFactory, ServiceFactory>();
 
             return services;
         }
