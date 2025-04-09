@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nestin.Api.Utils;
 using Nestin.Core.Dtos.Accounts;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
@@ -9,10 +10,12 @@ namespace Nestin.Api.Controllers
     public class AccountsController : BaseController
     {
         private readonly IIdentityFactory _identityFactory;
+        private readonly IServiceFactory _serviceFactory;
 
-        public AccountsController(IUnitOfWork unitOfWork, IIdentityFactory identityFactory) : base(unitOfWork)
+        public AccountsController(IUnitOfWork unitOfWork, IIdentityFactory identityFactory, IServiceFactory serviceFactory) : base(unitOfWork)
         {
             _identityFactory = identityFactory;
+            _serviceFactory = serviceFactory;
         }
 
         [HttpPost("register")]
@@ -37,15 +40,20 @@ namespace Nestin.Api.Controllers
 
                 if (roleResult.Succeeded)
                 {
-                    return Ok("User Created");
+                    return StatusCode(201, new NewUserDto
+                    {
+                        Id = appUser.Id,
+                        UserName = appUser.UserName,
+                        Token = await _serviceFactory.TokenService.CreateTokenAsync(appUser)
+                    });
                 }
                 else
                 {
-                    return StatusCode(500, roleResult.Errors);
+                    return StatusCode(500, roleResult.ToErrorList());
                 }
             }
 
-            return StatusCode(500, createdUser.Errors);
+            return StatusCode(500, createdUser.ToErrorList());
         }
 
         [HttpPost("login")]
