@@ -44,6 +44,7 @@ namespace Nestin.Api
 
             app.UseCors(builder.Configuration["Cors:Policy"]);
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
