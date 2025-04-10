@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Nestin.Api.Utils;
 using Nestin.Core.Dtos.Accounts;
 using Nestin.Core.Entities;
@@ -60,9 +61,28 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Login user.")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public Task<IActionResult> Login([FromBody] LoginDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            throw new NotImplementedException();
+            var userName = ExtractUsernameFromEmail(dto.Email);
+
+            var user = await _identityFactory.UserManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+
+            if (user is not null)
+            {
+                var passCheckResult = await _identityFactory.SignInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+
+                if (passCheckResult.Succeeded)
+                {
+                    return Ok(new NewUserDto
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        Token = await _serviceFactory.TokenService.CreateTokenAsync(user)
+                    });
+                }
+            }
+
+            return Unauthorized("Invalid creditionals.");
         }
 
         private string ExtractUsernameFromEmail(string email)
