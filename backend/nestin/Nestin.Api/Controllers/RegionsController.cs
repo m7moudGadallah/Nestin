@@ -22,7 +22,7 @@ namespace Nestin.Api.Controllers
                 PageSize = pageSize
             };
 
-            var result = await _unitOfWork.RegionRepository.GetAllAsync(queryDto);
+            var result = await _unitOfWork.RegionRepository.GetAllAsync(queryDto, q => q.OrderBy(x => x.Id));
 
             var resultDto = new PaginatedResult<RegionDto>
             {
