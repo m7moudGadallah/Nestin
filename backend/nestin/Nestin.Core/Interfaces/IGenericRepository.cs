@@ -7,8 +7,8 @@ namespace Nestin.Core.Interfaces
 {
     public interface IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto);
-        public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, params Expression<Func<TEntity, object>>[] includes);
+        public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
+        public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params Expression<Func<TEntity, object>>[] includes);
         public Task<TEntity?> GetByIdAsync(TKey id);
         public Task<TEntity?> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes);
         public void Create(TEntity entity);

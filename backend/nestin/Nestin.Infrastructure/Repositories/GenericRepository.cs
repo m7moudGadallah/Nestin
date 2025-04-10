@@ -31,14 +31,14 @@ namespace Nestin.Infrastructure.Repositories
             _dbContext.Remove(entity);
         }
 
-        public virtual Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto)
+        public virtual Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
         {
-            return GetPaginatedResultAsync(queryDto);
+            return GetPaginatedResultAsync(queryDto, orderBy);
         }
 
-        public virtual Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, params Expression<Func<TEntity, object>>[] includes)
+        public virtual Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params Expression<Func<TEntity, object>>[] includes)
         {
-            return GetPaginatedResultAsync(queryDto, includes);
+            return GetPaginatedResultAsync(queryDto, orderBy, includes);
         }
 
         public virtual Task<TEntity?> GetByIdAsync(TKey id)
@@ -61,7 +61,7 @@ namespace Nestin.Infrastructure.Repositories
             _dbContext.Update(entity);
         }
 
-        private async Task<PaginatedResult<TEntity>> GetPaginatedResultAsync(GetAllQueryDto queryDto, params Expression<Func<TEntity, object>>[]? includes)
+        private async Task<PaginatedResult<TEntity>> GetPaginatedResultAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params Expression<Func<TEntity, object>>[]? includes)
         {
             var query = _dbContext.Set<TEntity>().AsQueryable();
 
@@ -78,6 +78,9 @@ namespace Nestin.Infrastructure.Repositories
             {
                 query = ApplyIncludesToQuery(query, includes);
             }
+
+            // Apply ordering
+            query = orderBy(query);
 
             // Evaluate Query
             var items = await query.AsNoTracking()
