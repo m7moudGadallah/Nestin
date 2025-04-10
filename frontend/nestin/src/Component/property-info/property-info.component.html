@@ -1,0 +1,439 @@
+<!-- <div class="property-info" [@fadeIn]>
+  <h2>{{ property.name }}</h2>
+  <p class="location">📍 {{ property.location }}</p>
+  <p class="price">💵 ${{ property.price_per_night }} per night</p>
+
+  <div class="image-banner">
+    <img src="https://source.unsplash.com/800x400/?villa,beach" alt="Property Image" />
+  </div>
+
+  <div class="details">
+    <p>{{ property.description }}</p>
+    <ul>
+      <li>🛏️ Beds: {{ property.num_beds }}</li>
+      <li>🛌 Bedrooms: {{ property.num_bedrooms }}</li>
+      <li>🛁 Bathrooms: {{ property.num_bathrooms }}</li>
+      <li>👥 Max Guests: {{ property.max_guests }}</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🏠 House Rules</h3>
+    <p>{{ property.house_rules }}</p>
+  </div>
+
+  <div class="section">
+    <h3>🛟 Safety Info</h3>
+    <p>{{ property.safety_info }}</p>
+  </div>
+
+  <div class="section">
+    <h3>📄 Cancellation Policy</h3>
+    <p>{{ property.cancellation_policy }}</p>
+  </div>
+
+  <div id="map"></div>
+</div> -->
+
+<!-- property-details.component.html -->
+<!-- <swiper
+  [slidesPerView]="1"
+  [navigation]="true"
+  [pagination]="{ clickable: true }"
+  class="property-image-carousel"
+>
+  <ng-template swiperSlide *ngFor="let image of images">
+    <img [src]="image.image_path" alt="Property image" class="carousel-img" />
+  </ng-template>
+</swiper> -->
+
+<!-- <swiper-container
+  slides-per-view="1"
+  navigation="true"
+  pagination="true"
+  loop="true"
+  class="property-image-carousel"
+>
+  <swiper-slide *ngFor="let image of images">
+    <img [src]="image.image_path" alt="Property Image" class="carousel-img" />
+  </swiper-slide>
+</swiper-container> -->
+
+<!-- <h2>Nestin</h2>
+<h2>Images Length: {{ images.length }}</h2>
+
+
+<swiper-container
+  slides-per-view="4"
+  space-between="10"
+  loop="true"
+  pagination="true"
+  navigation="true"
+  style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff;"
+  class="property-swiper"
+>
+  <swiper-slide *ngFor="let image of images">
+    <img
+      [src]="image.image_path"
+      alt="Property image"
+      class="carousel-img"
+      (click)="openFullscreen(image.image_path)"
+    />
+  </swiper-slide>
+</swiper-container> -->
+
+<!-- <div class="max-w-6xl mx-auto px-4 py-6 space-y-10">
+  Title and Location
+  <div>
+    <h1 class="text-3xl font-semibold">{{ property.name }}</h1>
+    <p class="text-gray-500">{{ property.location }}</p>
+  </div>
+
+  Swiper Images
+  <swiper-container
+  slides-per-view="4"
+  space-between="10"
+  loop="true"
+  pagination="true"
+  navigation="true"
+  style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff;"
+  class="property-swiper"
+>
+  <swiper-slide *ngFor="let image of images">
+    <img
+      [src]="image.image_path"
+      alt="Property image"
+      class="carousel-img"
+      (click)="openFullscreen(image.image_path)"
+    />
+  </swiper-slide>
+</swiper-container>
+
+  Property Summary
+  <div class="flex flex-wrap gap-6 text-lg">
+    <div class="flex items-center gap-2">
+      <i lucide-icon="users"></i>
+      {{ property.maxGuests }} Guests
+    </div>
+    <div class="flex items-center gap-2">
+      <i lucide-icon="bed"></i>
+      {{ property.numBeds }} Beds
+    </div>
+    <div class="flex items-center gap-2">
+      <i lucide-icon="door-open"></i>
+      {{ property.numBedrooms }} Bedrooms
+    </div>
+    <div class="flex items-center gap-2">
+      <i lucide-icon="shower-head"></i>
+      {{ property.numBathrooms }} Bathrooms
+    </div>
+    <div class="flex items-center gap-2">
+      <i lucide-icon="dollar-sign"></i>
+      ${{ property.pricePerNight }} / night
+    </div>
+  </div>
+
+  Description
+  <div>
+    <h2 class="text-2xl font-semibold mb-2">About this place</h2>
+    <p class="text-gray-700 leading-7">{{ property.description }}</p>
+  </div>
+
+  Rules & Safety Info
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <h3 class="text-xl font-medium">House Rules</h3>
+      <p class="text-gray-600 mt-2">{{ property.houseRules }}</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-medium">Safety Info</h3>
+      <p class="text-gray-600 mt-2">{{ property.safetyInfo }}</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-medium">Cancellation Policy</h3>
+      <p class="text-gray-600 mt-2">{{ property.cancellationPolicy }}</p>
+    </div>
+  </div>
+
+  Map
+  <div id="map"></div>
+</div>
+
+
+ -->
+ <pre *ngIf="property">{{ property | json }}</pre>
+<div class="max-w-6xl mx-auto px-4 py-6 space-y-8 md:space-y-10" *ngIf="!loading && !error">
+  <!-- Title and Location -->
+  <div>
+    <h1 class="text-2xl md:text-3xl font-semibold">{{ property?.name }}</h1>
+    <div class="flex items-center text-gray-500 text-sm md:text-base mt-1">
+      <span class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        {{ property?.location?.name }}, {{ property?.location?.name }}
+      </span>
+      <span class="mx-2">·</span>
+      <span class="underline cursor-pointer">Show map</span>
+    </div>
+  </div>
+
+  <!-- Image Gallery -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-2 h-[300px] md:h-[400px]">
+  <div class="md:col-span-2 row-span-2 rounded-l-xl overflow-hidden cursor-pointer" 
+       (click)="openLightbox(0)" *ngIf="propertyImages[0]">
+    <img [src]="propertyImages[0]?.imagePath" alt="Main property image" class="w-full h-full object-cover">
+  </div>
+  <div class="hidden md:block rounded-tr-xl overflow-hidden cursor-pointer" 
+       (click)="openLightbox(1)" *ngIf="propertyImages[1]">
+    <img [src]="propertyImages[1]?.imagePath" alt="Property image" class="w-full h-full object-cover">
+  </div>
+  <div class="hidden md:block overflow-hidden cursor-pointer" 
+       (click)="openLightbox(2)" *ngIf="propertyImages[2]">
+    <img [src]="propertyImages[2]?.imagePath" alt="Property image" class="w-full h-full object-cover">
+  </div>
+  <div class="hidden md:block rounded-br-xl overflow-hidden relative cursor-pointer" 
+       (click)="openLightbox(3)" *ngIf="propertyImages[3]">
+    <img [src]="propertyImages[3]?.imagePath" alt="Property image" class="w-full h-full object-cover">
+    <button class="absolute bottom-4 right-4 bg-white px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+      </svg>
+      Show all {{ propertyImages.length }} photos
+    </button>
+  </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left Column -->
+    <div class="lg:col-span-2 space-y-8">
+      <!-- Property Header -->
+      <div class="border-b pb-6">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="text-xl font-semibold">{{ property?.name }}</h2>
+            <div class="flex items-center mt-2 text-sm">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span class="ml-1">{{ property.averageRating | number:'1.1-1' }}</span>
+                <span class="mx-1">·</span>
+              </div>
+              <span class="underline cursor-pointer">{{ property.reviewCount }} reviews</span>
+              <span class="mx-1">·</span>
+              <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                <span class="ml-1">Superhost</span>
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button class="p-2 rounded-full hover:bg-gray-100" (click)="toggleFavorite()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+            <button class="p-2 rounded-full hover:bg-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property Highlights -->
+      <div class="border-b pb-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="flex items-start space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <div>
+              <p class="font-medium">Entire {{ (property?.propertyType?.name ?? '').toLowerCase() }}</p>
+              <p class="text-sm text-gray-500">You'll have the place to yourself</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p class="font-medium">Self check-in</p>
+              <p class="text-sm text-gray-500">Check yourself in with the keypad</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <div>
+              <p class="font-medium">Free cancellation</p>
+              <p class="text-sm text-gray-500">Before check-in</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="border-b pb-8">
+        <h2 class="text-xl font-semibold mb-4">About this place</h2>
+        <p class="text-gray-700 leading-7">{{ property.description }}</p>
+      </div>
+
+      <!-- Sleeping arrangements -->
+      <div class="border-b pb-8">
+        <h2 class="text-xl font-semibold mb-4">Where you'll sleep</h2>
+        <div class="border rounded-xl p-6 w-max">
+          <div class="flex items-center space-x-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p class="font-medium">Bedroom {{ property.numBeds}}</p>
+              <p class="text-sm text-gray-500">{{ property.numBeds }} {{ property.numBeds > 1 ? 'beds' : 'bed' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amenities -->
+      <div class="border-b pb-8">
+        <h2 class="text-xl font-semibold mb-4">What this place offers</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center space-x-2" *ngFor="let amenity of property.amenities">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{{ amenity.name }}</span>
+          </div>
+        </div>
+        <button class="mt-4 border border-gray-800 rounded-lg px-4 py-2 font-medium">
+          Show all {{ property?.amenities?.length || 0 }} amenities
+        </button>
+      </div>
+
+      <!-- Reviews -->
+      <div class="border-b pb-8" *ngIf="property?.reviews && property.reviews.length > 0">
+        <h2 class="text-xl font-semibold mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          {{ property?.averageRating | number:'1.1-1' }} · {{ property?.reviewCount }} reviews
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div *ngFor="let review of property.reviews">
+            <div class="flex items-center space-x-4 mb-2">
+              <img [src]="'assets/default-avatar.jpg'" alt="Guest" class="w-12 h-12 rounded-full object-cover">
+              <div>
+                <p class="font-medium">{{ review.guest.firstName }} {{ review.guest.lastName }}</p>
+                <p class="text-gray-500 text-sm">{{ review.createdAt | date:'MMMM yyyy' }}</p>
+              </div>
+            </div>
+            <p class="text-gray-700">{{ review.comment }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Host Info -->
+      <div class="border-b pb-8">
+        <h2 class="text-xl font-semibold mb-4">Hosted by {{ property.host?.firstName }}</h2>
+        <div class="flex items-start space-x-4">
+          <img [src]="'assets/default-avatar.jpg'" alt="Host" class="w-16 h-16 rounded-full object-cover">
+          <div>
+            <p class="text-gray-700 mb-2">Joined in {{ property.host?.joinedAt | date:'MMMM yyyy' }}</p>
+            <!-- <p class="text-gray-700">Response rate: {{ property.host?.response_rate }}%</p>
+            <p class="text-gray-700">Response time: {{ property.host?.response_time }}</p> -->
+            <button class="border border-gray-800 rounded-lg px-4 py-2 font-medium">Contact host</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div id="map"></div>
+    </div>
+
+    <!-- Right Column - Booking Card -->
+    <div>
+      <div class="sticky top-4 border rounded-xl p-6 shadow-lg">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xl font-semibold">${{ property.pricePerNight | number }} <span class="text-base font-normal">night</span></p>
+            <div class="flex items-center mt-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span class="ml-1">{{ property.averageRating | number:'1.1-1' }}</span>
+              <span class="mx-1">·</span>
+              <span class="underline">{{ property?.reviewCount}} reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="grid grid-cols-2 border rounded-t-lg overflow-hidden">
+            <div class="border-r p-4">
+              <label class="text-xs font-medium uppercase">Check-in</label>
+              <input type="date" class="w-full mt-1 outline-none" [(ngModel)]="checkInDate">
+            </div>
+            <div class="p-4">
+              <label class="text-xs font-medium uppercase">Checkout</label>
+              <input type="date" class="w-full mt-1 outline-none" [(ngModel)]="checkOutDate">
+            </div>
+          </div>
+          <div class="border border-t-0 rounded-b-lg p-4">
+            <label class="text-xs font-medium uppercase">Guests</label>
+            <select class="w-full mt-1 outline-none" [(ngModel)]="guests">
+              <option *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]" [value]="num">{{ num }} {{ num === 1 ? 'guest' : 'guests' }}</option>
+            </select>
+          </div>
+          <button class="w-full mt-4 bg-rose-500 text-white py-3 rounded-lg font-medium" (click)="checkAvailability()">
+            Check availability
+          </button>
+        </div>
+
+        <div class="mt-4 text-center text-sm text-gray-500">
+          You won't be charged yet
+        </div>
+
+        <div class="mt-6 space-y-4" *ngIf="checkInDate && checkOutDate">
+          <div class="flex justify-between">
+            <span class="underline">${{ property?.pricePerNight | number }} x {{ nightsCount || 0 }} nights</span>
+            <span>${{ ((property?.pricePerNight ?? 0) * nightsCount) | number }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="underline">Cleaning fee</span>
+            <span>$50</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="underline">Service fee</span>
+            <span>$75</span>
+          </div>
+          <div class="flex justify-between border-t pt-4 font-semibold">
+            <span>Total before taxes</span>
+            <span>${{ ((property?.pricePerNight ?? 0) * nightsCount + 50 + 75) | number }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Loading State -->
+<div *ngIf="loading" class="max-w-6xl mx-auto px-4 py-6 flex justify-center items-center h-64">
+  <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-500"></div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error && !loading" class="max-w-6xl mx-auto px-4 py-6 text-center">
+  <h2 class="text-xl font-semibold mb-2">Failed to load property details</h2>
+  <p class="text-gray-600 mb-4">Please try again later</p>
+  <button class="bg-rose-500 text-white px-4 py-2 rounded-lg">Retry</button>
+</div>
+</div>

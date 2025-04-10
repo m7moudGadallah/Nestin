@@ -1,0 +1,118 @@
+[{
+  "id": 1,
+  "name": "Cozy Mountain Retreat",
+  "description": "Escape to this cozy cabin nestled in the mountains, perfect for a quiet weekend away with stunning views and modern comforts.",
+  "pricePerNight": 120,
+  "numBeds": 2,
+  "numBedrooms": 1,
+  "reviewCount": 3,
+  "averageRating": 4.67,
+  "propertyType": {
+    "name": "Cabin"
+  },
+  "amenities": [
+    {
+      "id": 1,
+      "name": "Wi-Fi",
+      "icon": "wifi",
+      "categoryId": 1
+    },
+    {
+      "id": 2,
+      "name": "Fireplace",
+      "icon": "fireplace",
+      "categoryId": 2
+    },
+    {
+      "id": 3,
+      "name": "Hot Tub",
+      "icon": "hot_tub",
+      "categoryId": 2
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "comment": "Amazing location, clean cabin, and super host!",
+      "cleanliness": 5,
+      "accuracy": 5,
+      "checkIn": 5,
+      "communication": 5,
+      "location": 4,
+      "value": 5,
+      "propertyId": "1",
+      "guestId": "g101",
+      "createdAt": "2024-12-12T14:30:00.000Z",
+      "updatedAt": "2024-12-12T14:30:00.000Z",
+      "guest": {
+        "id": 1,
+        "firstName": "Emily",
+        "lastName": "Clark",
+        "email": "emily.clark@example.com",
+        "password": "hashedpassword",
+        "photoId": 12,
+        "joinedAt": "2023-05-01T10:00:00.000Z"
+      }
+    },
+    {
+      "id": 1,
+      "comment": "Very cozy and private. The hot tub was a great bonus!",
+      "cleanliness": 4,
+      "accuracy": 5,
+      "checkIn": 4,
+      "communication": 5,
+      "location": 5,
+      "value": 4,
+      "propertyId": "1",
+      "guestId": "g102",
+      "createdAt": "2025-01-15T16:45:00.000Z",
+      "updatedAt": "2025-01-15T16:45:00.000Z",
+      "guest": {
+        "id": "g102",
+        "firstName": "Liam",
+        "lastName": "Taylor",
+        "email": "liam.taylor@example.com",
+        "password": "hashedpassword",
+        "joinedAt": "2024-03-22T11:00:00.000Z"
+      }
+    },
+    {
+      "id": 1,
+      "comment": "Peaceful spot, everything was as described. Will visit again.",
+      "cleanliness": 5,
+      "accuracy": 4,
+      "checkIn": 5,
+      "communication": 4,
+      "location": 5,
+      "value": 5,
+      "propertyId": "1",
+      "guestId": "g103",
+      "createdAt": "2025-02-10T13:20:00.000Z",
+      "updatedAt": "2025-02-10T13:20:00.000Z",
+      "guest": {
+        "id": "g103",
+        "firstName": "Sophie",
+        "lastName": "Nguyen",
+        "email": "sophie.nguyen@example.com",
+        "password": "hashedpassword",
+        "photoId": 18,
+        "joinedAt": "2022-08-14T09:30:00.000Z"
+      }
+    }
+  ],
+  "host": {
+    "id": 1,
+    "firstName": "Daniel",
+    "lastName": "Reed",
+    "email": "daniel.reed@example.com",
+    "password": "hashedpassword",
+    "photoId": 3,
+    "joinedAt": "2021-11-05T08:00:00.000Z"
+  },
+  "location": {
+    "name": "Aspen, Colorado",
+    "latitude": 39.1911,
+    "longitude": -106.8175
+  }
+}
+]

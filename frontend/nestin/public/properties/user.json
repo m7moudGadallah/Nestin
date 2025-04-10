@@ -1,0 +1,45 @@
+[
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "email": "alice.johnson@example.com",
+      "password": "hashedpassword123",
+      "photoId": 101,
+      "joinedAt": "2024-01-15T10:45:00Z"
+    },
+    {
+      "id": "0f1e2d3c-4b5a-6978-9f0e-abcdef123456",
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "email": "bob.smith@example.com",
+      "password": "securehash456",
+      "joinedAt": "2024-02-20T08:30:00Z"
+    },
+    {
+      "id": "98765432-10fe-dcba-5678-1234abcd5678",
+      "firstName": "Carol",
+      "lastName": "Davis",
+      "email": "carol.davis@example.com",
+      "password": "mypassword789",
+      "photoId": 102,
+      "joinedAt": "2024-03-01T15:00:00Z"
+    },
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "firstName": "David",
+      "lastName": "Miller",
+      "email": "david.miller@example.com",
+      "password": "encryptedpass321",
+      "joinedAt": "2024-04-01T09:15:00Z"
+    },
+    {
+      "id": "7890abcd-1234-5678-9abc-def012345678",
+      "firstName": "Eva",
+      "lastName": "Wilson",
+      "email": "eva.wilson@example.com",
+      "password": "password1234",
+      "photoId": 103,
+      "joinedAt": "2024-04-08T13:00:00Z"
+    }
+]

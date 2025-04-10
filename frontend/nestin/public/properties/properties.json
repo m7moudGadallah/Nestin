@@ -1,0 +1,54 @@
+[
+    {
+      "id": "a1b2c3d4",
+      "name": "Modern Loft in City Center",
+      "description": "A stylish and modern loft located in the heart of the city. Great for couples or solo travelers.",
+      "pricePerNight": 120,
+      "location": "Downtown, Cairo",
+      "maxGuests": 2,
+      "numBeds": 1,
+      "numBedrooms": 1,
+      "numBathrooms": 1,
+      "safetyInfo": "Smoke detector, fire extinguisher",
+      "houseRules": "No pets. No smoking. No parties.",
+      "cancellationPolicy": "Free cancellation within 48 hours",
+      "latitude": 30.0444,
+      "longitude": 31.2357,
+      "type": "Loft"
+    },
+    {
+      "id": "p2",
+      "name": "Cozy Beach House",
+      "description": "Relax in this cozy house right by the beach. Perfect for families or a group of friends.",
+      "pricePerNight": 200,
+      "location": "North Coast, Egypt",
+      "maxGuests": 6,
+      "numBeds": 3,
+      "numBedrooms": 2,
+      "numBathrooms": 2,
+      "safetyInfo": "First aid kit available",
+      "houseRules": "No loud music after 10 PM",
+      "cancellationPolicy": "Non-refundable",
+      "latitude": 31.0841,
+      "longitude": 29.7376,
+      "type": "House"
+    },
+    {
+      "id": "p3",
+      "name": "Luxury Villa with Pool",
+      "description": "Experience luxury in this stunning villa with a private pool and garden.",
+      "pricePerNight": 450,
+      "location": "Gouna, Red Sea",
+      "maxGuests": 8,
+      "numBeds": 4,
+      "numBedrooms": 4,
+      "numBathrooms": 3,
+      "safetyInfo": "Security cameras outside the property",
+      "houseRules": "No smoking inside. Pool hours: 7 AM - 10 PM",
+      "cancellationPolicy": "Free cancellation up to 5 days before check-in",
+      "latitude": 27.3940,
+      "longitude": 33.6780,
+      "type": "Villa"
+    }
+  ]
+  

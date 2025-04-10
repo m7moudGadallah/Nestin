@@ -1,0 +1,27 @@
+[
+    {
+      "property_id": "a1b2c3d4",
+      "image_id": 1,
+      "touched_at": "2025-04-01T10:00:00Z",
+      "image_path": "https://cdn.dummyjson.com/products/images/furniture/Wooden%20Bathroom%20Sink%20With%20Mirror/thumbnail.png"
+    },
+    {
+      "property_id": "a1b2c3d4",
+      "image_id": 2,
+      "touched_at": "2025-04-01T10:05:00Z",
+      "image_path": "https://assets.dummyjson.com/public/qr-code.png"
+    },
+    {
+      "property_id": "a1b2c3d4",
+      "image_id": 3,
+      "touched_at": "2025-04-01T10:10:00Z",
+      "image_path": "https://assets.dummyjson.com/public/qr-code.png"
+    },
+    {
+      "property_id": "a1b2c3d4",
+      "image_id": 4,
+      "touched_at": "2025-04-01T10:15:00Z",
+      "image_path": "https://cdn.dummyjson.com/products/images/furniture/Wooden%20Bathroom%20Sink%20With%20Mirror/thumbnail.png"
+    }
+  ]
+  

@@ -1,0 +1,63 @@
+[
+    {
+      "id": 1,
+      "name": "Wi-Fi",
+      "icon": "fa-solid fa-wifi",
+      "category_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Pool",
+      "icon": "fa-solid fa-swimming-pool",
+      "categoryId": 2
+    },
+    {
+      "id": 3,
+      "name": "Air Conditioning",
+      "icon": "fa-solid fa-snowflake",
+      "categoryId": 1
+    },
+    {
+      "id": 4,
+      "name": "Kitchen",
+      "icon": "fa-solid fa-kitchen-set",
+      "categoryId": 3
+    },
+    {
+      "id": 5,
+      "name": "Free Parking",
+      "icon": "fa-solid fa-car",
+      "categoryId": 4
+    },
+    {
+      "id": 6,
+      "name": "TV",
+      "icon": "fa-solid fa-tv",
+      "categoryId": 1
+    },
+    {
+      "id": 7,
+      "name": "Gym",
+      "icon": "fa-solid fa-dumbbell",
+      "categoryId": 2
+    },
+    {
+      "id": 8,
+      "name": "Washer",
+      "icon": "fa-solid fa-soap",
+      "categoryId": 3
+    },
+    {
+      "id": 9,
+      "name": "Pets Allowed",
+      "icon": "fa-solid fa-paw",
+      "categoryId": 5
+    },
+    {
+      "id": 10,
+      "name": "Breakfast",
+      "icon": "fa-solid fa-mug-hot",
+      "categoryId": 3
+    }
+  ]
+  

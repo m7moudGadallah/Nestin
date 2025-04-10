@@ -1,0 +1,73 @@
+[
+    {
+      "id": "r1a2b3c4-d5e6-7890-abcd-1234567890ab",
+      "comment": "Great place! Very clean and well located.",
+      "cleanliness": 5,
+      "accuracy": 5,
+      "checkIn": 5,
+      "communication": 5,
+      "location": 4,
+      "value": 5,
+      "propertyd": "p1a2b3c4-d5e6-7890-abcd-1234567890ab",
+      "guestId": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+      "createdAt": "2024-04-01T14:23:00Z",
+      "updatedAt": "2024-04-01T14:23:00Z"
+    },
+    {
+      "id": "r2b3c4d5-e6f7-8901-abcd-2345678901bc",
+      "comment": "Nice stay overall, but the check-in process was a bit confusing.",
+      "cleanliness": 4,
+      "accuracy": 4,
+      "checkIn": 3,
+      "communication": 4,
+      "location": 5,
+      "value": 4,
+      "propertyId": "p2b3c4d5-e6f7-8901-abcd-2345678901bc",
+      "guestId": "0f1e2d3c-4b5a-6978-9f0e-abcdef123456",
+      "createdAt": "2024-03-15T10:00:00Z",
+      "updatedAt": "2024-03-15T10:00:00Z"
+    },
+    {
+      "id": "r3c4d5e6-f789-0123-abcd-3456789012cd",
+      "comment": "Exactly as described. Hosts were very responsive.",
+      "cleanliness": 5,
+      "accuracy": 5,
+      "checkIn": 5,
+      "communication": 5,
+      "location": 5,
+      "value": 5,
+      "propertyId": "p3c4d5e6-f789-0123-abcd-3456789012cd",
+      "guestId": "98765432-10fe-dcba-5678-1234abcd5678",
+      "createdAt": "2024-02-25T08:45:00Z",
+      "updatedAt": "2024-02-25T08:45:00Z"
+    },
+    {
+      "id": "r4d5e6f7-8901-2345-abcd-4567890123de",
+      "comment": "Good value for money. Quiet neighborhood.",
+      "cleanliness": 4,
+      "accuracy": 4,
+      "check_in": 4,
+      "communication": 4,
+      "location": 3,
+      "value": 5,
+      "propertyId": "p4d5e6f7-8901-2345-abcd-4567890123de",
+      "guestId": "123e4567-e89b-12d3-a456-426614174000",
+      "createdAt": "2024-01-18T12:30:00Z",
+      "updatedAt": "2024-01-18T12:30:00Z"
+    },
+    {
+      "id": "r5e6f789-0123-4567-abcd-5678901234ef",
+      "comment": "The place could have been cleaner, but overall okay.",
+      "cleanliness": 3,
+      "accuracy": 4,
+      "checkIn": 5,
+      "communication": 4,
+      "location": 4,
+      "value": 3,
+      "propertyId": "p5e6f789-0123-4567-abcd-5678901234ef",
+      "guestId": "7890abcd-1234-5678-9abc-def012345678",
+      "createdAt": "2024-03-10T17:00:00Z",
+      "updatedAt": "2024-03-10T17:00:00Z"
+    }
+  ]
+  
