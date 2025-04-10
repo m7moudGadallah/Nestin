@@ -7,5 +7,6 @@ namespace Nestin.Core.Interfaces
     {
         public UserManager<AppUser> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
+        public SignInManager<AppUser> SignInManager { get; }
     }
 }
