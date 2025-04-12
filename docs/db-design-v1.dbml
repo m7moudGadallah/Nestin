@@ -1,0 +1,266 @@
+Table user_account {
+  id uuid [pk]
+  first_name varchar(100)
+  last_name varchar(100)
+  email varchar(100) [not null]
+  password varchar(255) [not null] // password hash
+  photo_id int
+  joined_at datetime [not null]
+}
+
+Table role {
+  id autoincrement [pk]
+  name varchar(100) [not null]
+}
+
+Table user_role {
+  user_id uuid [not null]
+  role_id int [not null]
+  
+  indexes {
+    (user_id, role_id) [pk]
+  }
+}
+
+Table property_type {
+  id autoincrement [pk]
+  name varchar(100) [not null]
+}
+
+Table property {
+  id uuid [pk]
+  name varchar(100) [not null]
+  description text [not null]
+  price_per_night decimal(16, 2) [not null]
+  location_id int [not null]
+  latitude decimal(9, 6)
+  longitude decimal(9, 6)
+  max_guests int [not null]
+  num_beds int [not null]
+  num_bedrooms int [not null]
+  num_bathrooms int [not null]
+  safety_info text [not null]
+  house_rules text [not null]
+  cancellation_policy text [not null]
+  host_id uuid [not null]
+  type_id int [not null]
+}
+
+Table attachment {
+  id autoincrement [pk]
+  path varchar(300) [not null]
+}
+
+Table property_image {
+  property_id uuid [not null]
+  image_id int [not null]
+  touched_at timestamp [not null]
+  indexes {
+    (image_id, property_id) [pk]
+  }
+}
+
+Table region {
+  id autoincrement [pk]
+  name varchar(100)
+}
+
+Table country {
+  id autoincrement [pk]
+  name varchar(100)
+  region_id int [not null]
+}
+
+Table location {
+  id autoincrement [pk]
+  name varchar(100)
+  country_id int [not null]
+}
+
+Table category {
+  id autoincrement [pk]
+  name varchar(100) [not null]
+  icon text
+}
+
+Table property_category {
+  property_id uuid [not null]
+  category_id int [not null]
+
+  indexes {
+    (property_id, category_id) [pk]
+  }
+}
+
+Table amenity_category {
+  id autoincrement [pk]
+  name varchar(100) [not null]
+}
+
+Table amenity {
+  id autoincrement [pk]
+  name varchar(100) [not null] // e.g., "Wi-Fi", "Pool"
+  icon text // e.g., URL or class for UI icon
+  category_id int [not null]
+}
+
+Table property_amenity {
+  property_id uuid [not null]
+  amenity_id int [not null]
+  indexes {
+    (property_id, amenity_id) [pk]
+  }
+}
+
+Table property_availability {
+  id autoincrement [pk]
+  property_id uuid [not null]
+  start_date date [not null]
+  end_date date [not null]
+  indexes {
+    (property_id, start_date, end_date) [unique] // Prevents duplicate ranges
+  }
+}
+
+Table review {
+  id uuid [pk]
+  comment text [not null]
+  cleanliness int [not null]
+  accuracy int [not null]
+  check_in int [not null]
+  communication int [not null]
+  location int [not null]
+  value int [not null]
+  property_id uuid [not null]
+  guest_id uuid [not null]
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+
+  indexes {
+    (guest_id, property_id) [unique]
+  }
+}
+
+Table guest_type {
+  id autoincrement [pk]
+  name varchar(100)
+}
+
+Table booking {
+  id uuid [pk]
+  property_id uuid [not null]
+  guest_id uuid [not null]
+  check_in date [not null]
+  check_out date [not null]
+  price_per_night decimal(16, 2) [not null]
+  total_price decimal(20, 2) [not null]
+  status varchar(50) [default: 'pending'] // 'pending', 'confirmed', 'cancelled', etc.
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+
+    indexes {
+      (property_id, check_in, check_out) [unique]
+    }
+}
+
+Table booking_guest_type {
+  booking_id uuid [not null]
+  guest_type_id int [not null]
+  guest_count int [not null]
+
+  indexes {
+    (booking_id)
+  }
+}
+
+Table payment {
+  id uuid [pk]
+  booking_id uuid [not null]
+  amount decimal(20, 2) [not null]
+  status varchar(50) [default: 'pending'] // 'pending', 'paid', 'failed', 'refunded'
+  payment_method varchar(100) // e.g., 'credit_card', 'paypal'
+  paid_at datetime
+
+  indexes {
+    (booking_id)
+  }
+}
+
+Table message {
+  id uuid [pk]
+  booking_id uuid
+  sender_id uuid [not null]
+  receiver_id uuid [not null]
+  content text [not null]
+  sent_at datetime [default: `now()`]
+  is_read boolean [default: false]
+}
+
+Table user_favorite_property {
+  property_id uuid [not null]
+  user_id uuid [not null]
+  created_at datetime [default: `now()`]
+
+  indexes {
+    (user_id, property_id) [unique]
+  }
+}
+
+Table host_earning {
+  id uuid [pk]
+  booking_id uuid [not null]
+  host_id uuid [not null]
+  total_amount decimal(20, 2) [not null] // from booking.total_price
+  host_earning decimal(20, 2) [not null] // after commission
+  commission decimal(20, 2) [not null]   // what platform keeps
+  status varchar(50) [default: 'pending'] // 'pending', 'paid', 'failed'
+  payout_method_id uuid
+  paid_at datetime
+
+  indexes {
+    (booking_id)
+  }
+}
+
+Table host_payout_method {
+  id uuid [pk]
+  host_id uuid [not null]
+  method varchar(100) [not null] // 'bank_transfer', 'paypal'
+  details json [not null]        // flexible for any method (e.g., IBAN, PayPal email)
+  is_default boolean [default: false]
+  created_at datetime [default: `now()`]
+}
+
+// Relationships
+REF location_country_ref: location.country_id > country.id [delete: cascade, update: cascade]
+REF country_region_ref: country.id > region.id [delete: cascade, update: cascade]
+REF property_location_ref: property.location_id > location.id [delete: restrict, update: cascade]
+REF property_image_attachment_ref: property_image.image_id - attachment.id [delete: cascade, update: cascade]
+REF property_image_property_ref: property_image.property_id < property.id [delete: cascade, update: cascade]
+REF user_account_photo_ref: user_account.photo_id - attachment.id [delete: set null, update: cascade]
+REF user_role_account_ref: user_role.user_id > user_account.id [delete: cascade, update: cascade]
+REF user_role_ref: user_role.role_id > role.id [delete: cascade, update: cascade]
+REF property_host_ref: property.host_id < user_account.id [delete: cascade, update: cascade]
+REF property_category_category_ref: property_category.category_id < category.id [delete: cascade, update: cascade]
+REF property_category_property_ref: property_category.property_id < property.id [delete: cascade, update: cascade]
+REF property_type_ref: property.type_id > property_type.id [delete: cascade, update: cascade]
+REF review_property_ref: review.property_id < property.id [delete: cascade, update: cascade]
+REF review_property_ref: review.guest_id < user_account.id [delete: cascade, update: cascade]
+REF amenity_category_amenity_ref: amenity_category.id > amenity.category_id [delete: cascade, update: cascade]
+REF property_amenity_property_ref: property_amenity.property_id < property.id [delete: cascade, update: cascade]
+REF property_amenity_amenity_ref: property_amenity.amenity_id < amenity.id [delete: cascade, update: cascade]
+REF property_availability_property_ref: property_availability.property_id > property.id [delete: cascade, update: cascade]
+REF booking_property_ref: booking.property_id < property.id [delete: cascade, update: cascade]
+REF booking_guest_ref: booking.guest_id > user_account.id [delete: cascade, update: cascade]
+REF booking_guest_type_booking_ref: booking_guest_type.booking_id < booking.id [delete: cascade, update: cascade]
+REF booking_gust_type_ref: booking_guest_type.guest_type_id > guest_type.id [delete: cascade, update: cascade]
+REF booking_payment_ref: payment.booking_id < booking.id [delete: cascade, update: cascade]
+REF user_favorite_property_account_ref: user_favorite_property.user_id > user_account.id [delete: cascade, update: cascade]
+REF user_favorite_property_property_ref: user_favorite_property.property_id > property.id [delete: cascade, update: cascade]
+REF host_earning_booking_ref: host_earning.booking_id < booking.id [delete: cascade, update: cascade]
+REF host_earning_host_ref: host_earning.host_id > user_account.id [delete: cascade, update: cascade]
+REF host_payout_method_host_ref: host_payout_method.host_id > user_account.id [delete: cascade, update: cascade]
+REF host_earning_payout_method_ref: host_earning.payout_method_id < host_payout_method.id [delete: set null, update: cascade]
+REF booking_messages_ref: message.booking_id < booking.id [delete: cascade, update: cascade]
+REF sender_message_ref: message.sender_id > user_account.id [delete: cascade, update:  cascade]
+REF receiver_message_ref: message.receiver_id > user_account.id [delete: cascade, update: cascade]
