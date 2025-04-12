@@ -1,0 +1,102 @@
+<div class="inspiration-section p-6 bg-gray-100">
+    <h4 class="text-xl font-semibold mb-4">Inspiration for future getaways</h4>
+  
+    <!--header-links-->
+    <div class="header-links scroll-wrapper">
+      <!--scroll left-->
+      <button class="scroll-btn left" (click)="scrollLeft()" *ngIf="showLeft">
+        ‹
+      </button>
+      <div class="scrollable" #scrollable (scroll)="checkScroll()">
+      <ul class="link-list">
+        <li><a href="#">Popular</a></li>
+        <li><a href="#">Arts & culture</a></li>
+        <li><a href="#">Outdoors</a></li>
+        <li><a href="#">Mountains</a></li>
+        <li><a href="#">Beach</a></li>
+        <li><a href="#">Unique stays</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Things to do</a></li>
+        <li><a href="#">Travel tips & inspiration</a></li>
+        <li><a href="#">Nestin-freindly apartments</a></li>
+      </ul>
+      </div>
+      <!--scroll right-->
+      <button class="scroll-btn right" (click)="scrollRight()" *ngIf="showRight">
+        ›
+      </button>
+    </div>
+  
+    
+  </div>
+
+  <!--second section-->
+  <footer>
+    <div class="footer-container">
+      <!--first column-->
+      <div class="footer-column">
+        <h6>Support</h6>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">AirCover</a></li>
+          <li><a href="#">Anti-discrimination</a></li>
+          <li><a href="#">Disability support</a></li>
+          <li><a href="#">Cancellation options</a></li>
+          <li><a href="#">Report neighborhood concern</a></li>
+        </ul>
+      </div>
+      <!--second column-->
+      <div class="footer-column">
+        <h6>Hosting</h6>
+        <ul>
+          <li><a href="#">Nestin your home</a></li>
+          <li><a href="#">AirCover for Hosts</a></li>
+          <li><a href="#">Hosting resources</a></li>
+          <li><a href="#">Community forum</a></li>
+          <li><a href="#">Hosting responsibly</a></li>
+          <li><a href="#">Nestin-freindly apartments</a></li>
+          <li><a href="#">Join a free Hosting class</a></li>
+          <li><a href="#">find a co-host</a></li>
+        </ul>
+      </div>
+      <!--third column-->
+      <div class="footer-column">
+        <h6>Nestin</h6>
+        <ul>
+          <li><a href="#">Newsroom</a></li>
+          <li><a href="#">New features</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">community forum</a></li>
+          <li><a href="#">Investors</a></li>
+          <li><a href="#">Gift cards</a></li>
+          <li><a href="#">Nestin.org emergency stays</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <!--copyrights-->
+    <div class="copyrights">
+      <!--left side-->
+      <div class="left-side">
+      <p><i class="bi bi-c-circle"></i>2025 Nestin, Inc. </p>
+      <ul class="lists">
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Sitemap</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Your Privacy Choices</a></li>
+      </ul>
+      </div>
+      <!--right side-->
+      <div class="right-side">
+       <ul class="icons">
+        <li><i class="bi bi-globe2"></i> English (US)</li>
+        <li>EGP</li>
+        <li><i class="bi bi-facebook"></i></li>
+        <li><i class="bi bi-twitter-x"></i></li>
+        <li><i class="bi bi-instagram"></i></li>
+       </ul>
+      </div>
+    </div>
+   
+  </footer>
+ 
