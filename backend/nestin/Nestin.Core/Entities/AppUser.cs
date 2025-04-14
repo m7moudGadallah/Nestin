@@ -4,5 +4,6 @@ namespace Nestin.Core.Entities
 {
     public class AppUser : IdentityUser
     {
+        public virtual ICollection<Property> Properties { get; set; } = new HashSet<Property>();
     }
 }
