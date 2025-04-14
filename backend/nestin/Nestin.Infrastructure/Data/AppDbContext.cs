@@ -16,5 +16,6 @@ namespace Nestin.Infrastructure.Data
         }
 
         public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
     }
 }
