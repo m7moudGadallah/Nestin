@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -25,6 +26,8 @@ namespace Nestin.Infrastructure.Data.Configurations
                 .WithMany(x => x.Countries)
                 .HasForeignKey(x => x.RegionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasData(CountrySeed.Data);
         }
     }
 }
