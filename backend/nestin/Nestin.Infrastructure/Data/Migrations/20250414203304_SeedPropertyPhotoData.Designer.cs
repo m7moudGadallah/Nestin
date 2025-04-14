@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nestin.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Nestin.Infrastructure.Data;
 namespace Nestin.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414203304_SeedPropertyPhotoData")]
+    partial class SeedPropertyPhotoData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2814,261 +2817,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Nestin.Core.Entities.PropertyAmenity", b =>
-                {
-                    b.Property<string>("PropertyId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AmenityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PropertyId", "AmenityId");
-
-                    b.HasIndex("AmenityId");
-
-                    b.ToTable("PropertyAmenities");
-
-                    b.HasData(
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            AmenityId = 9
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            AmenityId = 11
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            AmenityId = 20
-                        },
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            AmenityId = 2
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            AmenityId = 5
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            AmenityId = 3
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            AmenityId = 4
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            AmenityId = 1
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            AmenityId = 16
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            AmenityId = 8
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            AmenityId = 22
-                        },
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            AmenityId = 11
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            AmenityId = 30
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            AmenityId = 11
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            AmenityId = 14
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            AmenityId = 51
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            AmenityId = 61
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            AmenityId = 28
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            AmenityId = 42
-                        });
-                });
-
-            modelBuilder.Entity("Nestin.Core.Entities.PropertyAvailability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2(3)");
-
-                    b.Property<string>("PropertyId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2(3)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PropertyId");
-
-                    b.ToTable("PropertyAvailabilities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndDate = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            EndDate = new DateTime(2025, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EndDate = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            EndDate = new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            StartDate = new DateTime(2025, 6, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 8,
-                            EndDate = new DateTime(2025, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            StartDate = new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 9,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 10,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 11,
-                            EndDate = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 12,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 13,
-                            EndDate = new DateTime(2025, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
-
             modelBuilder.Entity("Nestin.Core.Entities.PropertyFee", b =>
                 {
                     b.Property<int>("Id")
@@ -3093,65 +2841,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyFees", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 1212.09m,
-                            Name = "Cleaning Fee",
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 442.09m,
-                            Name = "Extra Guest Fee",
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 600m,
-                            Name = "Pet Fee",
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Amount = 600m,
-                            Name = "Pet Fee",
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Amount = 1200m,
-                            Name = "Cleaning Fee",
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Amount = 900.12m,
-                            Name = "Cleaning Fee",
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Amount = 442.09m,
-                            Name = "Extra Guest Fee",
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Amount = 113.09m,
-                            Name = "Cleaning Fee",
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f"
-                        });
+                    b.ToTable("PropertyFee");
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.PropertyGuest", b =>
@@ -3170,56 +2860,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.HasIndex("GuestTypeId");
 
                     b.ToTable("PropertyGuests");
-
-                    b.HasData(
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            GuestTypeId = 1,
-                            GuestCount = 1
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            GuestTypeId = 4,
-                            GuestCount = 5
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            GuestTypeId = 1,
-                            GuestCount = 3
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            GuestTypeId = 3,
-                            GuestCount = 1
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            GuestTypeId = 2,
-                            GuestCount = 2
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            GuestTypeId = 2,
-                            GuestCount = 6
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            GuestTypeId = 4,
-                            GuestCount = 3
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            GuestTypeId = 3,
-                            GuestCount = 2
-                        });
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.PropertyPhoto", b =>
@@ -3856,63 +3496,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Nestin.Core.Entities.Wishlist", b =>
-                {
-                    b.Property<string>("PropertyId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GuestId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PropertyId", "GuestId");
-
-                    b.HasIndex("GuestId");
-
-                    b.ToTable("Wishlists");
-
-                    b.HasData(
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -4024,36 +3607,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.Navigation("PropertyType");
                 });
 
-            modelBuilder.Entity("Nestin.Core.Entities.PropertyAmenity", b =>
-                {
-                    b.HasOne("Nestin.Core.Entities.Amenity", "Amenity")
-                        .WithMany()
-                        .HasForeignKey("AmenityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Nestin.Core.Entities.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Amenity");
-
-                    b.Navigation("Property");
-                });
-
-            modelBuilder.Entity("Nestin.Core.Entities.PropertyAvailability", b =>
-                {
-                    b.HasOne("Nestin.Core.Entities.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Property");
-                });
-
             modelBuilder.Entity("Nestin.Core.Entities.PropertyFee", b =>
                 {
                     b.HasOne("Nestin.Core.Entities.Property", "Property")
@@ -4112,25 +3665,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PropertySpaceType");
-                });
-
-            modelBuilder.Entity("Nestin.Core.Entities.Wishlist", b =>
-                {
-                    b.HasOne("Nestin.Core.Entities.AppUser", "Guest")
-                        .WithMany()
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Nestin.Core.Entities.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Guest");
-
-                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.AmenityCategory", b =>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -28,6 +29,9 @@ namespace Nestin.Infrastructure.Data.Configurations
             builder.HasOne(x => x.FileUpload)
                 .WithOne(x => x.PropertyPhoto)
                 .HasForeignKey<PropertyPhoto>(x => x.PhotoId);
+
+
+            builder.HasData(PropertyPhotoSeed.Data);
         }
     }
 }

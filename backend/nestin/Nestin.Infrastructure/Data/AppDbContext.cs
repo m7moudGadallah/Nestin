@@ -28,5 +28,9 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<PropertyPhoto> PropertyPhotos { get; set; }
         public virtual DbSet<PropertyGuest> PropertyGuests { get; set; }
+        public virtual DbSet<PropertyFee> PropertyFees { get; set; }
+        public virtual DbSet<PropertyAmenity> PropertyAmenities { get; set; }
+        public virtual DbSet<PropertyAvailability> PropertyAvailabilities { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
     }
 }

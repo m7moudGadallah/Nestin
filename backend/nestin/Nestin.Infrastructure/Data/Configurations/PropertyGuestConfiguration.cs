@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -28,6 +29,8 @@ namespace Nestin.Infrastructure.Data.Configurations
                 .WithMany(x => x.PropertyGuests)
                 .HasForeignKey(x => x.GuestTypeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasData(PropertyGuestSeed.Data);
         }
     }
 }

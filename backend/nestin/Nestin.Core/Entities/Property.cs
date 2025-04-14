@@ -18,5 +18,6 @@
         public virtual PropertyType PropertyType { get; set; }
         public virtual ICollection<PropertyPhoto> PropertyPhotos { get; set; } = new HashSet<PropertyPhoto>();
         public virtual ICollection<PropertyGuest> PropertyGuests { get; set; } = new HashSet<PropertyGuest>();
+        public virtual ICollection<PropertyFee> PropertyFees { get; set; } = new HashSet<PropertyFee>();
     }
 }

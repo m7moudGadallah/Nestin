@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nestin.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Nestin.Infrastructure.Data;
 namespace Nestin.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414215436_CreateWishlistTable")]
+    partial class CreateWishlistTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2974,99 +2977,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.HasIndex("PropertyId");
 
                     b.ToTable("PropertyAvailabilities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EndDate = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            EndDate = new DateTime(2025, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EndDate = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            EndDate = new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            StartDate = new DateTime(2025, 6, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 8,
-                            EndDate = new DateTime(2025, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            StartDate = new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 9,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 10,
-                            EndDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            StartDate = new DateTime(2025, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 11,
-                            EndDate = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            StartDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 12,
-                            EndDate = new DateTime(2025, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 13,
-                            EndDate = new DateTime(2025, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            StartDate = new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.PropertyFee", b =>
@@ -3869,48 +3779,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.HasIndex("GuestId");
 
                     b.ToTable("Wishlists");
-
-                    b.HasData(
-                        new
-                        {
-                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        },
-                        new
-                        {
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            GuestId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
