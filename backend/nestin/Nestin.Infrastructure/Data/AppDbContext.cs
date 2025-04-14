@@ -23,5 +23,6 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<Amenity> Amenities { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
         public virtual DbSet<PropertySpaceType> PropertySpaceTypes { get; set; }
+        public virtual DbSet<PropertySpaceItemType> PropertySpaceItemTypes { get; set; }
     }
 }
