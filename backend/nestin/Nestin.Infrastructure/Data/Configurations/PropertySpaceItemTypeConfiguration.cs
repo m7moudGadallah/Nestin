@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -21,6 +22,8 @@ namespace Nestin.Infrastructure.Data.Configurations
             builder.HasOne(x => x.PropertySpaceType)
                 .WithMany(x => x.PropertySpaceItemTypes)
                 .HasForeignKey(x => x.PropertySpaceTypeId);
+
+            builder.HasData(PropertySpaceItemTypeSeed.Data);
         }
     }
 }
