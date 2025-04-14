@@ -17,5 +17,6 @@
         public virtual Location Location { get; set; }
         public virtual PropertyType PropertyType { get; set; }
         public virtual ICollection<PropertyPhoto> PropertyPhotos { get; set; } = new HashSet<PropertyPhoto>();
+        public virtual ICollection<PropertyGuest> PropertyGuests { get; set; } = new HashSet<PropertyGuest>();
     }
 }
