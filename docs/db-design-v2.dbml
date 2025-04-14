@@ -55,8 +55,8 @@ Table guest_type {
 Table property {
   id uuid [pk]
   title varchar(100) [not null]
-  description varchar(100) [not null] 
-  host_id uuid [not null]
+  description text
+  owner_id uuid [not null]
   type_id int [not null]
   location_id int
   price_per_night decimal(16, 2) [not null]
@@ -233,7 +233,7 @@ REF country_locations_ref: location.country_id > country.id [delete: cascade, up
 // properties relationships
 REF property_type_ref: property.type_id > property_type.id [delete: cascade, update: cascade]
 REF property_location_ref: property.location_id < location.id [delete: set null, update: cascade]
-REF property_host_ref: property.host_id > user_account.id [delete: cascade, update: cascade]
+REF property_host_ref: property.owner_id > user_account.id [delete: cascade, update: cascade]
 REF property_photos_ref: property_photo.property_id > property.id [delete: cascade, update: cascade]
 REF property_photo_file_upload_ref: property_photo.photo_id - file_upload.id [delete: cascade, update: cascade]
 REF property_guests_ref: property_guest.property_id > property.id [delete: cascade, update: cascade]
