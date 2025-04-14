@@ -26,5 +26,6 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<PropertySpaceItemType> PropertySpaceItemTypes { get; set; }
         public virtual DbSet<FileUpload> FileUploads { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
+        public virtual DbSet<PropertyPhoto> PropertyPhotos { get; set; }
     }
 }

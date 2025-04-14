@@ -16,5 +16,6 @@
         public virtual AppUser Owner { get; set; }
         public virtual Location Location { get; set; }
         public virtual PropertyType PropertyType { get; set; }
+        public virtual ICollection<PropertyPhoto> PropertyPhotos { get; set; } = new HashSet<PropertyPhoto>();
     }
 }
