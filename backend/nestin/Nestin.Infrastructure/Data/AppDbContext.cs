@@ -21,5 +21,6 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<GuestType> GuestTypes { get; set; }
         public virtual DbSet<AmenityCategory> AmenityCategories { get; set; }
         public virtual DbSet<Amenity> Amenities { get; set; }
+        public virtual DbSet<PropertyType> PropertyTypes { get; set; }
     }
 }
