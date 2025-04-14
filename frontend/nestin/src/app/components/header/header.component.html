@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white  px-4 py-2 d-none d-lg-flex justify-content-between align-items-center">
-    <a class="navbar-brand fw-bold fs-4 brand-hover" href="#">Nestin</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-white  px-4 py-2 d-none d-lg-flex justify-content-between align-items-center">  
+  <a class="navbar-brand fw-bold fs-4 brand-hover" href="#">Nestin</a>
   
     <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
 
@@ -28,10 +28,26 @@
   <!-- Search Bar -->
   <div class="search-box d-none d-lg-flex justify-content-center align-items-center border-bottom rounded-pill px-4 py-2 shadow-sm gap-3">
    <!-- search-bar-buttons -->
-    <button class="btn bg-white border-end rounded-0 text-start w-100">Where
-      <span class="d-block text-muted small no-wrap-text">Search destination</span>
-    </button>
-    <button class="btn bg-white border-end rounded-0 text-start w-100">Check in
+    <button class="btn bg-white border-end rounded-0 text-start w-100"(click)="toggleCountriesMenu()">Where
+    <span class="d-block text-muted small no-wrap-text">
+        Search destination</span> 
+      <!--search input-->
+      <input *ngIf="showCountries" 
+           type="text" 
+           class="form-control mt-2" 
+           [(ngModel)]="searchTerm" 
+           placeholder="Search destination" 
+           name="destination"
+           (click)="$event.stopPropagation()"
+           (input)="filterCountries()">
+      </button>
+    <!--Countries menu-->
+    <ul *ngIf="showCountries" class="list-group position-absolute w-100 z-3 shadow">
+      <li *ngFor="let country of countries" class="list-group-item"(click)="selectCountry(country.name)">
+       {{country.name}}
+      </li>
+    </ul>
+    <button class="btn bg-white border-end rounded-0 text-start w-100">Check out
       <span class="d-block text-muted small">Add dates</span>
     </button>
     <button class="btn bg-white border-end rounded-0 text-start w-100">Check out
@@ -44,6 +60,7 @@
       <i class="bi bi-search"></i>
       </button> 
   </div>
+
   <!--search bar for small screens-->
   <div class="search-box-small d-flex d-lg-none justify-content-center align-items-center border rounded-pill px-4 py-2 shadow-sm w-100 gap-3">
     <i class="bi bi-search"></i>

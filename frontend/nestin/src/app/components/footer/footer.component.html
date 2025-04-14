@@ -1,13 +1,13 @@
-<div class="inspiration-section p-6 bg-gray-100">
+<div class="inspiration-section p-6 bg-gray-100" #footerElement>
     <h4 class="text-xl font-semibold mb-4">Inspiration for future getaways</h4>
   
     <!--header-links-->
     <div class="header-links scroll-wrapper">
       <!--scroll left-->
-      <button class="scroll-btn left" (click)="scrollLeft()" *ngIf="showLeft">
+      <!-- <button class="scroll-btn left" (click)="scrollLeft()" *ngIf="showLeft">
         ‹
-      </button>
-      <div class="scrollable" #scrollable (scroll)="checkScroll()">
+      </button> -->
+      <div class="scrollable">
       <ul class="link-list">
         <li><a href="#">Popular</a></li>
         <li><a href="#">Arts & culture</a></li>
@@ -22,9 +22,9 @@
       </ul>
       </div>
       <!--scroll right-->
-      <button class="scroll-btn right" (click)="scrollRight()" *ngIf="showRight">
+      <!-- <button class="scroll-btn right" (click)="scrollRight()" *ngIf="showRight">
         ›
-      </button>
+      </button> -->
     </div>
   
     
