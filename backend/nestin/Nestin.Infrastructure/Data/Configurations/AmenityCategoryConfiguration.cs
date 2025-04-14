@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -17,6 +18,8 @@ namespace Nestin.Infrastructure.Data.Configurations
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasData(AmenityCategorySeed.Data);
         }
     }
 }
