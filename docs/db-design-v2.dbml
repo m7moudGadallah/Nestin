@@ -76,7 +76,7 @@ Table property_photo {
 Table property_guest {
   property_id uuid [not null]
   guest_type_id int [not null]
-  quantity int [not null]
+  guest_count int [not null]
 
   indexes {
     (property_id, guest_type_id) [pk]
