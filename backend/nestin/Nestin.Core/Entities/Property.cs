@@ -20,5 +20,6 @@
         public virtual ICollection<PropertyGuest> PropertyGuests { get; set; } = new HashSet<PropertyGuest>();
         public virtual ICollection<PropertyFee> PropertyFees { get; set; } = new HashSet<PropertyFee>();
         public virtual ICollection<PropertyAvailability> PropertyAvailabilities { get; set; } = new HashSet<PropertyAvailability>();
+        public virtual ICollection<PropertySpace> PropertySpaces { get; set; } = new HashSet<PropertySpace>();
     }
 }
