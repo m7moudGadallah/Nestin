@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Api.Filters;
+using Nestin.Api.Utils;
 using Nestin.Infrastructure;
 
 namespace Nestin.Api
@@ -49,6 +50,8 @@ namespace Nestin.Api
             app.UseHttpsRedirection();
 
             app.UseCors(builder.Configuration["Cors:Policy"]);
+
+            app.UseCustomStaticFiles();
 
             app.UseAuthentication();
             app.UseAuthorization();
