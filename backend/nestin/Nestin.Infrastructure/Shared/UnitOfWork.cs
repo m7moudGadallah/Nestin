@@ -18,7 +18,7 @@ namespace Nestin.Infrastructure.Shared
 
         public IRegionRepository RegionRepository => _regionRepository ??= new RegionRepository(_dbContext);
         public ICountryRepository CountryRepository => _countryRepository ??= new CountryRepository(_dbContext);
-        public IPropertyRepository PropertyRepository => _propertyRepository ?? = new PropertyRepository(_dbContext);
+        public IPropertyRepository PropertyRepository => _propertyRepository ??= new PropertyRepository(_dbContext);
 
         public async Task SaveChangesAsync()
         {
