@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.Properties;
+using Nestin.Core.Dtos.PropertyAmenities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Shared;
 
@@ -39,7 +41,7 @@ namespace Nestin.Api.Controllers
         [HttpGet("{id}")]
         [EndpointSummary("Fetch single property by id.")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<PropertyListItemDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
@@ -49,6 +51,18 @@ namespace Nestin.Api.Controllers
             {
                 return NotFoundResponse();
             }
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Amenities")]
+        [EndpointSummary("Fetch property amenities by i.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyAmenityDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetAmenitiesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.PropertyAmenityRepository.GetByPropertyId(id, dto);
 
             return Ok(result);
         }
