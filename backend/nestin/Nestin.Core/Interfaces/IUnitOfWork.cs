@@ -5,6 +5,7 @@
         public IRegionRepository RegionRepository { get; }
         public ICountryRepository CountryRepository { get; }
         public IPropertyRepository PropertyRepository { get; }
+        public IPropertyTypeRepository PropertyTypeRepository { get; }
         public Task SaveChangesAsync();
     }
 }

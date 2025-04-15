@@ -10,6 +10,7 @@ namespace Nestin.Infrastructure.Shared
         private IRegionRepository? _regionRepository;
         private ICountryRepository? _countryRepository;
         private IPropertyRepository? _propertyRepository;
+        private IPropertyTypeRepository? _propertyTypeRepository;
 
         public UnitOfWork(AppDbContext dbContext)
         {
@@ -19,6 +20,7 @@ namespace Nestin.Infrastructure.Shared
         public IRegionRepository RegionRepository => _regionRepository ??= new RegionRepository(_dbContext);
         public ICountryRepository CountryRepository => _countryRepository ??= new CountryRepository(_dbContext);
         public IPropertyRepository PropertyRepository => _propertyRepository ??= new PropertyRepository(_dbContext);
+        public IPropertyTypeRepository PropertyTypeRepository => _propertyTypeRepository ??= new PropertyTypeRepository(_dbContext);
 
         public async Task SaveChangesAsync()
         {
