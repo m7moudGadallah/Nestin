@@ -23,6 +23,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Register new user.")]
         [Consumes("application/json")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(NewUserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             var username = ExtractUsernameFromEmail(dto.Email);
@@ -61,6 +62,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Login user.")]
         [Consumes("application/json")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(NewUserDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var userName = ExtractUsernameFromEmail(dto.Email);

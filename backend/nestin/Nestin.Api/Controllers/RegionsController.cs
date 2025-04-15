@@ -14,6 +14,7 @@ namespace Nestin.Api.Controllers
         [HttpGet]
         [EndpointSummary("Fetch all regions.")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<RegionDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
         {
             var result = await _unitOfWork.RegionRepository.GetAllAsync(queryDto, q => q.OrderBy(x => x.Id));

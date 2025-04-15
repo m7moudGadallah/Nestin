@@ -15,6 +15,7 @@ namespace Nestin.Api.Controllers
         [HttpGet]
         [EndpointSummary("Fetch all contries.")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<CountryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
         {
             var result = await _unitOfWork.CountryRepository.GetAllAsync(queryDto, q => q.OrderBy(x => x.Id));

@@ -15,6 +15,7 @@ namespace Nestin.Api.Controllers
         [HttpGet]
         [EndpointSummary("Fetch all property types.")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyTypeDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
         {
             var result = await _unitOfWork.PropertyTypeRepository.GetAllAsync(queryDto, q => q.OrderBy(x => x.Id));
