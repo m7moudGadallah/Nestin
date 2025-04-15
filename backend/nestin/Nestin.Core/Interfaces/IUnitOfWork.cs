@@ -6,6 +6,7 @@
         public ICountryRepository CountryRepository { get; }
         public IPropertyRepository PropertyRepository { get; }
         public IPropertyTypeRepository PropertyTypeRepository { get; }
+        public IAmenityRepository AmenityRepository { get; }
         public Task SaveChangesAsync();
     }
 }

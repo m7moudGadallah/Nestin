@@ -11,7 +11,7 @@ namespace Nestin.Infrastructure.Shared
         private ICountryRepository? _countryRepository;
         private IPropertyRepository? _propertyRepository;
         private IPropertyTypeRepository? _propertyTypeRepository;
-
+        private IAmenityRepository _amenityRepository;
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -21,7 +21,7 @@ namespace Nestin.Infrastructure.Shared
         public ICountryRepository CountryRepository => _countryRepository ??= new CountryRepository(_dbContext);
         public IPropertyRepository PropertyRepository => _propertyRepository ??= new PropertyRepository(_dbContext);
         public IPropertyTypeRepository PropertyTypeRepository => _propertyTypeRepository ??= new PropertyTypeRepository(_dbContext);
-
+        public IAmenityRepository AmenityRepository => _amenityRepository ??= new AmenityRepository(_dbContext);
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
