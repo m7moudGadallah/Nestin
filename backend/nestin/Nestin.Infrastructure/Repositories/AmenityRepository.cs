@@ -4,7 +4,7 @@ using Nestin.Infrastructure.Data;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class AmenityRepository : GenericRepository<Amenity, int>, IAmenityRepository
+    class AmenityRepository : GenericRepository<Amenity, int>, IAmenityRepository
     {
         public AmenityRepository(AppDbContext dbContext) : base(dbContext)
         { }

@@ -4,7 +4,7 @@ using Nestin.Infrastructure.Data;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class PropertyTypeRepository : GenericRepository<PropertyType, int>, IPropertyTypeRepository
+    class PropertyTypeRepository : GenericRepository<PropertyType, int>, IPropertyTypeRepository
     {
         public PropertyTypeRepository(AppDbContext dbContext) : base(dbContext)
         { }

@@ -8,7 +8,7 @@ using Nestin.Infrastructure.Data;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class PropertyRepository : GenericRepository<Property, string>, IPropertyRepository
+    class PropertyRepository : GenericRepository<Property, string>, IPropertyRepository
     {
         public PropertyRepository(AppDbContext dbContext) : base(dbContext)
         { }
@@ -84,20 +84,7 @@ namespace Nestin.Infrastructure.Repositories
 
             // Pagination
             var total = await query.CountAsync();
-            var items = await query.Skip(queryDto.CalcSkippedItems()).Take(queryDto.PageSize).Select(p => new PropertyListItemDto
-            {
-                Id = p.Id,
-                Title = p.Title,
-                PricePerNight = p.PricePerNight,
-                Latitude = p.Latitude,
-                Longitude = p.Longitude,
-                Owner = p.Owner.ToDo(),
-                Location = p.Location.ToDto(),
-                PropertyType = p.PropertyType.ToDto(),
-                Photos = p.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                AverageRating = 0, // TODO: replace it with the actual rating
-                ReviewCount = 0 // TODO: replace it with the actual reviw count 
-            }).ToListAsync();
+            var items = await query.Skip(queryDto.CalcSkippedItems()).Take(queryDto.PageSize).Select(p => p.ToPropertyListItemDto()).ToListAsync();
 
             return new()
             {
@@ -120,24 +107,7 @@ namespace Nestin.Infrastructure.Repositories
                 .Include(x => x.PropertyPhotos)
                 .ThenInclude(x => x.FileUpload)
                 .Where(x => x.Id == id)
-                .Select(p => new PropertyDetailsDto
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Description = p.Description,
-                    PricePerNight = p.PricePerNight,
-                    Latitude = p.Latitude,
-                    Longitude = p.Longitude,
-                    SafteyInfo = p.SafteyInfo,
-                    HouseRules = p.HouseRules,
-                    CancellationPolicy = p.CancellationPolicy,
-                    Owner = p.Owner.ToDo(),
-                    Location = p.Location.ToDto(),
-                    PropertyType = p.PropertyType.ToDto(),
-                    Photos = p.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                    AverageRating = 0, // TODO: replace it with the actual rating
-                    ReviewCount = 0 // TODO: replace it with the actual reviw count 
-                }).FirstOrDefaultAsync();
+                .Select(p => p.ToPropertyDetailsDto()).FirstOrDefaultAsync();
 
             return property;
         }
