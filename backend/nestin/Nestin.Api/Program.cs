@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Api.Filters;
 using Nestin.Api.Utils;
+using Nestin.Core.Mappings;
 using Nestin.Infrastructure;
 
 namespace Nestin.Api
@@ -50,6 +51,8 @@ namespace Nestin.Api
             app.UseHttpsRedirection();
 
             app.UseCors(builder.Configuration["Cors:Policy"]);
+
+            FileUploadPathMappingExtensions.Init(builder.Configuration);
 
             app.UseCustomStaticFiles();
 
