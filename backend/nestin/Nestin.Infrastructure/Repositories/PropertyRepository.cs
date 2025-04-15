@@ -16,6 +16,7 @@ namespace Nestin.Infrastructure.Repositories
         public async Task<PaginatedResult<PropertyListItemDto>> GetFilteredPropertiesAsync(FilterPropertyQueryParamsDto queryDto)
         {
             var query = _dbContext.Properties
+                    .Include(x => x.Owner)
                     .Include(x => x.Location)
                     .Include(x => x.PropertyType)
                     .Include(x => x.PropertyPhotos)
@@ -87,10 +88,10 @@ namespace Nestin.Infrastructure.Repositories
             {
                 Id = p.Id,
                 Title = p.Title,
-                OwnerId = p.OwnerId,
                 PricePerNight = p.PricePerNight,
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
+                Owner = p.Owner.ToDo(),
                 Location = p.Location.ToDto(),
                 PropertyType = p.PropertyType.ToDto(),
                 Photos = p.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
@@ -108,6 +109,37 @@ namespace Nestin.Infrastructure.Repositories
                     PageSize = queryDto.PageSize
                 }
             };
+        }
+
+        public async Task<PropertyDetailsDto?> GetPropertyDetails(string id)
+        {
+            var property = await _dbContext.Properties
+                .Include(x => x.Owner)
+                .Include(x => x.Location)
+                .Include(x => x.PropertyType)
+                .Include(x => x.PropertyPhotos)
+                .ThenInclude(x => x.FileUpload)
+                .Where(x => x.Id == id)
+                .Select(p => new PropertyDetailsDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    PricePerNight = p.PricePerNight,
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    SafteyInfo = p.SafteyInfo,
+                    HouseRules = p.HouseRules,
+                    CancellationPolicy = p.CancellationPolicy,
+                    Owner = p.Owner.ToDo(),
+                    Location = p.Location.ToDto(),
+                    PropertyType = p.PropertyType.ToDto(),
+                    Photos = p.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
+                    AverageRating = 0, // TODO: replace it with the actual rating
+                    ReviewCount = 0 // TODO: replace it with the actual reviw count 
+                }).FirstOrDefaultAsync();
+
+            return property;
         }
     }
 }
