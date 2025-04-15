@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class CountryMappingExtensions
     {
-        public static CountryDto ToDo(this Country country)
+        public static CountryDto ToDto(this Country country)
         {
             return new CountryDto
             {

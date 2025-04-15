@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertyPhotoMappingExtensions
     {
-        public static PropertyPhotoDto ToDo(this PropertyPhoto propertyPhoto)
+        public static PropertyPhotoDto ToDto(this PropertyPhoto propertyPhoto)
         {
             return new PropertyPhotoDto
             {

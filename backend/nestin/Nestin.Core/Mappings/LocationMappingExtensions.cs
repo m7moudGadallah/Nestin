@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class LocationMappingExtensions
     {
-        public static LocationDto ToDo(this Location location)
+        public static LocationDto ToDto(this Location location)
         {
             return new LocationDto
             {
