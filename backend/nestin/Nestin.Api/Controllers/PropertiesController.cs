@@ -2,6 +2,7 @@
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.Properties;
 using Nestin.Core.Dtos.PropertyAmenities;
+using Nestin.Core.Dtos.PropertyGuests;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Shared;
 
@@ -56,13 +57,25 @@ namespace Nestin.Api.Controllers
         }
 
         [HttpGet("{id}/Amenities")]
-        [EndpointSummary("Fetch property amenities by i.")]
+        [EndpointSummary("Fetch property amenities by id.")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<PropertyAmenityDto>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetAmenitiesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
             var result = await _unitOfWork.PropertyAmenityRepository.GetByPropertyId(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Guests")]
+        [EndpointSummary("Fetch property guests by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyGuestsDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetGuestsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.PropertyGuestRepository.GetByPropertyId(id, dto);
 
             return Ok(result);
         }
