@@ -93,7 +93,9 @@ namespace Nestin.Infrastructure.Repositories
                 Longitude = p.Longitude,
                 Location = p.Location.ToDto(),
                 PropertyType = p.PropertyType.ToDto(),
-                MainPhoto = p.PropertyPhotos.OrderBy(x => x.TouchedAt).First().ToDto()
+                Photos = p.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
+                AverageRating = 0, // TODO: replace it with the actual rating
+                ReviewCount = 0 // TODO: replace it with the actual reviw count 
             }).ToListAsync();
 
             return new()

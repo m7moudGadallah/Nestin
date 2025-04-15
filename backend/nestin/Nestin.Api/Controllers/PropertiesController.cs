@@ -14,14 +14,14 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Fetch all properties.")]
         [EndpointDescription(
             "Returns paginated list of properties for search/homepage display.\n" +
-            "Includes essential info + preview data (main photo, price, rating).\n\n" +
+            "Includes essential info + preview data (photos, price, rating).\n\n" +
             "### Key Features:\n" +
             "- Filter by location, dates, price range, capacity\n" +
             "- Sort by price or rating\n" +
             "- Paginated results\n\n" +
             "### Response includes:\n" +
             "- Basic property info\n" +
-            "- Main photo\n" +
+            "- Photos\n" +
             "- Price per night\n" +
             "- Average rating\n" +
             "- Location details\n\n" +

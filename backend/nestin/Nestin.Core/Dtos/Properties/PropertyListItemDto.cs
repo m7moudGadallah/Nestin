@@ -14,6 +14,8 @@ namespace Nestin.Core.Dtos.Properties
         public decimal Longitude { get; set; }
         public LocationDto Location { get; set; }
         public PropertyTypeDto PropertyType { get; set; }
-        public PropertyPhotoDto? MainPhoto { get; set; }
+        public List<PropertyPhotoDto>? Photos { get; set; }
+        public double AverageRating { get; set; }
+        public int ReviewCount { get; set; }
     }
 }
