@@ -14,14 +14,8 @@ namespace Nestin.Api.Controllers
         [HttpGet]
         [EndpointSummary("Fetch all regions.")]
         [Produces("application/json")]
-        public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
         {
-            var queryDto = new GetAllQueryDto
-            {
-                Page = page,
-                PageSize = pageSize
-            };
-
             var result = await _unitOfWork.RegionRepository.GetAllAsync(queryDto, q => q.OrderBy(x => x.Id));
 
             var resultDto = new PaginatedResult<RegionDto>
