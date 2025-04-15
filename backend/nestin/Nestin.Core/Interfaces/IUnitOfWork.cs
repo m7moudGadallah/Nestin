@@ -7,6 +7,7 @@
         public IPropertyRepository PropertyRepository { get; }
         public IPropertyTypeRepository PropertyTypeRepository { get; }
         public IAmenityRepository AmenityRepository { get; }
+        public IAmenityCategoryRepository AmenityCategoryRepository { get; }
         public Task SaveChangesAsync();
     }
 }
