@@ -10,6 +10,7 @@
         public IAmenityCategoryRepository AmenityCategoryRepository { get; }
         public IGuestTypeReposiotry GuestTypeReposiotry { get; }
         public IPropertyAmenityRepository PropertyAmenityRepository { get; }
+        public IPropertyGuestRepository PropertyGuestRepository { get; }
         public Task SaveChangesAsync();
     }
 }
