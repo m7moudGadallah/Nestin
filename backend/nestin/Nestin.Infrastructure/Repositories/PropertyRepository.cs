@@ -26,6 +26,9 @@ namespace Nestin.Infrastructure.Repositories
             if (queryDto.LocationId.HasValue)
                 query = query.Where(x => x.LocationId == queryDto.LocationId.Value);
 
+            if (queryDto.PropertyTypeId.HasValue)
+                query = query.Where(x => x.PropertyTypeId == queryDto.PropertyTypeId.Value);
+
             if (queryDto.GuestCount.HasValue)
                 query = query.Where(x => x.PropertyGuests.Sum(pg => pg.GuestCount) >= queryDto.GuestCount.Value);
 
@@ -36,7 +39,33 @@ namespace Nestin.Infrastructure.Repositories
                 query = query.Where(x => x.PricePerNight <= queryDto.PriceMax.Value);
 
 
-            //TODO: Handle CheckIn Checkout filters
+            // TODO: Handle booking checking
+            if (queryDto.CheckIn.HasValue)
+            {
+                var checkInDate = queryDto.CheckIn.Value.ToDateTime(TimeOnly.MinValue);
+
+                if (queryDto.CheckOut.HasValue)
+                {
+                    var checkOutDate = queryDto.CheckOut.Value.ToDateTime(TimeOnly.MinValue);
+
+                    query = query.Where(x => x.PropertyAvailabilities
+                        .Any(pa =>
+                            pa.StartDate <= checkOutDate &&  // Availability starts before or on checkout
+                            pa.EndDate >= checkInDate
+                        )
+                    );
+                }
+                else
+                {
+                    // Only check-in date provided
+                    query = query.Where(x => x.PropertyAvailabilities
+                        .Any(pa =>
+                            pa.StartDate <= checkInDate &&
+                            pa.EndDate >= checkInDate
+                        )
+                    );
+                }
+            }
 
             if (queryDto.CountryId.HasValue)
                 query = query.Where(x => x.Location.CountryId == queryDto.CountryId.Value);
@@ -49,7 +78,7 @@ namespace Nestin.Infrastructure.Repositories
             {
                 "price_asc" => query.OrderByDescending(x => x.PricePerNight),
                 "price_dec" => query.OrderBy(x => x.PricePerNight),
-                _ => query.OrderBy(x => x.Id)
+                _ => query.OrderBy(x => x.PricePerNight) // TODO: should be by average rating
             };
 
             // Pagination

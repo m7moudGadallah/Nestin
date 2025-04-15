@@ -3,6 +3,7 @@
     public class FilterPropertyQueryParamsDto : GetAllQueryDto
     {
         public int? LocationId { get; set; }
+        public int? PropertyTypeId { get; set; }
         public int? GuestCount { get; set; }
         public decimal? PriceMin { get; set; }
         public decimal? PriceMax { get; set; }
