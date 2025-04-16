@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class GuestTypeMappingExtensions
     {
-        public static GuestTypesDto ToDo(this GuestType guestType)
+        public static GuestTypesDto ToDto(this GuestType guestType)
         {
             return new GuestTypesDto
             {

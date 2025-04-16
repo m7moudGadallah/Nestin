@@ -23,7 +23,7 @@ namespace Nestin.Api
 
             var resultDto = new PaginatedResult<PropertySpaceTypeDto>
             {
-                Items = result.Items.Select(x => x.ToDo()).ToList(),
+                Items = result.Items.Select(x => x.ToDto()).ToList(),
                 MetaData = result.MetaData
             };
 

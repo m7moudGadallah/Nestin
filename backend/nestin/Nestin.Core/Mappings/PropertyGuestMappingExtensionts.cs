@@ -10,7 +10,7 @@ namespace Nestin.Core.Mappings
             return new PropertyGuestsDto
             {
                 PropertyId = propertyGuest.PropertyId,
-                GuestType = propertyGuest.GuestType.ToDo(),
+                GuestType = propertyGuest.GuestType.ToDto(),
                 GuestCount = propertyGuest.GuestCount
             };
         }

@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertySpaceTypeMappingExtensionts
     {
-        public static PropertySpaceTypeDto ToDo(this PropertySpaceType propertySpaceType)
+        public static PropertySpaceTypeDto ToDto(this PropertySpaceType propertySpaceType)
         {
             return new PropertySpaceTypeDto
             {

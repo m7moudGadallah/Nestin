@@ -25,7 +25,7 @@ namespace Nestin.Infrastructure.Repositories
             var items = await query
                     .Skip(dto.CalcSkippedItems())
                     .Take(dto.PageSize)
-                    .Select(x => x.ToDo())
+                    .Select(x => x.ToDto())
                     .ToListAsync();
 
             return new PaginatedResult<PropertyAmenityDto>
