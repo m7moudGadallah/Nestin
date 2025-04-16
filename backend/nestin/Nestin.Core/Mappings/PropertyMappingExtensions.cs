@@ -7,6 +7,8 @@ namespace Nestin.Core.Mappings
     {
         public static PropertyListItemDto ToPropertyListItemDto(this Property property)
         {
+            var (averageRating, reviewCount) = CalculateRatingStats(property);
+
             return new PropertyListItemDto
             {
                 Id = property.Id,
@@ -18,13 +20,15 @@ namespace Nestin.Core.Mappings
                 Location = property.Location.ToDto(),
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                AverageRating = 0, // TODO: replace it with the actual rating
-                ReviewCount = 0 // TODO: replace it with the actual reviw count 
+                AverageRating = averageRating,
+                ReviewCount = reviewCount
             };
         }
 
         public static PropertyDetailsDto ToPropertyDetailsDto(this Property property)
         {
+            var (averageRating, reviewCount) = CalculateRatingStats(property);
+
             return new PropertyDetailsDto
             {
                 Id = property.Id,
@@ -40,9 +44,25 @@ namespace Nestin.Core.Mappings
                 Location = property.Location.ToDto(),
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                AverageRating = 0, // TODO: replace it with the actual rating
-                ReviewCount = 0 // TODO: replace it with the actual reviw count 
+                AverageRating = averageRating,
+                ReviewCount = reviewCount
             };
+        }
+
+        private static (decimal averageRating, int reviewCount) CalculateRatingStats(Property property)
+        {
+            var reviews = property.Bookings?
+                .Where(b => b.Review != null)
+                .Select(b => b.Review)
+                .ToList() ?? new List<Review>();
+
+            var reviewCount = reviews.Count;
+            var averageRating = reviewCount > 0
+                ? reviews.Average(r => (r.Cleanliness + r.Accuracy + r.CheckIn +
+                                      r.Communication + r.Location + r.Value) / 6)
+                : 0;
+
+            return (averageRating, reviewCount);
         }
     }
 }
