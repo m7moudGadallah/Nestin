@@ -13,6 +13,7 @@
         public IPropertyGuestRepository PropertyGuestRepository { get; }
         public IPropertySpaceTypeRepository PropertySpaceTypeRepository { get; }
         public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository { get; }
+        public IPropertyFeeRepository PropertyFeeRepository { get; }
         public Task SaveChangesAsync();
     }
 }

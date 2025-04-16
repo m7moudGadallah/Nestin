@@ -18,6 +18,7 @@ namespace Nestin.Infrastructure.Shared
         private IPropertyGuestRepository? _propertyGuestRepository;
         private IPropertySpaceTypeRepository? _propertySpaceTypeRepository;
         private IPropertySpaceItemTypeRepository _propertySpaceItemTypeRepository;
+        private IPropertyFeeRepository _propertyFeeRepository;
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -34,6 +35,7 @@ namespace Nestin.Infrastructure.Shared
         public IPropertyGuestRepository PropertyGuestRepository => _propertyGuestRepository ??= new PropertyGuestRepository(_dbContext);
         public IPropertySpaceTypeRepository PropertySpaceTypeRepository => _propertySpaceTypeRepository ??= new PropertySpaceTypeRepository(_dbContext);
         public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository => _propertySpaceItemTypeRepository ??= new PropertySpaceItemTypeRepository(_dbContext);
+        public IPropertyFeeRepository PropertyFeeRepository => _propertyFeeRepository ??= new PropertyFeeRepository(_dbContext);
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
