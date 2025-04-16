@@ -64,20 +64,6 @@ namespace Nestin.Infrastructure.Data.Seeds
             },
             new Review
             {
-                Id = "b57197dc-ff4e-4e03-aeb0-cc7c560dc519",
-                BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
-                Comment = "Needs improvement",
-                Cleanliness = 2.5m,
-                Accuracy = 2.0m,
-                CheckIn = 2.0m,
-                Communication = 3.0m,
-                Location = 2.5m,
-                Value = 2.0m,
-                CreatedAt = DateTime.Parse("2025-05-16"),
-                UpdatedAt = DateTime.Parse("2025-05-17")
-            },
-            new Review
-            {
                 Id = "72b3d68d-234a-4ed7-b7f7-e07fc82f58ef",
                 BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
                 Comment = "Good value for money",

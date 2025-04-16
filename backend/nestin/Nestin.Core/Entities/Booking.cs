@@ -22,6 +22,6 @@
         public virtual Property Property { get; set; }
         public virtual AppUser User { get; set; }
         public virtual ICollection<BookingGuest> BookingGuests { get; set; } = new HashSet<BookingGuest>();
-        public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
+        public virtual Review? Review { get; set; }
     }
 }

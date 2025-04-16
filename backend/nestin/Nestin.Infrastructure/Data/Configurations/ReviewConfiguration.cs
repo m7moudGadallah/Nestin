@@ -59,8 +59,8 @@ namespace Nestin.Infrastructure.Data.Configurations
 
 
             builder.HasOne(x => x.Booking)
-                .WithMany(x => x.Reviews)
-                .HasForeignKey(x => x.BookingId)
+                .WithOne(x => x.Review)
+                .HasForeignKey<Review>(x => x.BookingId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(x => x.BookingId);
