@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nestin.Api.Controllers;
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.PropertySpaceTypes;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
 
-namespace Nestin.Api
+namespace Nestin.Api.Controllers
 {
     public class PropertySpaceTypesController : BaseController
     {

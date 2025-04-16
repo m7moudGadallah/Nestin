@@ -13,11 +13,11 @@ namespace Nestin.Infrastructure.Shared
         private IPropertyTypeRepository? _propertyTypeRepository;
         private IAmenityRepository? _amenityRepository;
         private IAmenityCategoryRepository? _amenityCategoryRepository;
-        public IGuestTypeReposiotry? _guestTypeReposiotry;
-        public IPropertyAmenityRepository? _propertyAmenityRepository;
-        public IPropertyGuestRepository? _propertyGuestRepository;
-        public IPropertySpaceTypeRepository? _propertySpaceTypeRepository;
-        public IPropertySpaceItemTypeRepository _propertySpaceItemTypeRepository; PropertySpaceItemTypeRepository
+        private IGuestTypeReposiotry? _guestTypeReposiotry;
+        private IPropertyAmenityRepository? _propertyAmenityRepository;
+        private IPropertyGuestRepository? _propertyGuestRepository;
+        private IPropertySpaceTypeRepository? _propertySpaceTypeRepository;
+        private IPropertySpaceItemTypeRepository _propertySpaceItemTypeRepository;
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
