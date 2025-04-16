@@ -25,7 +25,13 @@ namespace Nestin.Infrastructure.Repositories
 
             // Fitlers
             if (queryDto.LocationId.HasValue)
+            {
                 query = query.Where(x => x.LocationId == queryDto.LocationId.Value);
+            }
+            else if (!string.IsNullOrEmpty(queryDto.LocationName))
+            {
+                query = query.Where(x => EF.Functions.Like(x.Location.Name, $"%{queryDto.LocationName}%"));
+            }
 
             if (queryDto.PropertyTypeId.HasValue)
                 query = query.Where(x => x.PropertyTypeId == queryDto.PropertyTypeId.Value);

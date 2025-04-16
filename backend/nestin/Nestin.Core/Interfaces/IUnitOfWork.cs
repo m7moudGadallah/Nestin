@@ -11,6 +11,13 @@
         public IGuestTypeReposiotry GuestTypeReposiotry { get; }
         public IPropertyAmenityRepository PropertyAmenityRepository { get; }
         public IPropertyGuestRepository PropertyGuestRepository { get; }
+        public IPropertySpaceTypeRepository PropertySpaceTypeRepository { get; }
+        public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository { get; }
+        public IPropertyFeeRepository PropertyFeeRepository { get; }
+        public IPropertyAvailabilityRepository PropertyAvailabilityRepository { get; }
+        public IPropertySpaceRepository PropertySpaceRepository { get; }
+        public IPropertySpaceItemRepository PropertySpaceItemRepository { get; }
+        public ILocationRepository LocationRepository { get; }
         public Task SaveChangesAsync();
     }
 }

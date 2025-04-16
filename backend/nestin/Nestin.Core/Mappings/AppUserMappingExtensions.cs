@@ -5,7 +5,7 @@ namespace Nestin.Core.Mappings
 {
     public static class AppUserMappingExtensions
     {
-        public static PropertyOwnerDto ToDo(this AppUser user)
+        public static PropertyOwnerDto ToDto(this AppUser user)
         {
             return new PropertyOwnerDto
             {

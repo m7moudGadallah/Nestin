@@ -22,7 +22,7 @@ namespace Nestin.Api.Controllers
 
             var resultDto = new PaginatedResult<GuestTypesDto>
             {
-                Items = result.Items.Select(x => x.ToDo()).ToList(),
+                Items = result.Items.Select(x => x.ToDto()).ToList(),
                 MetaData = result.MetaData
             };
 

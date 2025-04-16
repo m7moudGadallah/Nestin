@@ -13,9 +13,17 @@ namespace Nestin.Infrastructure.Shared
         private IPropertyTypeRepository? _propertyTypeRepository;
         private IAmenityRepository? _amenityRepository;
         private IAmenityCategoryRepository? _amenityCategoryRepository;
-        public IGuestTypeReposiotry? _guestTypeReposiotry;
-        public IPropertyAmenityRepository? _propertyAmenityRepository;
-        public IPropertyGuestRepository? _propertyGuestRepository;
+        private IGuestTypeReposiotry? _guestTypeReposiotry;
+        private IPropertyAmenityRepository? _propertyAmenityRepository;
+        private IPropertyGuestRepository? _propertyGuestRepository;
+        private IPropertySpaceTypeRepository? _propertySpaceTypeRepository;
+        private IPropertySpaceItemTypeRepository _propertySpaceItemTypeRepository;
+        private IPropertyFeeRepository _propertyFeeRepository;
+        private IPropertyAvailabilityRepository _propertyAvailabilityRepository;
+        private IPropertySpaceRepository _propertySpaceRepository;
+        private IPropertySpaceItemRepository _propertySpaceItemRepository;
+        private ILocationRepository _locationRepository;
+
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -30,6 +38,13 @@ namespace Nestin.Infrastructure.Shared
         public IGuestTypeReposiotry GuestTypeReposiotry => _guestTypeReposiotry ??= new GuestTypeRepository(_dbContext);
         public IPropertyAmenityRepository PropertyAmenityRepository => _propertyAmenityRepository ??= new PropertyAmenityRepository(_dbContext);
         public IPropertyGuestRepository PropertyGuestRepository => _propertyGuestRepository ??= new PropertyGuestRepository(_dbContext);
+        public IPropertySpaceTypeRepository PropertySpaceTypeRepository => _propertySpaceTypeRepository ??= new PropertySpaceTypeRepository(_dbContext);
+        public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository => _propertySpaceItemTypeRepository ??= new PropertySpaceItemTypeRepository(_dbContext);
+        public IPropertyFeeRepository PropertyFeeRepository => _propertyFeeRepository ??= new PropertyFeeRepository(_dbContext);
+        public IPropertyAvailabilityRepository PropertyAvailabilityRepository => _propertyAvailabilityRepository ??= new PropertyAvailabilityRepository(_dbContext);
+        public IPropertySpaceRepository PropertySpaceRepository => _propertySpaceRepository ??= new PropertySpaceRepository(_dbContext);
+        public IPropertySpaceItemRepository PropertySpaceItemRepository => _propertySpaceItemRepository ??= new PropertySpaceItemRepository(_dbContext);
+        public ILocationRepository LocationRepository => _locationRepository = new LocationRepository(_dbContext);
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();

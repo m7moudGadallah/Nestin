@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\nestin",
+    "\\backend\\nestin\\Nestin.Api",
+    "\\backend\\nestin\\Nestin.Api\\Controllers",
+    "\\backend\\nestin\\Nestin.Core\\Dtos"
+  ],
+  "SelectedNode": "\\backend\\nestin\\nestin.sln",
+  "PreviewInSolutionExplorer": false
+}

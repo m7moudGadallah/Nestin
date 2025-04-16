@@ -51,6 +51,7 @@ namespace Nestin.Api
             app.UseHttpsRedirection();
 
             app.UseCors(builder.Configuration["Cors:Policy"]);
+            
 
             FileUploadPathMappingExtensions.Init(builder.Configuration);
 

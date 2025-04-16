@@ -2,6 +2,8 @@
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.Properties;
 using Nestin.Core.Dtos.PropertyAmenities;
+using Nestin.Core.Dtos.PropertyAvailabilities;
+using Nestin.Core.Dtos.PropertyFees;
 using Nestin.Core.Dtos.PropertyGuests;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Shared;
@@ -59,7 +61,7 @@ namespace Nestin.Api.Controllers
         [HttpGet("{id}/Amenities")]
         [EndpointSummary("Fetch property amenities by id.")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<PropertyAmenityDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<PropertySpaceDto>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetAmenitiesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
@@ -76,6 +78,42 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> GetGuestsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
             var result = await _unitOfWork.PropertyGuestRepository.GetByPropertyId(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Fees")]
+        [EndpointSummary("Fetch property fees by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyFeeDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetFeesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.PropertyFeeRepository.GetByPropertyId(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Availabilities")]
+        [EndpointSummary("Fetch property aviabilities by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyAvailabilityDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetAvailabilitiesById([FromRoute] string id, [FromQuery] PropertyAvailabilityQueryParamsDto dto)
+        {
+            var result = await _unitOfWork.PropertyAvailabilityRepository.GetByPropertyId(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Spaces")]
+        [EndpointSummary("Fetch property spaces by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertySpaceDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetSpacesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.PropertySpaceRepository.GetByPropertyId(id, dto);
 
             return Ok(result);
         }

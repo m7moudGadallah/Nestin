@@ -1,10 +1,10 @@
-﻿namespace Nestin.Core.Entities
+﻿namespace Nestin.Core.Dtos.PropertyAvailabilities
 {
-    public class PropertyAvailability : BaseEntity<int>
+    public class PropertyAvailabilityDto
     {
+        public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string PropertyId { get; set; }
-        public virtual Property Property { get; set; }
     }
 }
