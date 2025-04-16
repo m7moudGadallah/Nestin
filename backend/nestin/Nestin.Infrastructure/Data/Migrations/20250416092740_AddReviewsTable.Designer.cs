@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nestin.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Nestin.Infrastructure.Data;
 namespace Nestin.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250416092740_AddReviewsTable")]
+    partial class AddReviewsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4520,134 +4523,6 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.HasIndex("CreatedAt");
 
                     b.ToTable("Reviews");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "66d2f0d9-1f1f-4a02-81d6-0ecabc5215e6",
-                            Accuracy = 4.0m,
-                            BookingId = "7f6b0bb5-e99e-47c7-8d75-b5d46284e241",
-                            CheckIn = 5.0m,
-                            Cleanliness = 4.5m,
-                            Comment = "Great stay overall",
-                            Communication = 4.5m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 4.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 5.0m
-                        },
-                        new
-                        {
-                            Id = "a54b86b1-65e2-426b-81ef-c65c71e5b8d0",
-                            Accuracy = 4.5m,
-                            BookingId = "49b69c8a-8b4b-4021-85f4-ff273b70c85d",
-                            CheckIn = 4.0m,
-                            Cleanliness = 5.0m,
-                            Comment = "Comfortable and clean",
-                            Communication = 5.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 4.5m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 4.5m
-                        },
-                        new
-                        {
-                            Id = "2fca2c7e-263b-4d7e-99e7-0c1c3ad2aa08",
-                            Accuracy = 3.0m,
-                            BookingId = "438d19e1-66fc-4219-9e3d-0519c9c27332",
-                            CheckIn = 2.5m,
-                            Cleanliness = 3.5m,
-                            Comment = "Could be better",
-                            Communication = 4.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 3.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 3.0m
-                        },
-                        new
-                        {
-                            Id = "fca2e08b-0436-4f3f-8261-f69cf3eaa579",
-                            Accuracy = 3.5m,
-                            BookingId = "e42b9075-d67c-4b5f-8316-bde33ef7272a",
-                            CheckIn = 3.0m,
-                            Cleanliness = 3.0m,
-                            Comment = "Average experience",
-                            Communication = 3.5m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 3.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 3.0m
-                        },
-                        new
-                        {
-                            Id = "b57197dc-ff4e-4e03-aeb0-cc7c560dc519",
-                            Accuracy = 2.0m,
-                            BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
-                            CheckIn = 2.0m,
-                            Cleanliness = 2.5m,
-                            Comment = "Needs improvement",
-                            Communication = 3.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 2.5m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 2.0m
-                        },
-                        new
-                        {
-                            Id = "72b3d68d-234a-4ed7-b7f7-e07fc82f58ef",
-                            Accuracy = 4.0m,
-                            BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
-                            CheckIn = 3.5m,
-                            Cleanliness = 4.0m,
-                            Comment = "Good value for money",
-                            Communication = 4.5m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 4.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 4.0m
-                        },
-                        new
-                        {
-                            Id = "ffc234ae-2820-4fd6-b9d7-6b315d91a790",
-                            Accuracy = 5.0m,
-                            BookingId = "0fe8f9f5-7751-460b-b39f-dab6946c0ba2",
-                            CheckIn = 5.0m,
-                            Cleanliness = 5.0m,
-                            Comment = "Perfect location",
-                            Communication = 5.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 5.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 5.0m
-                        },
-                        new
-                        {
-                            Id = "e62cd505-8d60-430b-8b52-16d40902a303",
-                            Accuracy = 4.5m,
-                            BookingId = "7b479ff7-22c5-46ad-85a3-204b502e5d0b",
-                            CheckIn = 4.0m,
-                            Cleanliness = 4.5m,
-                            Comment = "Very good host",
-                            Communication = 5.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 4.5m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 4.5m
-                        },
-                        new
-                        {
-                            Id = "84c03e84-cd8b-4dbf-a0f4-48ed3dd0b0aa",
-                            Accuracy = 5.0m,
-                            BookingId = "8a45a4b6-24ab-4a5b-8ef3-17b7de41295a",
-                            CheckIn = 5.0m,
-                            Cleanliness = 5.0m,
-                            Comment = "Excellent experience",
-                            Communication = 5.0m,
-                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = 5.0m,
-                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Value = 5.0m
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
