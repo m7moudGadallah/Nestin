@@ -15,6 +15,7 @@
         public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository { get; }
         public IPropertyFeeRepository PropertyFeeRepository { get; }
         public IPropertyAvailabilityRepository PropertyAvailabilityRepository { get; }
+        public IPropertySpaceRepository PropertySpaceRepository { get; }
         public Task SaveChangesAsync();
     }
 }
