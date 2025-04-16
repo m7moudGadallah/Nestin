@@ -144,7 +144,7 @@ Table property_availability {
   property_id uuid [not null]
 }
 
-Table wishlist {
+Table favorite_property {
   property_id uuid [not null]
   user_id uuid [not null]
 
@@ -199,7 +199,7 @@ Table payment {
   id uuid [pk]
   booking_id uuid [not null]
   stripe_session_id varchar(255) [not null, unique] // Returned from Stripe when session is created
-  stripe_payment_intent_id varchar(255) // Payment intended created by stripe for session
+  stripe_payment_intent_id varchar(255) // Payment intent created by stripe for session
   amount decimal(16,2) [not null] // Total amount expected
   currency varchar(10) [default: 'usd'] // Could be multi-currency
   status varchar(50) [not null, default: 'pending'] // pending, succeeded, failed, cancelled, refunded
@@ -246,9 +246,9 @@ REF property_amenities_ref: property_amenity.property_id > property.id [delete: 
 REF property_amenity_amenities_ref: property_amenity.amenity_id > amenity.id [delete: cascade, update: cascade]
 REF property_availability_ref: property_availability.property_id > property.id [delete: cascade, update: cascade]
 
-// wishlist relationships
-REF wishlist_property_ref: wishlist.property_id > property.id [delete: cascade, update: cascade]
-REF wishlist_user_ref: wishlist.user_id > user_account.id [delete: cascade, update: cascade]
+// favorite_property relationships
+REF favorite_property_property_ref: favorite_property.property_id > property.id [delete: cascade, update: cascade]
+REF favorite_property_user_ref: favorite_property.user_id > user_account.id [delete: cascade, update: cascade]
 
 // booking relationships
 REF booking_user_ref: booking.user_id > user_account.id [delete: cascade, update: cascade]
