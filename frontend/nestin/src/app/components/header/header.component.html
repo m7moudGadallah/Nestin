@@ -10,7 +10,7 @@
       <!-- Right buttons -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-globe2"></i></a>
+          <lucide-icon [name]="icons.global" class="my-icon"></lucide-icon>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle border p-2 rounded-3" href="#" id="profileMenu" role="button" data-bs-toggle="dropdown">
@@ -27,11 +27,11 @@
   
   <!-- Search Bar -->
   <div class="search-box d-none d-lg-flex justify-content-center align-items-center border-bottom rounded-pill px-4 py-2 shadow-sm gap-3">
-   <!-- search-bar-buttons -->
+    <!-- search-bar-buttons -->
     <button class="btn bg-white border-end rounded-0 text-start w-100"(click)="toggleCountriesMenu()">Where
     <span class="d-block text-muted small no-wrap-text">
         Search destination</span> 
-      <!--search input-->
+      <!-- search input -->
       <input *ngIf="showCountries" 
            type="text" 
            class="form-control mt-2" 
@@ -41,7 +41,7 @@
            (click)="$event.stopPropagation()"
            (input)="filterCountries()">
       </button>
-    <!--Countries menu-->
+   <!-- Countries menu -->
     <ul *ngIf="showCountries" class="list-group position-absolute w-100 z-3 shadow">
       <li *ngFor="let country of countries" class="list-group-item"(click)="selectCountry(country.name)">
        {{country.name}}
@@ -60,7 +60,7 @@
       <i class="bi bi-search"></i>
       </button> 
   </div>
-
+  
   <!--search bar for small screens-->
   <div class="search-box-small d-flex d-lg-none justify-content-center align-items-center border rounded-pill px-4 py-2 shadow-sm w-100 gap-3">
     <i class="bi bi-search"></i>

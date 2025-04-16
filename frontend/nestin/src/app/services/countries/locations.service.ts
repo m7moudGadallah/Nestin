@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LocationsService {
-  private apiUrl = 'http://localhost:3000/country';
+  private apiUrl = 'http://localhost:5050/country';
   constructor(private http: HttpClient) {}
   //for countries
   getAllCountries(): Observable<any[]> {
