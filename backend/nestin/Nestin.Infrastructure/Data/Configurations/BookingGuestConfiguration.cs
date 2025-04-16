@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -35,6 +36,9 @@ namespace Nestin.Infrastructure.Data.Configurations
 
             // Index configuration
             builder.HasIndex(x => x.BookingId);
+
+            // Seed data
+            builder.HasData(BookingGuestSeed.Data);
         }
     }
 }
