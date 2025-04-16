@@ -8,4 +8,7 @@ export interface Property {
   rating: number;
   imageUrl?: string;
   distanceFromMe?: string;
+  cancellationPolicy:string;
+  houseRules:string;
+  reviewsNumber:number;
 }

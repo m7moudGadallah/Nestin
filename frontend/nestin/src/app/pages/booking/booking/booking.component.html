@@ -1,16 +1,125 @@
-<form>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+<div class="booking-page">
+  <div class="left-content">
+      <h4>Your trip</h4>
+      <!--date container-->
+      <div class="date-container">
+        <div class="date-section">
+          <h6>Dates</h6>
+           <button class="edit-button" (click)="openOverlay()">Edit</button>
+        </div>
+        <div class="date-values">
+          <span>
+            <!-- Displayed Dates -->
+            <p class="text-sm text-gray-600 mt-1">
+            {{ savedCheckIn || 'Add date' }} → {{ savedCheckOut || 'Add date' }}
+            </p>
+          </span>
+        </div>
+        <!--date overlay-->
+        <div class="overlay" *ngIf="isOverlayOpen" (click)="closeOverlay()">
+          <div class="popup-content" (click)="$event.stopPropagation()">
+            <h2>Edit Booking Details</h2>
+            <form>
+              <label for="checkIn">Check-In Date:</label>
+              <input type="date" id="checkIn" [(ngModel)]="checkInDate" name="checkIn" />
+        
+              <label for="checkOut">Check-Out Date:</label>
+              <input type="date" id="checkOut" [(ngModel)]="checkOutDate" name="checkOut" />
+        
+              <div class="buttons">
+                <button type="button" (click)="saveChanges()">Save Changes</button>
+                <button type="button" (click)="closeOverlay()">Cancel</button>
+              </div>
+            </form>
+          </div> 
+        </div>
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
+
+    <!--guests div-->
+      <div class="date-section">
+        <h6>Guests</h6> 
+        <button class="edit-button" (click)="openOverlay()">Edit</button>
+      </div>
+      <div class="date-values">
+        <!--display guests-->
+        <span class="text-sm text-gray-600 mt-1">
+          {{totalGuests || 'Add guest'}}
+        </span>
+      </div>
+      <!--guest overlay-->
+      <div class="overlay" *ngIf="isOverlayOpen" (click)="closeOverlay()">
+        <div class="popup-content" (click)="$event.stopPropagation()">
+          <h2>Guests</h2>
+          <form>
+            <!--Adults-->
+            <div class="guest-type">
+              <label>Adults</label>
+              <small>Age 13+</small>
+              <div class="controls">
+                <button type="button" (click)="decrement('adults')">-</button>
+                <span>{{adults}}</span>
+                <button type="button" (click)="increment('adults')">+</button>
+              </div>
+            </div>
+            <!--Children-->
+            <div class="guest-type">
+              <label>Children</label>
+              <small>Ages 2-12</small>
+              <div class="controls">
+                <button type="button" (click)="decrement('children')">-</button>
+                <span>{{children}}</span>
+                <button type="button" (click)="increment('children')">+</button>
+              </div>
+            </div>
+            <!--infants-->
+          <div class="guest-type">
+            <label>Infants</label>
+            <small>Under 2</small>
+            <div class="controls">
+              <button type="button" (click)="decrement('infants')">-</button>
+              <span>{{infants}}</span>
+              <button type="button" (click)="increment('infants')">+</button>
+            </div>
+          </div>
+          <!--pets-->
+          <div class="guest-type">
+            <label>Pets</label>
+            <div class="controls">
+              <button type="button" (click)="decrement('pets')">-</button>
+              <span>{{pets}}</span>
+              <button type="button" (click)="increment('pets')">+</button>
+            </div>
+          </div>
+          <!--save and cancel buttons -->
+          <div class="buttons">
+            <button type="button" (click)="saveChanges()">Save Changes</button>
+            <button type="button" (click)="closeOverlay()">Cancel</button>
+          </div>
+          </form>
+          
+        </div>
+        
+      </div>
+      <hr>
+      <!--cancellation policy-->
+      <h4>Cancellation policy</h4>
+      <hr>
+      <!--ground rules-->
+      <h4>Ground rules</h4>
+      <p>We ask every guest to remember a few simple things about what makes a graet guest.</p>
+      <ul>
+        <li>Follow the house rules</li>
+        <li>Treat your host's home like your own</li>
+      </ul>
+      <button type="button" class="btn btn-danger">confirm and pay</button>
     </div>
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    <!--right side-->
+    <div class="right-sidebar">
+      <img src="../../../../../../../backend/nestin/Nestin.Api/wwwroot/images/barcelona1.avif" alt="there is photo">
+      <p>cairo Egypt </p>
+      <span class="text-muted"></span>
+      <hr>
+      <h4>Your total</h4>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+</div>
+  

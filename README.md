@@ -6,7 +6,8 @@ Nestin is an online platform (similar to Airbnb) where people can rent homes or 
 
 - [Nestin: Product Requirements Document v1](./docs/nestin-prd-v1.md)
 - [Nestin: Features Analysis v1](./docs/nestin-features-analysis-v1.md)
-- Nestin: Database Design v1 ([DBML](./docs/db-design-v1.dbml) | [PDF](./docs/nestin-db-diagram-v1.pdf))
+- Nestin: Database Design v1 ([DBML](./docs/db-design-v1.dbml))
+- Nestin: Database Design v2 ([DBML](./docs/db-design-v2.dbml))
 - [NestIn: Backend Implementation Guide v1](./docs/backend-implementation-guide-v1.md)
 - [NestIn: Frontend Implementation Guide v1](./docs/nestin-frontend-implementation-guide-v1.md)
 

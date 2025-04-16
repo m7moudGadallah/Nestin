@@ -1,0 +1,180 @@
+.booking-page {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .left-content {
+    flex: 2;
+  }
+  /*dates div*/
+  .date-container{
+    margin-bottom: 1.5rem;
+  }
+  .date-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .date-section button{
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .date-section button:hover{
+    color: #dc3545;
+  }
+  .date-section h6{
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .date-values{
+    margin-top: 2px;
+  }
+  .right-sidebar {
+    flex: 1;
+    position: sticky;
+    top: 2rem; /* بيبدأ يثبت بعد 2 ريم من فوق */
+    align-self: flex-start;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+
+
+
+
+
+
+
+
+  /*popup */
+  /* الغلاف الخارجي للبوب-آب */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* خلفية شفافة */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* لضمان ظهوره فوق العناصر الأخرى */
+  }
+  
+  /* محتوى البوب-آب */
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* زر الإغلاق */
+  .popup-content button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .popup-content button:hover {
+    background-color: #0056b3;
+  }
+
+
+
+  /*fake edit overlay*/
+  /* الغلاف الخارجي للـ Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* خلفية شفافة */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* لضمان ظهوره فوق العناصر الأخرى */
+  }
+  
+  /* محتوى النافذة المنبثقة */
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }  
+  /* أزرار الحفظ والإلغاء */
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .buttons button:first-child {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .buttons button:last-child {
+    background-color: #ccc;
+    color: black;
+  }
+  /* نوع الضيف */
+.guest-type {
+    margin-bottom: 15px;
+  }
+  .guest-type label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .guest-type small {
+    color: #666;
+    display: block;
+    margin-bottom: 5px;
+  }
+  /*plus & minus buttons */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .controls button{
+    padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  }
+  .controls button:hover {
+    background-color: #0056b3;
+  }
+  
+  .controls span {
+    font-size: 18px;
+  }

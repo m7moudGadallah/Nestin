@@ -8,14 +8,10 @@ using System.Linq.Expressions;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    class GenericRepository<TEntity, TKey> : BaseRepository, IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        private readonly AppDbContext _dbContext;
-
-        public GenericRepository(AppDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public GenericRepository(AppDbContext dbContext) : base(dbContext)
+        { }
 
         public virtual void Create(TEntity entity)
         {

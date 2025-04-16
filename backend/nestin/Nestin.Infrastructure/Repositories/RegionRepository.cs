@@ -4,7 +4,7 @@ using Nestin.Infrastructure.Data;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    public class RegionRepository : GenericRepository<Region, int>, IRegionRepository
+    class RegionRepository : GenericRepository<Region, int>, IRegionRepository
     {
         public RegionRepository(AppDbContext dbContext) : base(dbContext) { }
     }

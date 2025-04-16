@@ -233,7 +233,7 @@ Table host_payout_method {
 
 // Relationships
 REF location_country_ref: location.country_id > country.id [delete: cascade, update: cascade]
-REF country_region_ref: country.id > region.id [delete: cascade, update: cascade]
+REF country_region_ref: country.region_id > region.id [delete: cascade, update: cascade]
 REF property_location_ref: property.location_id > location.id [delete: restrict, update: cascade]
 REF property_image_attachment_ref: property_image.image_id - attachment.id [delete: cascade, update: cascade]
 REF property_image_property_ref: property_image.property_id < property.id [delete: cascade, update: cascade]
