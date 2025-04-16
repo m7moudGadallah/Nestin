@@ -35,5 +35,6 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<PropertySpaceItem> PropertySpaceItems { get; set; }
         public virtual DbSet<FavoriteProperty> FavoriteProperties { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<BookingGuest> BookingGuests { get; set; }
     }
 }

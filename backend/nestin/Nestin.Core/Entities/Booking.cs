@@ -21,5 +21,6 @@
         public DateTime UpdatedAt { get; set; }
         public virtual Property Property { get; set; }
         public virtual AppUser User { get; set; }
+        public virtual ICollection<BookingGuest> BookingGuests { get; set; } = new HashSet<BookingGuest>();
     }
 }

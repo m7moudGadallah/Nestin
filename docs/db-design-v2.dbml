@@ -173,7 +173,7 @@ Table booking {
 Table booking_guest {
   booking_id uuid [not null]
   guest_type_id int [not null]
-  quantity int [not null]
+  guest_count int [not null]
 
   indexes {
     (booking_id, guest_type_id) [unique]
