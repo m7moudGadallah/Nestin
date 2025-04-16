@@ -12,6 +12,7 @@
         public IPropertyAmenityRepository PropertyAmenityRepository { get; }
         public IPropertyGuestRepository PropertyGuestRepository { get; }
         public IPropertySpaceTypeRepository PropertySpaceTypeRepository { get; }
+        public IPropertySpaceItemTypeRepository PropertySpaceItemTypeRepository { get; }
         public Task SaveChangesAsync();
     }
 }
