@@ -110,13 +110,10 @@ Table property_space_item_type {
 }
 
 Table property_space_item {
-  item_type_id int [not null]
+  id autoincrement [pk]
+  item_type_id int
   property_space_id uuid [not null]
   quantity int
-
-  indexes {
-    (property_space_id, item_type_id) [pk]
-  }
 }
 
 Table amenity_category {
@@ -243,7 +240,7 @@ REF property_space_types_ref: property_space.type_id > property_space_type.id [d
 REF property_spaces_ref: property_space.property_id > property.id [delete: cascade, update: cascade]
 REF space_item_type_space_type_ref: property_space_item_type.space_type_id > property_space_type.id [delete: cascade, update: cascade]
 REF property_space_items_ref: property_space_item.property_space_id > property_space.id [delete: cascade, update: cascade]
-REF property_space_item_type_ref: property_space_item.item_type_id > property_space_item_type.id [delete: cascade, update: cascade]
+REF property_space_item_type_ref: property_space_item.item_type_id > property_space_item_type.id [delete: set null, update: cascade]
 REF amenity_categories_ref: amenity.category_id > amenity_category.id [delete: cascade, update: cascade]
 REF property_amenities_ref: property_amenity.property_id > property.id [delete: cascade, update: cascade]
 REF property_amenity_amenities_ref: property_amenity.amenity_id > amenity.id [delete: cascade, update: cascade]
