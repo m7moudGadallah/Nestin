@@ -11,6 +11,7 @@
         public IGuestTypeReposiotry GuestTypeReposiotry { get; }
         public IPropertyAmenityRepository PropertyAmenityRepository { get; }
         public IPropertyGuestRepository PropertyGuestRepository { get; }
+        public IPropertySpaceTypeRepository PropertySpaceTypeRepository { get; }
         public Task SaveChangesAsync();
     }
 }
