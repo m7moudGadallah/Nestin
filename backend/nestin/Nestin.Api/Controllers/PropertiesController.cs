@@ -2,6 +2,7 @@
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.Properties;
 using Nestin.Core.Dtos.PropertyAmenities;
+using Nestin.Core.Dtos.PropertyFees;
 using Nestin.Core.Dtos.PropertyGuests;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Shared;
@@ -76,6 +77,18 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> GetGuestsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
             var result = await _unitOfWork.PropertyGuestRepository.GetByPropertyId(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Fees")]
+        [EndpointSummary("Fetch property fees by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyFeeDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetFeesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.PropertyFeeRepository.GetByPropertyId(id, dto);
 
             return Ok(result);
         }
