@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Nestin.Core.Dtos.Countires;
+using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.FavoriteProperties;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
-using System.Security.Claims;
 
 
 namespace Nestin.Api.Controllers
@@ -15,65 +12,59 @@ namespace Nestin.Api.Controllers
     [Authorize]
     public class FavoritePropertiesController : BaseController
     {
-        private readonly IFavoritePropertyRepository _favoritePropertyRepository;
-
         public FavoritePropertiesController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
+        { }
 
 
 
         // POST: api/FavoriteProperties
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FavoritePropertiesDto dto)
+        [EndpointSummary("Create new property favirate.")]
+        [Consumes("application/json")]
+        [Produces("appplication/json")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Create([FromBody] CreateFavoritePropertyDto dto)
         {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-               var result= await _favoritePropertyRepository.CreateAsync(userId, dto.PropertyId);
-                var resultDto = new PaginatedResult<FavoritePropertiesDto>
-                {
-                    Items = result.Items.Select(x => x.ToDto()).ToList(),
-                    MetaData = result.MetaData
-                };
-                return Ok(new { message = "Property added to favorites." });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message);
-            }
+            var userId = CurrentUser.Id;
+            await _unitOfWork.FavoritePropertyRepository.CreateAsync(userId, dto.PropertyId);
+            return Created();
         }
 
-       
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] FavoritePropertiesDto dto)
+
+        [HttpDelete("{propertyId:guid}")]
+        [EndpointSummary("Delete exiting property favirate.")]
+        [Produces("appplication/json")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Delete([FromQuery] string propertyId)
         {
-            try
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _favoritePropertyRepository.DeleteAsync(dto.UserId, dto.PropertyId);
-                return Ok(new { message = "Property removed from favorites." });
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            var userId = CurrentUser.Id;
+            await _unitOfWork.FavoritePropertyRepository.DeleteAsync(userId, propertyId);
+            await _unitOfWork.SaveChangesAsync();
+            return NoContent();
         }
 
-       
-       
-        public async Task<IActionResult> GetAll( [FromQuery] string PropertyId)
+
+        [HttpGet()]
+        [EndpointSummary("Get all property favirates.")]
+        [Produces("appplication/json")]
+        [ProducesResponseType(typeof(PaginatedResult<FavoritePropertyDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var favorites = await _favoritePropertyRepository.GetAllByUserIdAsync(userId, PropertyId);
-            var dtoList = favorites.ToDtoList();
-            return Ok(dtoList);
+            var userId = CurrentUser.Id;
+            var result = await _unitOfWork.FavoritePropertyRepository.GetAllByUserIdAsync(userId, queryDto);
+
+            var responseResult = new PaginatedResult<FavoritePropertyDto>
+            {
+                Items = result.Items.Select(x => x.ToDto()).ToList(),
+                MetaData = result.MetaData,
+            };
+
+            return Ok(responseResult);
         }
     }
 }
-    
+
 

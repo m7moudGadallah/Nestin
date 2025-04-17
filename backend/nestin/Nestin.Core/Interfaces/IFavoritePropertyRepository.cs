@@ -1,16 +1,12 @@
-﻿using Nestin.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nestin.Core.Dtos;
+using Nestin.Core.Entities;
+using Nestin.Core.Shared;
 
 namespace Nestin.Core.Interfaces
 {
-    public interface IFavoritePropertyRepository
+    public interface IFavoritePropertyRepository : IBaseRepository
     {
-        Task<List<FavoriteProperty>> GetAllByUserIdAsync(string userId, string propertyId);
+        Task<PaginatedResult<FavoriteProperty>> GetAllByUserIdAsync(string userId, GetAllQueryDto queryDto);
         Task CreateAsync(string userId, string propertyId);
         Task DeleteAsync(string userId, string propertyId);
     }

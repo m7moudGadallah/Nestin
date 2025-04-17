@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Nestin.Core.Interfaces
 {
-    public interface IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public interface IGenericRepository<TEntity, TKey> : IBaseRepository where TEntity : BaseEntity<TKey>
     {
         public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
         public Task<PaginatedResult<TEntity>> GetAllAsync(GetAllQueryDto queryDto, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, params Expression<Func<TEntity, object>>[] includes);
@@ -14,6 +14,5 @@ namespace Nestin.Core.Interfaces
         public void Create(TEntity entity);
         public void Update(TEntity entity);
         public Task DeleteAsync(TKey id);
-        public Task SaveChangesAsync();
     }
 }

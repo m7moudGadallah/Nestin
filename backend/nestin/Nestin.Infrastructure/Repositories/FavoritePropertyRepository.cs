@@ -1,17 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Nestin.Core.Dtos;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Shared;
 using Nestin.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nestin.Infrastructure.Repositories
 {
-     class FavoritePropertyRepository : BaseRepository,IFavoritePropertyRepository
+    class FavoritePropertyRepository : BaseRepository, IFavoritePropertyRepository
     {
         public FavoritePropertyRepository(AppDbContext dbContext) : base(dbContext)
         { }
@@ -32,7 +28,6 @@ namespace Nestin.Infrastructure.Repositories
 
             var entity = new FavoriteProperty { UserId = userId, PropertyId = propertyId };
             _dbContext.FavoriteProperties.Add(entity);
-            await _dbContext.SaveChangesAsync();
         }
 
 
@@ -44,16 +39,35 @@ namespace Nestin.Infrastructure.Repositories
             if (entity != null)
             {
                 _dbContext.FavoriteProperties.Remove(entity);
-                await _dbContext.SaveChangesAsync();
             }
         }
 
 
-        public async Task<List<FavoriteProperty>> GetAllByUserIdAsync(string userId,string propertyId)
+        public async Task<PaginatedResult<FavoriteProperty>> GetAllByUserIdAsync(string userId, GetAllQueryDto queryDto)
         {
-            return await _dbContext.FavoriteProperties
-                .Where(f => f.UserId == userId &&   f.PropertyId == propertyId)
+            var query = _dbContext.FavoriteProperties
+                .Include(x => x.Property)
+                .ThenInclude(x => x.PropertyPhotos)
+                .ThenInclude(x => x.FileUpload)
+                .Where(x => x.UserId == userId).AsQueryable();
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip(queryDto.CalcSkippedItems())
+                .Take(queryDto.PageSize)
                 .ToListAsync();
+
+            return new PaginatedResult<FavoriteProperty>
+            {
+                Items = items,
+                MetaData = new PaginationMetaData
+                {
+                    Page = queryDto.Page,
+                    PageSize = queryDto.PageSize,
+                    Total = totalCount
+                }
+            };
         }
     }
 }
