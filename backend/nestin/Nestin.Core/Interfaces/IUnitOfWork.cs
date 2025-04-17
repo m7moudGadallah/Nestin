@@ -19,6 +19,8 @@
         public IPropertySpaceItemRepository PropertySpaceItemRepository { get; }
         public ILocationRepository LocationRepository { get; }
         public IFavoritePropertyRepository FavoritePropertyRepository { get; }
+
+        public IUserProfileRepository UserProfileRepository { get; }
         public Task SaveChangesAsync();
     }
 }

@@ -1,8 +1,12 @@
-﻿namespace Nestin.Core.Dtos.FavoriteProperties
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Nestin.Core.Dtos.FavoriteProperties
 {
     public class FavoritePropertyDto
     {
+        [Required]
         public string PropertyId { get; set; }
-        // TODO: Add another related data to property like title, main photo
+        [Required]
+        public string PropertyPhotoFullPath { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Nestin.Core.Mappings
             return new FavoriteProperty
             {
                 PropertyId = dto.PropertyId
+
             };
         }
 
@@ -21,8 +22,11 @@ namespace Nestin.Core.Mappings
             //entity.Property.PropertyPhotos.OrderBy(x => x.TouchedAt).FirstOrDefault().FileUpload.Path.ToFullUrl()
             return new FavoritePropertyDto
             {
-                PropertyId = entity.PropertyId
+                PropertyId = entity.PropertyId,
+                PropertyPhotoFullPath=entity.Property.PropertyPhotos.OrderBy(x=>x.TouchedAt).FirstOrDefault().FileUpload.Path.ToFullUrl(),
+
             };
+
         }
     }
 }

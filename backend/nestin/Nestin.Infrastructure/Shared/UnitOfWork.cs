@@ -1,6 +1,7 @@
 ﻿using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Data;
 using Nestin.Infrastructure.Repositories;
+using System.Runtime.CompilerServices;
 
 namespace Nestin.Infrastructure.Shared
 {
@@ -25,6 +26,8 @@ namespace Nestin.Infrastructure.Shared
         private ILocationRepository _locationRepository;
         private IFavoritePropertyRepository? _favoritePropertyRepository;
 
+        private IUserProfileRepository? _userProfileRepository;
+
         public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -48,6 +51,7 @@ namespace Nestin.Infrastructure.Shared
         public ILocationRepository LocationRepository => _locationRepository = new LocationRepository(_dbContext);
         public IFavoritePropertyRepository FavoritePropertyRepository => _favoritePropertyRepository ??= new FavoritePropertyRepository(_dbContext);
 
+        public IUserProfileRepository UserProfileRepository=>_userProfileRepository ??= new UserProfileRepository(_dbContext);
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
