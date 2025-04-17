@@ -23,6 +23,7 @@ namespace Nestin.Infrastructure.Shared
         private IPropertySpaceRepository _propertySpaceRepository;
         private IPropertySpaceItemRepository _propertySpaceItemRepository;
         private ILocationRepository _locationRepository;
+        private IFavoritePropertyRepository? _favoritePropertyRepository;
 
         public UnitOfWork(AppDbContext dbContext)
         {
@@ -45,6 +46,8 @@ namespace Nestin.Infrastructure.Shared
         public IPropertySpaceRepository PropertySpaceRepository => _propertySpaceRepository ??= new PropertySpaceRepository(_dbContext);
         public IPropertySpaceItemRepository PropertySpaceItemRepository => _propertySpaceItemRepository ??= new PropertySpaceItemRepository(_dbContext);
         public ILocationRepository LocationRepository => _locationRepository = new LocationRepository(_dbContext);
+        public IFavoritePropertyRepository FavoritePropertyRepository => _favoritePropertyRepository ??= new FavoritePropertyRepository(_dbContext);
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
