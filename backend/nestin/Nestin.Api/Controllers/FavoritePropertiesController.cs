@@ -1,22 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Nestin.Core.Dtos.Countires;
 using Nestin.Core.Dtos.FavoriteProperties;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
+using Nestin.Core.Shared;
+using System.Security.Claims;
 
 
 namespace Nestin.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FavoritePropertiesController : ControllerBase
+    [Authorize]
+    public class FavoritePropertiesController : BaseController
     {
         private readonly IFavoritePropertyRepository _favoritePropertyRepository;
 
-        public FavoritePropertiesController(IFavoritePropertyRepository favoritePropertyRepository)
+        public FavoritePropertiesController(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _favoritePropertyRepository = favoritePropertyRepository;
         }
+
+
 
         // POST: api/FavoriteProperties
         [HttpPost]
@@ -24,7 +29,13 @@ namespace Nestin.Api.Controllers
         {
             try
             {
-                await _favoritePropertyRepository.CreateAsync(dto.UserId, dto.PropertyId);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+               var result= await _favoritePropertyRepository.CreateAsync(userId, dto.PropertyId);
+                var resultDto = new PaginatedResult<FavoritePropertiesDto>
+                {
+                    Items = result.Items.Select(x => x.ToDto()).ToList(),
+                    MetaData = result.MetaData
+                };
                 return Ok(new { message = "Property added to favorites." });
             }
             catch (ArgumentException ex)
@@ -37,12 +48,13 @@ namespace Nestin.Api.Controllers
             }
         }
 
-        // DELETE: api/FavoriteProperties
+       
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] FavoritePropertiesDto dto)
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await _favoritePropertyRepository.DeleteAsync(dto.UserId, dto.PropertyId);
                 return Ok(new { message = "Property removed from favorites." });
             }
@@ -53,9 +65,10 @@ namespace Nestin.Api.Controllers
         }
 
        
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAll(string userId, [FromQuery] string PropertyId)
+       
+        public async Task<IActionResult> GetAll( [FromQuery] string PropertyId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var favorites = await _favoritePropertyRepository.GetAllByUserIdAsync(userId, PropertyId);
             var dtoList = favorites.ToDtoList();
             return Ok(dtoList);

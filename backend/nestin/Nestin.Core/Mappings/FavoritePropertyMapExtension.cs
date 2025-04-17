@@ -7,7 +7,7 @@ namespace Nestin.Core.Mappings
 {
     public static class FavoritePropertyMappingExtensions
     {
-        // Mapping from DTO to Entity
+        
         public static FavoriteProperty ToEntity(this FavoritePropertiesDto dto)
         {
             return new FavoriteProperty
@@ -17,7 +17,7 @@ namespace Nestin.Core.Mappings
             };
         }
 
-        // Mapping from Entity to DTO
+       
         public static FavoritePropertiesDto ToDto(this FavoriteProperty entity)
         {
             return new FavoritePropertiesDto
@@ -27,7 +27,7 @@ namespace Nestin.Core.Mappings
             };
         }
 
-        // Mapping from list of entities to list of DTOs
+        
         public static List<FavoritePropertiesDto> ToDtoList(this IEnumerable<FavoriteProperty> entities)
         {
             return entities.Select(e => e.ToDto()).ToList();
