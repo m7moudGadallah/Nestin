@@ -133,6 +133,9 @@ namespace Nestin.Infrastructure.Repositories
                 .Include(x => x.PropertyGuests)
                 .Include(x => x.PropertySpaces)
                 .ThenInclude(x => x.PropertySpaceType)
+                .Include(x => x.PropertySpaces)
+                .ThenInclude(x => x.PropertySpaceItems)
+                .ThenInclude(x => x.PropertySpaceItemType)
                 .Where(x => x.Id == id)
                 .Select(p => p.ToPropertyDetailsDto()).FirstOrDefaultAsync();
 

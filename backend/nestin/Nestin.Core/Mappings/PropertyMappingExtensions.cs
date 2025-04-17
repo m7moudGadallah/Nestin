@@ -1,4 +1,5 @@
 ﻿using Nestin.Core.Dtos.Properties;
+using Nestin.Core.Dtos.PropertySpaceItemTypes;
 using Nestin.Core.Dtos.PropertySpaceTypes;
 using Nestin.Core.Entities;
 
@@ -48,7 +49,8 @@ namespace Nestin.Core.Mappings
                 AverageRating = averageRating,
                 ReviewCount = reviewCount,
                 MaxGuestCount = MapMaxGuestCount(property),
-                SpaceSummaries = MapSpaceSummaries(property)
+                SpaceSummaries = MapSpaceSummaries(property),
+                SpaceItemSummaries = MapSpaceItemSummaries(property)
             };
         }
 
@@ -88,6 +90,23 @@ namespace Nestin.Core.Mappings
                     IsShared = g.Key.IsShared
                 })
                 .ToList() ?? new List<PropertySpaceSummaryDto>();
+        }
+
+        private static List<PropertySpaceItemSummaryDto> MapSpaceItemSummaries(Property property)
+        {
+            return property?.PropertySpaces?
+                .SelectMany(space => space.PropertySpaceItems)
+                .GroupBy(item => item.PropertySpaceItemType)
+                .Select(g => new PropertySpaceItemSummaryDto
+                {
+                    ItemType = new PropertySpaceItemTypeDto
+                    {
+                        Id = g.First().PropertySpaceItemType.Id,
+                        Name = g.First().PropertySpaceItemType.Name
+                    },
+                    Quantity = g.Sum(item => item.Quantity)
+                })
+                .ToList() ?? new List<PropertySpaceItemSummaryDto>();
         }
 
         private static int MapMaxGuestCount(Property property)
