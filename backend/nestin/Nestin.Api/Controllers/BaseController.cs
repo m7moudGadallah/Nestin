@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Nestin.Core.Dtos.Accounts;
 using Nestin.Core.Interfaces;
+using System.Security.Claims;
 
 namespace Nestin.Api.Controllers
 {
@@ -12,6 +14,25 @@ namespace Nestin.Api.Controllers
         public BaseController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        protected LoggedInUser CurrentUser
+        {
+            get
+            {
+                if (!User.Identity.IsAuthenticated)
+                    return null;
+
+                return new LoggedInUser
+                {
+                    Id = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    UserName = User.FindFirstValue(ClaimTypes.Name),
+                    Roles = User.Claims
+                        .Where(c => c.Type == ClaimTypes.Role)
+                        .Select(c => c.Value)
+                        .ToList()
+                };
+            }
         }
 
         protected virtual NotFoundObjectResult NotFoundResponse(string? message = null)
