@@ -47,7 +47,7 @@ namespace Nestin.Core.Mappings
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
                 AverageRating = averageRating,
                 ReviewCount = reviewCount,
-                MaxGuestCount = 0,
+                MaxGuestCount = MapMaxGuestCount(property),
                 SpaceSummaries = MapSpaceSummaries(property)
             };
         }
@@ -88,6 +88,11 @@ namespace Nestin.Core.Mappings
                     IsShared = g.Key.IsShared
                 })
                 .ToList() ?? new List<PropertySpaceSummaryDto>();
+        }
+
+        private static int MapMaxGuestCount(Property property)
+        {
+            return property?.PropertyGuests.Sum(x => x.GuestCount) ?? 0;
         }
     }
 }
