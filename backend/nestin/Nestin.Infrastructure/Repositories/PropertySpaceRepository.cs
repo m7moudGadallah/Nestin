@@ -14,7 +14,7 @@ namespace Nestin.Infrastructure.Repositories
         public PropertySpaceRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertySpaceDto>> GetByPropertyId(string propertyId, GetAllQueryDto dto)
+        public async Task<PaginatedResult<PropertySpaceDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto)
         {
             var query = _dbContext.PropertySpaces
                 .Where(x => x.PropertyId == propertyId)

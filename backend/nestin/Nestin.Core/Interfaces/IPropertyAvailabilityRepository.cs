@@ -6,6 +6,6 @@ namespace Nestin.Core.Interfaces
 {
     public interface IPropertyAvailabilityRepository : IGenericRepository<PropertyAvailability, int>
     {
-        public Task<PaginatedResult<PropertyAvailabilityDto>> GetByPropertyId(string propertyId, PropertyAvailabilityQueryParamsDto queryDto);
+        public Task<PaginatedResult<PropertyAvailabilityDto>> GetByPropertyIdAsync(string propertyId, PropertyAvailabilityQueryParamsDto queryDto);
     }
 }

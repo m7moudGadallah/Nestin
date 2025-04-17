@@ -14,7 +14,7 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyFeeRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertyFeeDto>> GetByPropertyId(string propertyId, GetAllQueryDto dto)
+        public async Task<PaginatedResult<PropertyFeeDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto)
         {
             var query = _dbContext.PropertyFees
                .Where(x => x.PropertyId == propertyId)

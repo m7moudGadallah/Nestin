@@ -120,7 +120,7 @@ namespace Nestin.Infrastructure.Repositories
             };
         }
 
-        public async Task<PropertyDetailsDto?> GetPropertyDetails(string id)
+        public async Task<PropertyDetailsDto?> GetPropertyDetailsAsync(string id)
         {
             var property = await _dbContext.Properties
                 .Include(x => x.Owner)

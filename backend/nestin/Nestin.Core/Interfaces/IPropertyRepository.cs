@@ -7,6 +7,6 @@ namespace Nestin.Core.Interfaces
     public interface IPropertyRepository : IGenericRepository<Property, string>
     {
         public Task<PaginatedResult<PropertyListItemDto>> GetFilteredPropertiesAsync(FilterPropertyQueryParamsDto queryDto);
-        public Task<PropertyDetailsDto?> GetPropertyDetails(string id);
+        public Task<PropertyDetailsDto?> GetPropertyDetailsAsync(string id);
     }
 }

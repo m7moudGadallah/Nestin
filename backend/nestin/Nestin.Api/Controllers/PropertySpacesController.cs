@@ -18,7 +18,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetSpacesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
-            var result = await _unitOfWork.PropertySpaceItemRepository.GetByPropertySpaceId(id, dto);
+            var result = await _unitOfWork.PropertySpaceItemRepository.GetByPropertySpaceIdAsync(id, dto);
 
             return Ok(result);
         }
