@@ -1,4 +1,5 @@
 ﻿using Nestin.Core.Dtos.Properties;
+using Nestin.Core.Dtos.PropertySpaceTypes;
 using Nestin.Core.Entities;
 
 namespace Nestin.Core.Mappings
@@ -45,7 +46,9 @@ namespace Nestin.Core.Mappings
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
                 AverageRating = averageRating,
-                ReviewCount = reviewCount
+                ReviewCount = reviewCount,
+                MaxGuestCount = 0,
+                SpaceSummaries = MapSpaceSummaries(property)
             };
         }
 
@@ -63,6 +66,28 @@ namespace Nestin.Core.Mappings
                 : 0;
 
             return (averageRating, reviewCount);
+        }
+
+        private static List<PropertySpaceSummaryDto> MapSpaceSummaries(Property property)
+        {
+            return property.PropertySpaces?
+                .GroupBy(ps => new
+                {
+                    ps.PropertySpaceTypeId,
+                    ps.PropertySpaceType.Name,
+                    ps.IsShared
+                })
+                .Select(g => new PropertySpaceSummaryDto
+                {
+                    SpaceType = new PropertySpaceTypeDto
+                    {
+                        Id = g.Key.PropertySpaceTypeId,
+                        Name = g.Key.Name
+                    },
+                    Count = g.Count(),
+                    IsShared = g.Key.IsShared
+                })
+                .ToList() ?? new List<PropertySpaceSummaryDto>();
         }
     }
 }

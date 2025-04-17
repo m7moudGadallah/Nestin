@@ -6,5 +6,7 @@
         public string? SafteyInfo { get; set; }
         public string? HouseRules { get; set; }
         public string? CancellationPolicy { get; set; }
+        public int MaxGuestCount { get; set; }
+        public List<PropertySpaceSummaryDto> SpaceSummaries { get; set; }
     }
 }
