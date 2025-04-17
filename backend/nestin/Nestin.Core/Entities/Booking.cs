@@ -1,6 +1,5 @@
 ﻿namespace Nestin.Core.Entities
 {
-    [Flags]
     public enum BookingStatus
     {
         Pending = 1,
