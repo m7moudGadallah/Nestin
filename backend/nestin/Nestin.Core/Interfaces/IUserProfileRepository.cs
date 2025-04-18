@@ -1,11 +1,13 @@
 ﻿using Nestin.Core.Dtos.UserProfilesDto;
+using Nestin.Core.Entities;
 
 namespace Nestin.Core.Interfaces
 {
     public interface IUserProfileRepository : IBaseRepository
     {
-        public Task<UserProfileDto> GetByUserIdAsync(string userId);
+        public Task<UserProfile> GetByUserId(string userId);
+        public Task<UserProfileDto> GetProfileDetailsByUserId(string userId);
         public Task CreateAsync(string userId);
-        public Task UpdateByUserId(string userId, UpdateUserProfileDto userprofileEditDto);
+        public void Update(UserProfile userProfile);
     }
 }

@@ -2,14 +2,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.UserProfilesDto;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 
 namespace Nestin.Api.Controllers
 {
     [Authorize]
     public class UserProfileController : BaseController
     {
-        public UserProfileController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+        private readonly IServiceFactory _serviceFactory;
+        public UserProfileController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        {
+            _serviceFactory = serviceFactory;
+        }
 
 
         [HttpGet]
@@ -19,7 +23,7 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> GetByUserId()
         {
             var userId = CurrentUser.Id;
-            var userProfile = await _unitOfWork.UserProfileRepository.GetByUserIdAsync(userId);
+            var userProfile = await _unitOfWork.UserProfileRepository.GetProfileDetailsByUserId(userId);
 
             return Ok(userProfile);
 
@@ -35,15 +39,32 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> UpdateByUserId([FromForm] UpdateUserProfileDto dto)
         {
             var userId = CurrentUser.Id;
+            var userProfile = await _unitOfWork.UserProfileRepository.GetByUserId(userId);
 
-            // TODO: Check for file uploads (Photo)
+            // Handle photo upload if provided
+            if (dto.Photo != null)
+            {
+                var oldPhotoId = userProfile.PhotoId;
+                var fileUpload = await _serviceFactory.FileUploadManagementService.UploadAsync(dto.Photo);
+                userProfile.PhotoId = fileUpload.Id;
 
-            await _unitOfWork.UserProfileRepository.UpdateByUserId(userId, dto);
+                // Delete old photo after successful upload
+                if (!string.IsNullOrEmpty(oldPhotoId))
+                {
+                    await _serviceFactory.FileUploadManagementService.RemoveFileAsync(oldPhotoId);
+                }
+            }
+
+            // Update other properties
+            dto.ToEntity(userProfile);
+
+            // Save changes
+            _unitOfWork.UserProfileRepository.Update(userProfile);
             await _unitOfWork.SaveChangesAsync();
 
-            var userProfile = await _unitOfWork.UserProfileRepository.GetByUserIdAsync(userId);
-
-            return Ok(userProfile);
+            // Return updated profile details
+            var updatedProfile = await _unitOfWork.UserProfileRepository.GetProfileDetailsByUserId(userId);
+            return Ok(updatedProfile);
         }
     }
 }
