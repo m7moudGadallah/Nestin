@@ -1,43 +1,45 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nestin.Core.Dtos.UserProfilesDto;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 using Nestin.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nestin.Infrastructure.Repositories
 {
-    internal class UserProfileRepository :BaseRepository, IUserProfileRepository
+    internal class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
         public UserProfileRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<UserProfileViewDto> GetByUserIdAsync(string userId)
+        public async Task<UserProfileDto> GetByUserIdAsync(string userId)
         {
-            var user = await _dbContext.UserProfiles.Include(u=>u.AppUser)
+            var query = _dbContext.UserProfiles.Include(u => u.AppUser)
+                .Include(u => u.Country)
+                .Include(u => u.AppUser)
+                .Include(u => u.Photo)
                 .Where(u => u.UserId == userId)
-                .Select(u => new UserProfileViewDto
-                {
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    PhoneNumber = u.AppUser.PhoneNumber,
-                    Bio = u.Bio,
-                    BirthDate = u.BirthDate,
-                    UserName = u.AppUser.UserName,
-                    CountryId =u.CountryId,
-                    PhotoId = u.PhotoId
-                })
-                .FirstOrDefaultAsync();
+                .Select(u => u.ToDto());
 
-            if (user == null)
-                throw new ArgumentException("Invalid user ID");
+            var user = await query.FirstOrDefaultAsync();
 
-            return user;
+            if (user is null)
+            {
+                await CreateAsync(userId);
+            }
+
+            return await query.FirstOrDefaultAsync(); ;
         }
 
+        public async Task CreateAsync(string userId)
+        {
+            var newUserProfile = _dbContext.Add(new UserProfile
+            {
+                UserId = userId,
+            });
+
+            await SaveChangesAsync();
+        }
 
         public async Task UpdateByUserId(string userId, UserprofileEditDto dto)
         {
@@ -62,7 +64,7 @@ namespace Nestin.Infrastructure.Repositories
                 userProfile.AppUser.PhoneNumber = dto.PhoneNumber;
             }
 
-           
+
         }
     }
 }

@@ -20,13 +20,17 @@ namespace Nestin.Infrastructure.Repositories
             var propertyExists = await _dbContext.Properties.AnyAsync(p => p.Id == propertyId);
 
             if (!userExists || !propertyExists)
-                throw new ArgumentException("Invalid user ID or property ID.");
+            {
+                throw new ValidationException("Invalid user ID or property ID.");
+            }
 
             var alreadyFavorited = await _dbContext.FavoriteProperties
                 .AnyAsync(f => f.UserId == userId && f.PropertyId == propertyId);
 
             if (alreadyFavorited)
-                throw new InvalidOperationException("This property is already favorited by the user.");
+            {
+                throw new ConflictException("This property is already favorited by the user.");
+            }
 
             var entity = new FavoriteProperty { UserId = userId, PropertyId = propertyId };
             _dbContext.FavoriteProperties.Add(entity);
