@@ -12,7 +12,26 @@ namespace Nestin.Infrastructure.Repositories
         public UserProfileRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<UserProfileDto> GetByUserIdAsync(string userId)
+        public async Task<UserProfile> GetByUserId(string userId)
+        {
+            var query =
+                _dbContext.UserProfiles.Include(u => u.AppUser)
+                  .Include(u => u.Country)
+                  .Include(u => u.AppUser)
+                  .Include(u => u.Photo)
+                  .Where(x => x.UserId == userId);
+
+            var user = await query.FirstOrDefaultAsync();
+
+            if (user is null)
+            {
+                await CreateAsync(userId);
+            }
+
+            return await query.FirstAsync();
+        }
+
+        public async Task<UserProfileDto> GetProfileDetailsByUserId(string userId)
         {
             var query = _dbContext.UserProfiles.Include(u => u.AppUser)
                 .Include(u => u.Country)
@@ -41,30 +60,9 @@ namespace Nestin.Infrastructure.Repositories
             await SaveChangesAsync();
         }
 
-        public async Task UpdateByUserId(string userId, UpdateUserProfileDto dto)
+        public void Update(UserProfile userProfile)
         {
-            var userProfile = await _dbContext.UserProfiles
-                .Include(u => u.AppUser)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
-
-            if (userProfile == null)
-                throw new ArgumentException("User not found");
-
-            //// Update fields from dto
-            //userProfile.FirstName = dto.FirstName;
-            //userProfile.LastName = dto.LastName;
-            //userProfile.Bio = dto.Bio;
-            //userProfile.BirthDate = dto.BirthDate;
-            //userProfile.CountryId = dto.CountryId;
-            //userProfile.PhotoId = dto.PhotoId;
-
-            // Update AppUser PhoneNumber
-            if (userProfile.AppUser != null)
-            {
-                userProfile.AppUser.PhoneNumber = dto.PhoneNumber;
-            }
-
-
+            _dbContext.Update(userProfile);
         }
     }
 }

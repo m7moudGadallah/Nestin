@@ -11,6 +11,7 @@ namespace Nestin.Infrastructure.Shared
         private readonly IConfiguration _config;
 
         private ITokenService _tokenService;
+        private IFileUploadManagementService _fileUploadManagementService;
 
         public ServiceFactory(IServiceProvider provider, IConfiguration config)
         {
@@ -19,5 +20,6 @@ namespace Nestin.Infrastructure.Shared
         }
 
         public ITokenService TokenService => _tokenService ??= new TokenService(_config, _provider.GetRequiredService<IIdentityFactory>());
+        public IFileUploadManagementService FileUploadManagementService => _fileUploadManagementService ??= new FileUploadManagementService(_provider.GetRequiredService<IUnitOfWork>(), _provider.GetRequiredService<IFileStorageService>());
     }
 }

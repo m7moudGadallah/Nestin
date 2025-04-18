@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Data;
+using Nestin.Infrastructure.Services;
 using Nestin.Infrastructure.Shared;
 using System.Text;
 
@@ -66,6 +67,7 @@ namespace Nestin.Infrastructure
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<IServiceFactory, ServiceFactory>();
 
             return services;
