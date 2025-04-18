@@ -15,13 +15,10 @@ namespace Nestin.Api.Controllers
         public FavoritePropertiesController(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
 
-
-
-        // POST: api/FavoriteProperties
         [HttpPost]
         [EndpointSummary("Create new property favirate.")]
         [Consumes("application/json")]
-        [Produces("appplication/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Create([FromBody] CreateFavoritePropertyDto dto)
@@ -34,7 +31,7 @@ namespace Nestin.Api.Controllers
 
         [HttpDelete("{propertyId:guid}")]
         [EndpointSummary("Delete exiting property favirate.")]
-        [Produces("appplication/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Delete([FromQuery] string propertyId)
@@ -48,7 +45,7 @@ namespace Nestin.Api.Controllers
 
         [HttpGet()]
         [EndpointSummary("Get all property favirates.")]
-        [Produces("appplication/json")]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<FavoritePropertyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllQueryDto queryDto)
