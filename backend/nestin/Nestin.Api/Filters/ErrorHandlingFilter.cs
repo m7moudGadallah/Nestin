@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Nestin.Api.Utils;
+using Nestin.Core.Shared;
+using System.Net;
 
 namespace Nestin.Api.Filters
 {
@@ -74,25 +76,40 @@ namespace Nestin.Api.Filters
             // Log the actual exception details
             _logger.LogError(context.Exception, "An unhandled exception occurred while processing the request.");
 
-            // Prepare error message to send to the client
-            var errorMessages = new List<string>
-            {
-                "An error occurred while processing your request."
-            };
+            var errorMessages = new List<string>();
+            int statusCode = 500;
 
-            // In development, include full exception details
-            if (!_env.IsProduction())
+            if (context.Exception is ApiException apiEx)
             {
-                errorMessages.Add(context.Exception.ToString()); // Log complete stack trace in dev
+                statusCode = (int)apiEx.StatusCode;
+
+                if (apiEx is ValidationException validationEx)
+                {
+                    errorMessages = validationEx.Errors;
+                }
+                else
+                {
+                    errorMessages.Add(apiEx.Message);
+                }
             }
             else
             {
-                errorMessages.Add(context.Exception.Message); // Only log exception message in production
+                statusCode = (int)HttpStatusCode.InternalServerError;
+                errorMessages.Add("An error occurred while processing your request.");
+
+                if (!_env.IsProduction())
+                {
+                    errorMessages.Add(context.Exception.ToString());
+                }
+                else
+                {
+                    errorMessages.Add(context.Exception.Message);
+                }
             }
 
             context.Result = new ObjectResult(errorMessages)
             {
-                StatusCode = 500
+                StatusCode = statusCode
             };
         }
     }
