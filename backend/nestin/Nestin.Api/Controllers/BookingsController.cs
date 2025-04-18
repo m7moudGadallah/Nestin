@@ -19,7 +19,7 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         public Task<IActionResult> GetAll([FromQuery] GetAllBookingsQueryParamsDto queryDto)
         {
-            throw new NotImplementedException();
+            return Task.FromResult((IActionResult)StatusCode(StatusCodes.Status501NotImplemented, "This endpoint is not yet implemented"));
         }
     }
 }

@@ -42,11 +42,14 @@ namespace Nestin.Api.Controllers
 
                 if (roleResult.Succeeded)
                 {
+                    var token = await _serviceFactory.TokenService.CreateTokenAsync(appUser);
+                    _serviceFactory.TokenService.SetAccessTokenCookie(HttpContext, token);
+
                     return StatusCode(201, new NewUserDto
                     {
                         Id = appUser.Id,
                         UserName = appUser.UserName,
-                        Token = await _serviceFactory.TokenService.CreateTokenAsync(appUser)
+                        Token = token,
                     });
                 }
                 else
@@ -75,16 +78,27 @@ namespace Nestin.Api.Controllers
 
                 if (passCheckResult.Succeeded)
                 {
+                    var token = await _serviceFactory.TokenService.CreateTokenAsync(user);
+                    // Set secure HTTP-only cookie
+                    _serviceFactory.TokenService.SetAccessTokenCookie(HttpContext, token);
+
                     return Ok(new NewUserDto
                     {
                         Id = user.Id,
                         UserName = user.UserName,
-                        Token = await _serviceFactory.TokenService.CreateTokenAsync(user)
+                        Token = token
                     });
                 }
             }
 
             return Unauthorized("Invalid creditionals.");
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            _serviceFactory.TokenService.UnsetAccessTokenCookie(HttpContext);
+            return Ok();
         }
 
         private string ExtractUsernameFromEmail(string email)

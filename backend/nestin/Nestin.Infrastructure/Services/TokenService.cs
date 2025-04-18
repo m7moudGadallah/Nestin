@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
@@ -15,6 +16,7 @@ namespace Nestin.Infrastructure.Services
         private readonly string _issuer;
         private readonly string _audiance;
         private readonly int _expirationInDays;
+        private readonly CookieOptions _cookieOptions;
 
         public TokenService(IConfiguration config, IIdentityFactory identityFactory)
         {
@@ -26,7 +28,18 @@ namespace Nestin.Infrastructure.Services
             _issuer = config["Jwt:Issuer"];
             _audiance = config["Jwt:Audience"];
             _expirationInDays = int.Parse(config["Jwt:ExpirationInDays"]);
+
+            // Cookie configuration
+            _cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(_expirationInDays),
+                IsEssential = true
+            };
         }
+
 
         public async Task<string> CreateTokenAsync(AppUser user)
         {
@@ -63,6 +76,16 @@ namespace Nestin.Infrastructure.Services
 
             // Return the token as a string
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public void SetAccessTokenCookie(HttpContext ctx, string token)
+        {
+            ctx.Response.Cookies.Append("access_token", token, _cookieOptions);
+        }
+
+        public void UnsetAccessTokenCookie(HttpContext ctx)
+        {
+            ctx.Response.Cookies.Delete("access_token");
         }
     }
 }
