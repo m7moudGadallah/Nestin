@@ -6,6 +6,6 @@ namespace Nestin.Core.Interfaces
     {
         public Task<UserProfileDto> GetByUserIdAsync(string userId);
         public Task CreateAsync(string userId);
-        public Task UpdateByUserId(string userId, UserprofileEditDto userprofileEditDto);
+        public Task UpdateByUserId(string userId, UpdateUserProfileDto userprofileEditDto);
     }
 }

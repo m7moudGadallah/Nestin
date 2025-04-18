@@ -41,7 +41,7 @@ namespace Nestin.Infrastructure.Repositories
             await SaveChangesAsync();
         }
 
-        public async Task UpdateByUserId(string userId, UserprofileEditDto dto)
+        public async Task UpdateByUserId(string userId, UpdateUserProfileDto dto)
         {
             var userProfile = await _dbContext.UserProfiles
                 .Include(u => u.AppUser)
@@ -50,13 +50,13 @@ namespace Nestin.Infrastructure.Repositories
             if (userProfile == null)
                 throw new ArgumentException("User not found");
 
-            // Update fields from dto
-            userProfile.FirstName = dto.FirstName;
-            userProfile.LastName = dto.LastName;
-            userProfile.Bio = dto.Bio;
-            userProfile.BirthDate = dto.BirthDate;
-            userProfile.CountryId = dto.CountryId;
-            userProfile.PhotoId = dto.PhotoId;
+            //// Update fields from dto
+            //userProfile.FirstName = dto.FirstName;
+            //userProfile.LastName = dto.LastName;
+            //userProfile.Bio = dto.Bio;
+            //userProfile.BirthDate = dto.BirthDate;
+            //userProfile.CountryId = dto.CountryId;
+            //userProfile.PhotoId = dto.PhotoId;
 
             // Update AppUser PhoneNumber
             if (userProfile.AppUser != null)

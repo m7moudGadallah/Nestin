@@ -12,10 +12,10 @@ namespace Nestin.Api.Controllers
         { }
 
 
-        [HttpGet()]
+        [HttpGet]
         [EndpointSummary("Get UserProfile Info.")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetByUserId()
         {
             var userId = CurrentUser.Id;
@@ -26,16 +26,24 @@ namespace Nestin.Api.Controllers
         }
 
 
-        [HttpPut()]
+        [HttpPatch]
         [EndpointSummary("Update UserProfile Info.")]
+        [Consumes("multipart/form-data")]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> UpdateByUserId([FromBody] UserprofileEditDto dto)
+        public async Task<IActionResult> UpdateByUserId([FromForm] UpdateUserProfileDto dto)
         {
-
             var userId = CurrentUser.Id;
+
+            // TODO: Check for file uploads (Photo)
+
             await _unitOfWork.UserProfileRepository.UpdateByUserId(userId, dto);
-            return NoContent();
+            await _unitOfWork.SaveChangesAsync();
+
+            var userProfile = await _unitOfWork.UserProfileRepository.GetByUserIdAsync(userId);
+
+            return Ok(userProfile);
         }
     }
 }
