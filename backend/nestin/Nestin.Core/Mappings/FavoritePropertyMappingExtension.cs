@@ -18,12 +18,11 @@ namespace Nestin.Core.Mappings
 
         public static FavoritePropertyDto ToDto(this FavoriteProperty entity)
         {
-            // TODO: Map property photo
-            //entity.Property.PropertyPhotos.OrderBy(x => x.TouchedAt).FirstOrDefault().FileUpload.Path.ToFullUrl()
             return new FavoritePropertyDto
             {
                 PropertyId = entity.PropertyId,
-                PropertyPhotoFullPath=entity.Property.PropertyPhotos.OrderBy(x=>x.TouchedAt).FirstOrDefault().FileUpload.Path.ToFullUrl(),
+                Title = entity.Property.Title,
+                MainPhoto = entity.Property.PropertyPhotos.OrderBy(x => x.TouchedAt).FirstOrDefault().ToDto()
 
             };
 

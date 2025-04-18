@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.FavoriteProperties;
 using Nestin.Core.Interfaces;
-using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
 
 
@@ -53,13 +52,7 @@ namespace Nestin.Api.Controllers
             var userId = CurrentUser.Id;
             var result = await _unitOfWork.FavoritePropertyRepository.GetAllByUserIdAsync(userId, queryDto);
 
-            var responseResult = new PaginatedResult<FavoritePropertyDto>
-            {
-                Items = result.Items.Select(x => x.ToDto()).ToList(),
-                MetaData = result.MetaData,
-            };
-
-            return Ok(responseResult);
+            return Ok(result);
         }
     }
 }

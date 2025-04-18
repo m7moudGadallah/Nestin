@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nestin.Core.Dtos;
+using Nestin.Core.Dtos.FavoriteProperties;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
 using Nestin.Infrastructure.Data;
 
@@ -43,7 +45,7 @@ namespace Nestin.Infrastructure.Repositories
         }
 
 
-        public async Task<PaginatedResult<FavoriteProperty>> GetAllByUserIdAsync(string userId, GetAllQueryDto queryDto)
+        public async Task<PaginatedResult<FavoritePropertyDto>> GetAllByUserIdAsync(string userId, GetAllQueryDto queryDto)
         {
             var query = _dbContext.FavoriteProperties
                 .Include(x => x.Property)
@@ -56,9 +58,10 @@ namespace Nestin.Infrastructure.Repositories
             var items = await query
                 .Skip(queryDto.CalcSkippedItems())
                 .Take(queryDto.PageSize)
+                .Select(x => x.ToDto())
                 .ToListAsync();
 
-            return new PaginatedResult<FavoriteProperty>
+            return new PaginatedResult<FavoritePropertyDto>
             {
                 Items = items,
                 MetaData = new PaginationMetaData
