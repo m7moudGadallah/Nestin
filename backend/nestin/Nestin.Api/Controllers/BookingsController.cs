@@ -23,5 +23,18 @@ namespace Nestin.Api.Controllers
             var result = await _unitOfWork.BookingRepository.GetByUserIdAsync(userId, queryDto);
             return Ok(result);
         }
+
+        [Authorize]
+        [HttpPost]
+        [EndpointSummary("Fetch all bookings.")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<BookingDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
+        public Task<IActionResult> Create([FromBody] CreateBookingDto dto)
+        {
+            return Task.FromResult<IActionResult>(NotImplementedResponse());
+        }
     }
 }
