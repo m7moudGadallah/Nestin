@@ -1,0 +1,41 @@
+<div class="container">
+    <header class="header">
+      <h1>My Bookings</h1>
+      <p>View and manage all your reservations in one place</p>
+    </header>
+  
+    <div class="tabs">
+      <button class="tab" [class.active]="activeTab === 'active'" (click)="setActiveTab('active')">Active Bookings</button>
+      <button class="tab" [class.active]="activeTab === 'past'" (click)="setActiveTab('past')">Past Bookings</button>
+    </div>
+  
+    <div *ngIf="activeTab === 'active'" class="booking-list">
+      <div *ngFor="let booking of activeBookings" class="booking-card">
+        <img [src]="booking.propertyImage" alt="Property Image">
+        <div class="booking-details">
+          <h3>{{ booking.propertyName }}</h3>
+          <p>Location: {{ booking.location }}</p>
+          <p>Check-in: {{ booking.checkIn }} | Check-out: {{ booking.checkOut }}</p>
+          <p>Guests: {{ booking.guests }} | Total Price: ${{ booking.totalPrice }}</p>
+          <p>Status: {{ booking.status }}</p>
+          <button>View Details</button>
+          <button (click)="cancelBooking(booking.id)">Cancel Booking</button>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="activeTab === 'past'" class="booking-list">
+      <div *ngFor="let booking of pastBookings" class="booking-card">
+        <img [src]="booking.propertyImage" alt="Property Image">
+        <div class="booking-details">
+          <h3>{{ booking.propertyName }}</h3>
+          <p>Location: {{ booking.location }}</p>
+          <p>Check-in: {{ booking.checkIn }} | Check-out: {{ booking.checkOut }}</p>
+          <p>Guests: {{ booking.guests }} | Total Price: ${{ booking.totalPrice }}</p>
+          <p>Status: {{ booking.status }}</p>
+          <button>View Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

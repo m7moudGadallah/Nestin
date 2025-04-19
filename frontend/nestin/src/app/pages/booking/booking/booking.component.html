@@ -115,11 +115,51 @@
     </div>
     <!--right side-->
     <div class="right-sidebar">
-      <img src="../../../../../../../backend/nestin/Nestin.Api/wwwroot/images/barcelona1.avif" alt="there is photo">
-      <p>cairo Egypt </p>
-      <span class="text-muted"></span>
-      <hr>
-      <h4>Your total</h4>
+      <div *ngIf="property">
+        <img *ngfor="let photo of property.photos" [src]="photo.photoUrl" alt="Property Image" class="h-40 rounded-lg" /> />
+        <h2>{{ property.title }}</h2>
+        <p>{{ property.propertyType.name }}</p>
+        <p>{{ property.reviewCount }} reviews</p>
+        <p>Rating: {{ property.averageRating }}</p>
+        <p>Price per night: ${{ property.pricePerNight }}</p>
+        <!-- <p>Fees: ${{ property.fees }}</p> -->
+
+        <!-- اختيار التواريخ -->
+  <!-- <div class="my-4">
+    <label>
+      Start Date:
+      <input
+      type="date"
+      #startDate
+      (change)="onDatesSelected(($event.target as HTMLInputElement).value, endDate?.value || '')"
+    />
+     </label>
+
+    <label>
+      End Date:
+      <input
+      type="date"
+      #endDate
+      (change)="onDatesSelected(startDate?.value || '', ($event.target as HTMLInputElement).value)"
+    />
+      </label>
+  </div> -->
+
+  <!-- حساب السعر -->
+  <p>Total Nights: {{ numberOfNights }}</p>
+  <!-- جدول الفيز -->
+<div *ngIf="fees.length > 0">
+  <h3 class="font-semibold mt-4">Fees:</h3>
+  <ul class="list-disc pl-5">
+    <li *ngFor="let fee of fees">
+      {{ fee.name }}: ${{ fee.amount }}
+    </li>
+  </ul>
+</div>
+  <p class="font-bold">Total Price: ${{ totalPrice }}</p>
+
+
+      </div>
     </div>
 </div>
   

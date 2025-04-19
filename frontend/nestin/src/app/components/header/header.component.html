@@ -9,9 +9,9 @@
       </div>
       <!-- Right buttons -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <lucide-icon [name]="icons.global" class="my-icon"></lucide-icon>
-        </li>
+        </li> -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle border p-2 rounded-3" href="#" id="profileMenu" role="button" data-bs-toggle="dropdown">
             <i class="bi bi-list"></i> <i class="bi bi-person-circle ms-2"></i>
@@ -24,48 +24,101 @@
       </ul>
     </div>
   </nav>
-  
-  <!-- Search Bar -->
-  <div class="search-box d-none d-lg-flex justify-content-center align-items-center border-bottom rounded-pill px-4 py-2 shadow-sm gap-3">
-    <!-- search-bar-buttons -->
-    <button class="btn bg-white border-end rounded-0 text-start w-100"(click)="toggleCountriesMenu()">Where
-    <span class="d-block text-muted small no-wrap-text">
-        Search destination</span> 
-      <!-- search input -->
-      <input *ngIf="showCountries" 
-           type="text" 
-           class="form-control mt-2" 
-           [(ngModel)]="searchTerm" 
-           placeholder="Search destination" 
-           name="destination"
-           (click)="$event.stopPropagation()"
-           (input)="filterCountries()">
-      </button>
-   <!-- Countries menu -->
-    <ul *ngIf="showCountries" class="list-group position-absolute w-100 z-3 shadow">
-      <li *ngFor="let country of countries" class="list-group-item"(click)="selectCountry(country.name)">
-       {{country.name}}
-      </li>
-    </ul>
-    <button class="btn bg-white border-end rounded-0 text-start w-100">Check out
-      <span class="d-block text-muted small">Add dates</span>
-    </button>
-    <button class="btn bg-white border-end rounded-0 text-start w-100">Check out
-      <span class="d-block text-muted small">Add dates</span>
-    </button>
-    <button class="btn bg-white rounded-0 text-start w-100">Who
-      <span class="d-block text-muted small">Add guests</span>
-    </button>
-      <button class="btn btn-danger rounded-pill ms-2 d-flex align-items-center justify-content-center px-2 py-1">
-      <i class="bi bi-search"></i>
-      </button> 
+<!----------------------------------------------------------->
+<!--search bar-->
+
+<div class="container mt-4 d-flex justify-content-center d-none">
+  <div class="search-bar d-flex flex-wrap justify-content-between align-items-center p-3 rounded-pill shadow bg-white"style="max-width: 850px; width: 100%; background-color: white;">
+    <!-- Location -->
+     <!--search input-->
+    <div class="px-3 border-end flex-grow-1 search-section">
+      <label class="form-label mb-0 text-muted small">Where</label>
+      <div class="position-relative w-100">
+        <input 
+          type="text"
+          class="form-control border-0 p-0 bg-transparent"
+          placeholder="Search destination"
+          [(ngModel)]="searchQuery"
+        />
+        <!----------------suggestion menu----------------->
+        <ul *ngIf="suggestions.length" class="suggestions-list">
+          <li
+            *ngFor="let suggestion of suggestions"
+            (click)="onSuggestionSelect(suggestion)"
+            class="suggestion-item"
+          >
+            {{ suggestion.name }} ({{ suggestion.type }})
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+
+
+    <!-- Check in -->
+    <div class="px-3 border-end search-section">
+      <label class="form-label mb-1 text-muted small">Check in</label>
+      <input type="date" class="form-control border-0 p-0 bg-transparent" [(ngModel)]="checkInDate" (change)="filterByDate()"/>
+    </div>
+
+    <!-- Check out -->
+    <div class="px-3 border-end search-section">
+      <label class="form-label mb-1 text-muted small">Check out</label>
+      <input type="date" class="form-control border-0 p-0 bg-transparent" [(ngModel)]="checkOutDate" (change)="filterByDate()" />
+    </div>
+
+    <!-- Guests -->
+    <div class="position-relative px-3 flex-grow-1 search-section">
+      <!-- <label class="form-label mb-1 text-muted small">Guests</label> -->
+      <div class="d-flex align-items-center justify-between w-100 h-100">
+        <button type="button" class="btn p-0 border-0 bg-transparent text-start w-100" (click)="toggleGuestMenu($event)">
+          <h6 class="mb-0 fw-semibold">Guests</h6>
+          <small class="text-muted">{{ guestText }}</small> 
+        </button>
+
+        <!-- Search button -->
+        <button type="button" (click)="onSearchClick()"  class="btn btn-danger rounded-circle ms-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+          <i class="fas fa-search text-white"></i>
+        </button>
+      </div>
+
+      <!-- Guest selection menu -->
+      <div *ngIf="isGuestMenuOpen" class="position-absolute end-0 mt-2 p-3 bg-white border rounded shadow-sm " style="width: 300px; z-index: 100;">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Adults</span>
+          <input type="number" class="form-control form-control-sm w-25" min="1"  [(ngModel)]="adults" (ngModelChange)="filterByGuests()" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Children</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" [(ngModel)]="children" (ngModelChange)="filterByGuests()" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Infants</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" [(ngModel)]="infants" (ngModelChange)="filterByGuests()" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Pets</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" [(ngModel)]="pets" (ngModelChange)="filterByGuests()" />
+        </div>
+        <div class="text-end">
+          <button class="btn btn-sm btn-primary" (click)="applyGuestSelection()">Apply</button>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
+ <!--search bar for small screens-->
+ <div class="search-box-small d-flex d-lg-none justify-content-center align-items-center border rounded-pill px-4 py-2 shadow-sm w-100 gap-3">
+  <i class="bi bi-search"></i>
+  <span>Start your search</span> 
+</div>
+
+
+
+
+<!--------------------------------------------------------------------------------------------------------->
   
-  <!--search bar for small screens-->
-  <div class="search-box-small d-flex d-lg-none justify-content-center align-items-center border rounded-pill px-4 py-2 shadow-sm w-100 gap-3">
-    <i class="bi bi-search"></i>
-    <span>Start your search</span> 
-  </div>
 
   <hr>
   
