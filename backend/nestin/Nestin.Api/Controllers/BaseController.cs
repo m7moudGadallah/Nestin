@@ -42,5 +42,14 @@ namespace Nestin.Api.Controllers
                 message ?? "Resource not found!"
             });
         }
+
+        protected virtual ObjectResult NotImplementedResponse(string? message = null)
+        {
+            return new ObjectResult(new List<string>
+            {
+                 message ?? "This endpoint is not implemented yet."
+            })
+            { StatusCode = StatusCodes.Status501NotImplemented };
+        }
     }
 }
