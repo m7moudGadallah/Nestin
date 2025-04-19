@@ -20,8 +20,8 @@
         public ILocationRepository LocationRepository { get; }
         public IFavoritePropertyRepository FavoritePropertyRepository { get; }
         public IFileUploadRepository FileUploadRepository { get; }
-
         public IUserProfileRepository UserProfileRepository { get; }
+        public IBookingRepository BookingRepository { get; }
         public Task SaveChangesAsync();
     }
 }

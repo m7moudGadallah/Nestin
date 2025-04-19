@@ -17,9 +17,11 @@ namespace Nestin.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<BookingDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
-        public Task<IActionResult> GetAll([FromQuery] GetAllBookingsQueryParamsDto queryDto)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllBookingsQueryParamsDto queryDto)
         {
-            return Task.FromResult((IActionResult)StatusCode(StatusCodes.Status501NotImplemented, "This endpoint is not yet implemented"));
+            var userId = CurrentUser.Id;
+            var result = await _unitOfWork.BookingRepository.GetByUserIdAsync(userId, queryDto);
+            return Ok(result);
         }
     }
 }
