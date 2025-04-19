@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nestin.Api.Utils;
 using Nestin.Core.Dtos.Accounts;
@@ -99,6 +100,53 @@ namespace Nestin.Api.Controllers
         {
             _serviceFactory.TokenService.UnsetAccessTokenCookie(HttpContext);
             return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("change-password")]
+        [EndpointSummary("Change password loggedIn user password")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+        {
+            // Get current user from Identity
+            var user = await _identityFactory.UserManager.FindByIdAsync(CurrentUser.Id);
+            if (user == null)
+            {
+                return Unauthorized("User not found");
+            }
+
+            // Verify old password matches
+            var isOldPasswordValid = await _identityFactory.UserManager.CheckPasswordAsync(user, changePasswordDto.OldPassword);
+            if (!isOldPasswordValid)
+            {
+                return BadRequest("Current password is incorrect");
+            }
+
+            // Check if new password is different
+            if (changePasswordDto.OldPassword == changePasswordDto.NewPassword)
+            {
+                return BadRequest("New password must be different from current password");
+            }
+
+            // Change password using Identity
+            var changeResult = await _identityFactory.UserManager.ChangePasswordAsync(
+                user,
+                changePasswordDto.OldPassword,
+                changePasswordDto.NewPassword);
+
+            if (!changeResult.Succeeded)
+            {
+                return BadRequest(changeResult.Errors.Select(e => e.Description));
+            }
+
+
+            _serviceFactory.TokenService.UnsetAccessTokenCookie(HttpContext);
+
+            return NoContent();
         }
 
         private string ExtractUsernameFromEmail(string email)
