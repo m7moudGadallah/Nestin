@@ -29,7 +29,7 @@ namespace Nestin.Api.Controllers
 
         [Authorize(Roles = "Guest,Host")]
         [HttpPost]
-        [EndpointSummary("Create new booking bookings.")]
+        [EndpointSummary("Create new booking.")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<BookingDto>), StatusCodes.Status201Created)]
@@ -41,6 +41,21 @@ namespace Nestin.Api.Controllers
             var createdBooking = await _serviceFactory.BookingManagementService.CreateBookingAsync(userId, dto);
             var bookingDto = await _unitOfWork.BookingRepository.GetBookingDetailsByIdAsync(createdBooking.Id);
             return new ObjectResult(bookingDto) { StatusCode = 201 };
+        }
+
+        [Authorize]
+        [HttpPost("{bookingId:guid}/cancel")]
+        [EndpointSummary("Cancel an exiting booking.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Cancel([FromRoute] string bookingId)
+        {
+            var userId = CurrentUser.Id;
+            var isAdmin = CurrentUser.Roles.Contains("Admin");
+
+            await _serviceFactory.BookingManagementService.CancelBookingAsync(bookingId, userId, isAdmin);
+            return NoContent();
         }
     }
 }

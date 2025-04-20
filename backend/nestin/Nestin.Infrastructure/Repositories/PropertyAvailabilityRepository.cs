@@ -5,6 +5,7 @@ using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
 using Nestin.Infrastructure.Data;
+using System.Linq.Expressions;
 
 namespace Nestin.Infrastructure.Repositories
 {
@@ -13,6 +14,10 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyAvailabilityRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
+        public async Task<List<PropertyAvailability>> GetAllAsync(Expression<Func<PropertyAvailability, bool>> filter)
+        {
+            return await _dbContext.PropertyAvailabilities.Where(filter).ToListAsync();
+        }
         public async Task<PaginatedResult<PropertyAvailabilityDto>> GetByPropertyIdAsync(string propertyId, PropertyAvailabilityQueryParamsDto queryDto)
         {
             var query = _dbContext.PropertyAvailabilities
@@ -62,6 +67,11 @@ namespace Nestin.Infrastructure.Repositories
                     PageSize = queryDto.PageSize
                 }
             };
+        }
+
+        public void Delete(PropertyAvailability propertyAvailability)
+        {
+            _dbContext.Remove(propertyAvailability);
         }
     }
 }

@@ -59,6 +59,39 @@ namespace Nestin.Infrastructure.Services
             return booking;
         }
 
+        public async Task CancelBookingAsync(string bookingId, string userId, bool isAdmin)
+        {
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId, x => x.Property);
+
+            if (booking == null)
+            {
+                throw new NotFoundException($"Booking with id [{bookingId}] not found");
+            }
+
+            // Authorization check
+            if (!isAdmin && booking.UserId != userId)
+            {
+                throw new UnauthorizedException("You can only cancel your own bookings");
+            }
+
+            // Status validation
+            if (booking.Status != BookingStatus.Pending)
+            {
+                throw new ConflictException("Only pending bookings can be canceled");
+            }
+
+            // Update booking status
+            booking.Status = BookingStatus.Canceled;
+            booking.UpdatedAt = DateTime.UtcNow;
+            _unitOfWork.BookingRepository.Update(booking);
+
+            // Restore availability
+            await RestoreAvailabilityAsync(booking.Property, booking.CheckIn, booking.CheckOut);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
         private void ValidateGuestCounts(Property property, List<CreateBookingGuestDto> guests)
         {
             if (property.PropertyGuests == null || !property.PropertyGuests.Any())
@@ -187,9 +220,79 @@ namespace Nestin.Infrastructure.Services
                     _unitOfWork.PropertyAvailabilityRepository.Create(after);
                     await _unitOfWork.PropertyAvailabilityRepository.DeleteAsync(availability.Id);
                 }
-
             }
+        }
 
+
+        private async Task RestoreAvailabilityAsync(Property property, DateTime checkIn, DateTime checkOut)
+        {
+            // Get all UNAVAILABLE availability records that overlap with the booking dates
+            var overlappingAvailabilities = await _unitOfWork.PropertyAvailabilityRepository
+                .GetAllAsync(a => a.PropertyId == property.Id &&
+                                 !a.IsAvailable &&
+                                 a.StartDate < checkOut &&
+                                 a.EndDate > checkIn);
+
+            foreach (var availability in overlappingAvailabilities)
+            {
+                // Case 1: Record exactly matches booking period
+                if (availability.StartDate == checkIn && availability.EndDate == checkOut)
+                {
+                    availability.IsAvailable = true;
+                    _unitOfWork.PropertyAvailabilityRepository.Update(availability);
+                    continue;
+                }
+
+                // Find adjacent records that might need merging
+                var previous = await _unitOfWork.PropertyAvailabilityRepository
+                    .GetAllAsync(a => a.PropertyId == property.Id &&
+                                    a.EndDate == availability.StartDate);
+
+                var next = await _unitOfWork.PropertyAvailabilityRepository
+                    .GetAllAsync(a => a.PropertyId == property.Id &&
+                                    a.StartDate == availability.EndDate);
+
+                // Check if we can merge with adjacent available periods
+                var prevAvailable = previous.FirstOrDefault()?.IsAvailable == true;
+                var nextAvailable = next.FirstOrDefault()?.IsAvailable == true;
+
+                if (prevAvailable && nextAvailable)
+                {
+                    // Merge all three periods
+                    var prevRecord = previous.First();
+                    var nextRecord = next.First();
+
+                    prevRecord.EndDate = nextRecord.EndDate;
+                    _unitOfWork.PropertyAvailabilityRepository.Update(prevRecord);
+
+                    _unitOfWork.PropertyAvailabilityRepository.Delete(availability);
+                    await _unitOfWork.PropertyAvailabilityRepository.DeleteAsync(nextRecord.Id);
+                }
+                else if (prevAvailable)
+                {
+                    // Merge with previous
+                    var prevRecord = previous.First();
+                    prevRecord.EndDate = availability.EndDate;
+                    _unitOfWork.PropertyAvailabilityRepository.Update(prevRecord);
+
+                    _unitOfWork.PropertyAvailabilityRepository.Delete(availability);
+                }
+                else if (nextAvailable)
+                {
+                    // Merge with next
+                    var nextRecord = next.First();
+                    nextRecord.StartDate = availability.StartDate;
+                    _unitOfWork.PropertyAvailabilityRepository.Update(nextRecord);
+
+                    _unitOfWork.PropertyAvailabilityRepository.Delete(availability);
+                }
+                else
+                {
+                    // Just mark as available
+                    availability.IsAvailable = true;
+                    _unitOfWork.PropertyAvailabilityRepository.Update(availability);
+                }
+            }
         }
     }
 }
