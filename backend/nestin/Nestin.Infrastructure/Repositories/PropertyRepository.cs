@@ -58,6 +58,7 @@ namespace Nestin.Infrastructure.Repositories
 
                     query = query.Where(x =>
                         x.PropertyAvailabilities.Any(pa =>
+                            pa.IsAvailable &&
                             pa.StartDate <= checkOutDate &&
                             pa.EndDate >= checkInDate
                         ) &&
@@ -72,6 +73,7 @@ namespace Nestin.Infrastructure.Repositories
                 {
                     query = query.Where(x =>
                         x.PropertyAvailabilities.Any(pa =>
+                            pa.IsAvailable &&
                             pa.StartDate <= checkInDate &&
                             pa.EndDate >= checkInDate
                         ) &&
