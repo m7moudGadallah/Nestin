@@ -33,7 +33,7 @@ namespace Nestin.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Delete([FromQuery] string propertyId)
+        public async Task<IActionResult> Delete([FromRoute] string propertyId)
         {
             var userId = CurrentUser.Id;
             await _unitOfWork.FavoritePropertyRepository.DeleteAsync(userId, propertyId);
