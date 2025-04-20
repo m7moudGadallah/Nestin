@@ -21,8 +21,8 @@ Table user_role {
 
 Table user_profile {
   user_id uuid [pk]
-  fistname varchar(100)
-  lastsname varchar(100)
+  first_name varchar(100)
+  last_name varchar(100)
   bio text
   country_id int
   birth_date date
@@ -151,6 +151,7 @@ Table property_availability {
   id autoincrement [pk]
   start_date date [not null]
   end_date date [not null]
+  is_available bool [not null, default: 'true']
   property_id uuid [not null]
 }
 
