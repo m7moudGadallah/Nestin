@@ -18,7 +18,7 @@ namespace Nestin.Infrastructure.Repositories
             var query = _dbContext.PropertyAvailabilities
                .Where(x => x.PropertyId == propertyId)
                .AsQueryable();
-            // TODO: Handle booking checking
+
             if (queryDto.StartDate.HasValue)
             {
                 var checkInDate = queryDto.StartDate.Value.ToDateTime(TimeOnly.MinValue);
@@ -28,6 +28,7 @@ namespace Nestin.Infrastructure.Repositories
                     var checkOutDate = queryDto.EndDate.Value.ToDateTime(TimeOnly.MinValue);
 
                     query = query.Where(x =>
+                            x.IsAvailable &&
                             x.StartDate <= checkOutDate &&  // Availability starts before or on checkout
                             x.EndDate >= checkInDate
                     );
@@ -36,6 +37,7 @@ namespace Nestin.Infrastructure.Repositories
                 {
                     // Only check-in date provided
                     query = query.Where(x =>
+                            x.IsAvailable &&
                             x.StartDate <= checkInDate &&
                             x.EndDate >= checkInDate
                     );
