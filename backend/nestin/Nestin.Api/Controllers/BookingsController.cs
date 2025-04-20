@@ -8,8 +8,11 @@ namespace Nestin.Api.Controllers
 {
     public class BookingsController : BaseController
     {
-        public BookingsController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+        private IServiceFactory _serviceFactory;
+        public BookingsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        {
+            _serviceFactory = serviceFactory;
+        }
 
         [Authorize]
         [HttpGet]
@@ -24,17 +27,20 @@ namespace Nestin.Api.Controllers
             return Ok(result);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Guest,Host")]
         [HttpPost]
-        [EndpointSummary("Fetch all bookings.")]
+        [EndpointSummary("Create new booking bookings.")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<BookingDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
-        public Task<IActionResult> Create([FromBody] CreateBookingDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateBookingDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var userId = CurrentUser.Id;
+            var createdBooking = await _serviceFactory.BookingManagementService.CreateBookingAsync(userId, dto);
+            var bookingDto = await _unitOfWork.BookingRepository.GetBookingDetailsByIdAsync(createdBooking.Id);
+            return new ObjectResult(bookingDto) { StatusCode = 201 };
         }
     }
 }

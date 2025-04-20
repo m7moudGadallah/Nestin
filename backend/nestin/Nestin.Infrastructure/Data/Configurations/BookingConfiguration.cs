@@ -58,6 +58,9 @@ namespace Nestin.Infrastructure.Data.Configurations
                 .HasDefaultValueSql("GETDATE()")
                 .ValueGeneratedOnAddOrUpdate();
 
+
+            builder.Ignore(x => x.TotalAmount);
+
             // Relationships
             builder.HasOne(x => x.Property)
                 .WithMany(x => x.Bookings)

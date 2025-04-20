@@ -15,6 +15,7 @@ namespace Nestin.Core.Mappings
                 CheckOut = booking.CheckOut,
                 PricePerNight = booking.PricePerNight,
                 TotalFees = booking.TotalFees,
+                TotalAmount = booking.TotalAmount,
                 Status = booking.Status.ToString(),
                 CreatedAt = booking.CreatedAt,
                 UpdatedAt = booking.UpdatedAt,

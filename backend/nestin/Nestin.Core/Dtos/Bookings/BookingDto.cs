@@ -11,6 +11,7 @@ namespace Nestin.Core.Dtos.Bookings
         public DateTime CheckOut { get; set; }
         public decimal PricePerNight { get; set; }
         public decimal TotalFees { get; set; }
+        public decimal TotalAmount { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

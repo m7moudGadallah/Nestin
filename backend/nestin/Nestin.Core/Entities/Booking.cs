@@ -22,5 +22,9 @@
         public virtual AppUser User { get; set; }
         public virtual ICollection<BookingGuest> BookingGuests { get; set; } = new HashSet<BookingGuest>();
         public virtual Review? Review { get; set; }
+
+        // Computed property
+        public decimal TotalAmount =>
+            (decimal)(CheckOut - CheckIn).TotalDays * PricePerNight + TotalFees;
     }
 }

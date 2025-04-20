@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Nestin.Core.Dtos.BookingGuests;
+using System.ComponentModel.DataAnnotations;
 
 namespace Nestin.Core.Dtos.Bookings
 {
@@ -12,6 +13,7 @@ namespace Nestin.Core.Dtos.Bookings
 
         [Required]
         public DateTime Checkout { get; set; }
+        public List<CreateBookingGuestDto> Guests { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

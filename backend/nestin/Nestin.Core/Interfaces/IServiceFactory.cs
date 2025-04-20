@@ -4,5 +4,6 @@
     {
         public ITokenService TokenService { get; }
         public IFileUploadManagementService FileUploadManagementService { get; }
+        public IBookingManagementService BookingManagementService { get; }
     }
 }

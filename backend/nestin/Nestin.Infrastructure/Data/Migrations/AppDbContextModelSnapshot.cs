@@ -215,7 +215,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Amenities");
+                    b.ToTable("Amenities", (string)null);
 
                     b.HasData(
                         new
@@ -718,7 +718,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AmenityCategories");
+                    b.ToTable("AmenityCategories", (string)null);
 
                     b.HasData(
                         new
@@ -956,7 +956,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
 
                     b.HasData(
                         new
@@ -1097,7 +1097,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("GuestTypeId");
 
-                    b.ToTable("BookingGuests");
+                    b.ToTable("BookingGuests", (string)null);
 
                     b.HasData(
                         new
@@ -1176,7 +1176,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("RegionId");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
 
                     b.HasData(
                         new
@@ -2651,7 +2651,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FavoriteProperties");
+                    b.ToTable("FavoriteProperties", (string)null);
 
                     b.HasData(
                         new
@@ -2710,7 +2710,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileUploads");
+                    b.ToTable("FileUploads", (string)null);
 
                     b.HasData(
                         new
@@ -2850,7 +2850,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GuestTypes");
+                    b.ToTable("GuestTypes", (string)null);
 
                     b.HasData(
                         new
@@ -2895,7 +2895,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
 
                     b.HasData(
                         new
@@ -2999,7 +2999,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyTypeId");
 
-                    b.ToTable("Properties");
+                    b.ToTable("Properties", (string)null);
 
                     b.HasData(
                         new
@@ -3136,7 +3136,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("AmenityId");
 
-                    b.ToTable("PropertyAmenities");
+                    b.ToTable("PropertyAmenities", (string)null);
 
                     b.HasData(
                         new
@@ -3288,7 +3288,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyAvailabilities");
+                    b.ToTable("PropertyAvailabilities", (string)null);
 
                     b.HasData(
                         new
@@ -3497,7 +3497,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("GuestTypeId");
 
-                    b.ToTable("PropertyGuests");
+                    b.ToTable("PropertyGuests", (string)null);
 
                     b.HasData(
                         new
@@ -3566,7 +3566,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyPhotos");
+                    b.ToTable("PropertyPhotos", (string)null);
 
                     b.HasData(
                         new
@@ -3745,7 +3745,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceTypeId");
 
-                    b.ToTable("PropertySpaces");
+                    b.ToTable("PropertySpaces", (string)null);
 
                     b.HasData(
                         new
@@ -3902,7 +3902,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceItemTypeId");
 
-                    b.ToTable("PropertySpaceItems");
+                    b.ToTable("PropertySpaceItems", (string)null);
 
                     b.HasData(
                         new
@@ -4039,7 +4039,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceTypeId");
 
-                    b.ToTable("PropertySpaceItemTypes");
+                    b.ToTable("PropertySpaceItemTypes", (string)null);
 
                     b.HasData(
                         new
@@ -4311,7 +4311,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertySpaceTypes");
+                    b.ToTable("PropertySpaceTypes", (string)null);
 
                     b.HasData(
                         new
@@ -4414,7 +4414,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyTypes", (string)null);
 
                     b.HasData(
                         new
@@ -4458,7 +4458,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Regions");
+                    b.ToTable("Regions", (string)null);
 
                     b.HasData(
                         new
@@ -4538,7 +4538,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CreatedAt");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
 
                     b.HasData(
                         new
@@ -4688,7 +4688,7 @@ namespace Nestin.Infrastructure.Data.Migrations
                         .IsUnique()
                         .HasFilter("[PhotoId] IS NOT NULL");
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
