@@ -9,6 +9,7 @@ using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Data;
 using Nestin.Infrastructure.Services;
 using Nestin.Infrastructure.Shared;
+using OpenAI;
 using System.Text;
 
 namespace Nestin.Infrastructure
@@ -64,6 +65,10 @@ namespace Nestin.Infrastructure
                     }
                 };
             });
+
+            // OpenAI configuration
+            services.AddHttpClient();
+            services.Configure<OpenAIClientOptions>(configuration.GetSection("OpenAI"));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
