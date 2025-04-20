@@ -6,6 +6,6 @@ namespace Nestin.Core.Interfaces
 {
     public interface IPropertyGuestRepository
     {
-        public Task<PaginatedResult<PropertyGuestsDto>> GetByPropertyId(string propertyId, GetAllQueryDto dto);
+        public Task<PaginatedResult<PropertyGuestsDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto);
     }
 }

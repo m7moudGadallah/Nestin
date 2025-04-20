@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../services/bookingReservation/booking.service';
 import { ActivatedRoute } from '@angular/router';
+import { BookingResponse,Booking } from '../../../models/bookings/bookings';
+import { Property } from '../../../models/listings/propertyApi';
 
 @Component({
   selector: 'app-booking',
@@ -11,42 +13,35 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './booking.component.css',
 })
 export class BookingComponent implements OnInit {
-  //for fetching booking details
-  property: any;
-  numberOfNights: number = 0;
-  totalPrice: number = 0;
-  fees: any[] = [];
-  totalFees: number = 0;
-  propertyId!: string;
-
   constructor(private bookingService:BookingService, private route: ActivatedRoute){}
 
+  bookings: Booking[]=[];
+  property :Property | null = null;
+
   ngOnInit(): void {
-    this.propertyId = this.route.snapshot.paramMap.get('id')!;
-    this.bookingService.getBookingDetailsbyID(this.propertyId).subscribe(data => {
-      this.property = data;
+    this.loadBookings();
+  }
+  
+  loadBookings(){
+    this.bookingService.getBookings().subscribe({
+      next: (response: BookingResponse) => {
+        this.bookings = response.items;
+  
+        if (this.bookings.length > 0) {
+          this.loadProperty(this.bookings[0].property.id); 
+        }
+      },
+      error: (err) => console.error('error fetching data', err)
+    })
+  }
+  loadProperty(propertyId: string) {
+    this.bookingService.getBookingDetailsbyID(propertyId).subscribe({
+      next: (property) => {
+        this.property = property;
+      },
+      error: (err) => console.error('Error fetching property:', err)
     });
-
-    this.bookingService.getPropertyFees(this.propertyId).subscribe(res => {
-      this.fees = res.items;
-      this.totalFees = this.fees.reduce((sum, fee) => sum + fee.amount, 0);
-      this.calculateTotalPrice(); // بعد ما نحسب الفيز
-    });
   }
-  //calculating total price
-  calculateTotalPrice() {
-    if (this.property) {
-      this.totalPrice = (this.property.pricePerNight * this.numberOfNights) + this.totalFees;
-    }
-  }
-  onDatesSelected(startDate: string, endDate: string) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diff = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
-    this.numberOfNights = diff;
-    this.calculateTotalPrice();
-  }
-
   
 
 
@@ -57,6 +52,7 @@ export class BookingComponent implements OnInit {
 
   //overlay
   isOverlayOpen = false; 
+  overlayType: 'guest' | 'date' | null = null; 
   checkInDate: string = ''; 
   checkOutDate: string = ''; 
   savedCheckIn: string = ''; 
@@ -71,8 +67,9 @@ export class BookingComponent implements OnInit {
   savedPets=0;
 
   
-  openOverlay(): void {
-    this.isOverlayOpen = true;
+  openOverlay(type: 'guest' | 'date'): void {
+    // this.isOverlayOpen = true;
+    this.overlayType = type;
     //dates
     this.checkInDate = this.savedCheckIn;
     this.checkOutDate = this.savedCheckOut;
@@ -107,7 +104,8 @@ export class BookingComponent implements OnInit {
     }
   }
   closeOverlay(): void {
-    this.isOverlayOpen = false;
+    // this.isOverlayOpen = false;7
+    this.overlayType = null;
   }
   saveChanges(): void {
     //dates

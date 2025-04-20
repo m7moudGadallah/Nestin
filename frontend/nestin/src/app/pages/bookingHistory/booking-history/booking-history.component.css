@@ -1,125 +1,19 @@
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7fa;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-  }
-  
-  .header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .header h1 {
-    font-size: 2.5rem;
-    color: #333;
-  }
-  
-  .header p {
-    font-size: 1.2rem;
-    color: #666;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .tab {
-    background-color: #ddd;
-    border: 1px solid #bbb;
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .tab.active {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
-  .booking-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .booking-card {
-    display: flex;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .booking-card img {
-    width: 150px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .booking-details {
-    margin-left: 20px;
-  }
-  
-  .booking-details h3 {
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  .booking-details p {
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .booking-details button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s;
-  }
-  
-  .booking-details button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    .booking-card {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .booking-card img {
-      width: 100%;
-      height: 200px;
-    }
-  
-    .tabs {
-      flex-direction: column;
-    }
-  
-    .tab {
-      margin: 10px 0;
-    }
-  }
-  
+.tab-btn {
+  padding: 0.5rem 1.2rem;
+  border: 2px solid #dc3545;
+  border-radius: 20px;
+  background-color: transparent;
+  color:#dc3545;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tab-btn:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.tab-btn.active {
+  background-color: #dc3545;
+  color: white;
+}

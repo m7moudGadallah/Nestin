@@ -13,7 +13,7 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyGuestRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertyGuestsDto>> GetByPropertyId(string propertyId, GetAllQueryDto dto)
+        public async Task<PaginatedResult<PropertyGuestsDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto)
         {
             var query = _dbContext.PropertyGuests
                 .Include(x => x.GuestType)

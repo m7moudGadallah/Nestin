@@ -47,11 +47,6 @@ namespace Nestin.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public virtual async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
         public virtual void Update(TEntity entity)
         {
             _dbContext.Update(entity);

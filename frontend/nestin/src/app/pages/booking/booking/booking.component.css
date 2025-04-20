@@ -82,7 +82,7 @@
   .popup-content button {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #dc3545;
     color: white;
     border: none;
     border-radius: 4px;
@@ -90,7 +90,7 @@
   }
   
   .popup-content button:hover {
-    background-color: #0056b3;
+    background-color: #dc3545;
   }
 
 
@@ -135,7 +135,7 @@
   }
   
   .buttons button:first-child {
-    background-color: #007bff;
+    background-color: #dc3545;
     color: white;
   }
   
@@ -165,14 +165,14 @@
   }
   .controls button{
     padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   }
   .controls button:hover {
-    background-color: #0056b3;
+    background-color: #dc3545;
   }
   
   .controls span {

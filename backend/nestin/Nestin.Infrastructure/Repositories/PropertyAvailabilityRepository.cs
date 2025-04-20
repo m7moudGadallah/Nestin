@@ -13,7 +13,7 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyAvailabilityRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertyAvailabilityDto>> GetByPropertyId(string propertyId, PropertyAvailabilityQueryParamsDto queryDto)
+        public async Task<PaginatedResult<PropertyAvailabilityDto>> GetByPropertyIdAsync(string propertyId, PropertyAvailabilityQueryParamsDto queryDto)
         {
             var query = _dbContext.PropertyAvailabilities
                .Where(x => x.PropertyId == propertyId)

@@ -1,41 +1,49 @@
-<div class="container">
-    <header class="header">
-      <h1>My Bookings</h1>
-      <p>View and manage all your reservations in one place</p>
-    </header>
-  
-    <div class="tabs">
-      <button class="tab" [class.active]="activeTab === 'active'" (click)="setActiveTab('active')">Active Bookings</button>
-      <button class="tab" [class.active]="activeTab === 'past'" (click)="setActiveTab('past')">Past Bookings</button>
+<!-- status buttons-->
+<div class="status-tabs d-flex gap-3 mb-4 justify-content-center">
+  <button class="tab-btn"
+          *ngFor="let status of statusOptions"
+          (click)="filterByStatus(status)"
+          [class.active]="status === selectedStatus">
+          {{ status }}
+  </button>
+</div>
+
+<!-- booking cards -->
+<div  *ngFor="let booking of filteredBookings" class="card mb-3 w-100 shadow-sm">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img
+        [src]="booking.property.photos[0]?.photoUrl"
+        class="img-fluid h-100 object-fit-cover rounded-start"
+        alt="property"
+      />
     </div>
-  
-    <div *ngIf="activeTab === 'active'" class="booking-list">
-      <div *ngFor="let booking of activeBookings" class="booking-card">
-        <img [src]="booking.propertyImage" alt="Property Image">
-        <div class="booking-details">
-          <h3>{{ booking.propertyName }}</h3>
-          <p>Location: {{ booking.location }}</p>
-          <p>Check-in: {{ booking.checkIn }} | Check-out: {{ booking.checkOut }}</p>
-          <p>Guests: {{ booking.guests }} | Total Price: ${{ booking.totalPrice }}</p>
-          <p>Status: {{ booking.status }}</p>
-          <button>View Details</button>
-          <button (click)="cancelBooking(booking.id)">Cancel Booking</button>
+    <div class="col-md-8">
+      <div class="card-body d-flex flex-column justify-content-between h-100">
+        <div>
+          <h5 class="card-title">{{booking.property.title}}</h5>
+          <p class="text-muted mb-1">{{booking.property.location.name}},{{ booking.property.location.countryId }}</p>
+          <p class="mb-1"><strong>Check-in:</strong> {{ booking.checkIn }}</p>
+          <p class="mb-1"><strong>Check-out:</strong>{{ booking.checkOut }}</p>
+          <p class="mb-1"><strong>Guests:</strong>
+            <span *ngFor="let guest of booking.bookingGuests; let last = last">
+              {{ guest.guestCount }} {{ getGuestTypeName(guest.guestTypeId) }}<span *ngIf="!last">, </span>
+            </span>
+          </p>
         </div>
-      </div>
-    </div>
-  
-    <div *ngIf="activeTab === 'past'" class="booking-list">
-      <div *ngFor="let booking of pastBookings" class="booking-card">
-        <img [src]="booking.propertyImage" alt="Property Image">
-        <div class="booking-details">
-          <h3>{{ booking.propertyName }}</h3>
-          <p>Location: {{ booking.location }}</p>
-          <p>Check-in: {{ booking.checkIn }} | Check-out: {{ booking.checkOut }}</p>
-          <p>Guests: {{ booking.guests }} | Total Price: ${{ booking.totalPrice }}</p>
-          <p>Status: {{ booking.status }}</p>
-          <button>View Details</button>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="fw-bold text-success">Total: ${{ booking.totalFees }}</span>
+          <span class="badge" [ngClass]="{
+            'bg-success': booking.status === 'confirmed',
+            'bg-warning': booking.status === 'pending',
+            'bg-danger': booking.status === 'cancelled'
+          }">
+            {{ booking.status | titlecase }}
+          </span>
         </div>
       </div>
     </div>
   </div>
-  
+</div>
+
+

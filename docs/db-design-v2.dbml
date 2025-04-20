@@ -19,6 +19,16 @@ Table user_role {
   }
 }
 
+Table user_profile {
+  user_id uuid [pk]
+  fistname varchar(100)
+  lastsname varchar(100)
+  bio text
+  country_id int
+  birth_date date
+  photo_id int
+}
+
 Table file_upload {
   id uuid [pk]
   path varchar(300) [not null]
@@ -173,7 +183,7 @@ Table booking {
 Table booking_guest {
   booking_id uuid [not null]
   guest_type_id int [not null]
-  quantity int [not null]
+  guest_count int [not null]
 
   indexes {
     (booking_id, guest_type_id) [unique]
@@ -184,12 +194,12 @@ Table review {
   id uuid [pk]
   booking_id uuid [not null]
   comment text [not null]
-  cleanliness int [not null]
-  accuracy int [not null]
-  check_in int [not null]
-  communication int [not null]
-  location int [not null]
-  value int [not null]
+  cleanliness decimal(2, 1) [not null]
+  accuracy decimal(2, 1) [not null]
+  check_in decimal(2, 1) [not null]
+  communication decimal(2, 1) [not null]
+  location decimal(2, 1) [not null]
+  value decimal(2, 1) [not null]
   created_at datetime [default: `now()`]
   updated_at datetime [default: `now()`]
 }
@@ -222,6 +232,9 @@ Table payment_refund {
 // accounts relationships
 REF user_account_user_roles_ref: user_role.user_id < user_account.id [delete: cascade, update: cascade]
 REF role_user_roles_ref: user_role.role_id < role.id [delete: cascade, update: cascade]
+REF user_profile_account_ref: user_profile.user_id - user_account.id [delete: cascade, update: cascade]
+REF user_profile_country_ref: user_profile.country_id - country.id [delete: set null, update: cascade]
+REF user_profile_photo_ref: user_profile.photo_id - file_upload.id [delete: set null, update: cascade]
 
 // regions & countries relationships
 REF region_countries_ref: country.region_id > region.id [delete: cascade, update: cascade]

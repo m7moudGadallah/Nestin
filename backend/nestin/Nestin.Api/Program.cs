@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Api.Filters;
 using Nestin.Api.Utils;
@@ -25,6 +26,9 @@ namespace Nestin.Api
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            // Configure Ratelimiting
+            builder.Services.ConfigureRateLimiting(builder.Configuration);
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
@@ -40,6 +44,8 @@ namespace Nestin.Api
             });
 
             var app = builder.Build();
+
+            app.UseIpRateLimiting();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

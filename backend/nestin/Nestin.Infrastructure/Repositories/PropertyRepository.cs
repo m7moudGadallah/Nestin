@@ -21,6 +21,8 @@ namespace Nestin.Infrastructure.Repositories
                     .Include(x => x.PropertyType)
                     .Include(x => x.PropertyPhotos)
                     .ThenInclude(x => x.FileUpload)
+                    .Include(x => x.Bookings)
+                    .ThenInclude(x => x.Review)
                     .AsQueryable();
 
             // Fitlers
@@ -46,7 +48,6 @@ namespace Nestin.Infrastructure.Repositories
                 query = query.Where(x => x.PricePerNight <= queryDto.PriceMax.Value);
 
 
-            // TODO: Handle booking checking
             if (queryDto.CheckIn.HasValue)
             {
                 var checkInDate = queryDto.CheckIn.Value.ToDateTime(TimeOnly.MinValue);
@@ -55,20 +56,29 @@ namespace Nestin.Infrastructure.Repositories
                 {
                     var checkOutDate = queryDto.CheckOut.Value.ToDateTime(TimeOnly.MinValue);
 
-                    query = query.Where(x => x.PropertyAvailabilities
-                        .Any(pa =>
-                            pa.StartDate <= checkOutDate &&  // Availability starts before or on checkout
+                    query = query.Where(x =>
+                        x.PropertyAvailabilities.Any(pa =>
+                            pa.StartDate <= checkOutDate &&
                             pa.EndDate >= checkInDate
+                        ) &&
+                        !x.Bookings.Any(b =>
+                            b.Status != BookingStatus.Canceled &&
+                            b.CheckIn < checkOutDate &&
+                            b.CheckOut > checkInDate
                         )
                     );
                 }
                 else
                 {
-                    // Only check-in date provided
-                    query = query.Where(x => x.PropertyAvailabilities
-                        .Any(pa =>
+                    query = query.Where(x =>
+                        x.PropertyAvailabilities.Any(pa =>
                             pa.StartDate <= checkInDate &&
                             pa.EndDate >= checkInDate
+                        ) &&
+                        !x.Bookings.Any(b =>
+                            b.Status != BookingStatus.Canceled &&
+                            b.CheckIn <= checkInDate &&
+                            b.CheckOut > checkInDate
                         )
                     );
                 }
@@ -80,12 +90,18 @@ namespace Nestin.Infrastructure.Repositories
             if (queryDto.RegionId.HasValue)
                 query = query.Where(x => x.Location.Country.RegionId == queryDto.RegionId.Value);
 
-            // TODO: Handle ordering based on rating
             query = queryDto.Sort switch
             {
                 "price_asc" => query.OrderByDescending(x => x.PricePerNight),
                 "price_dec" => query.OrderBy(x => x.PricePerNight),
-                _ => query.OrderBy(x => x.PricePerNight) // TODO: should be by average rating
+                "rating" => query.OrderByDescending(x =>
+                    x.Bookings
+                     .Where(b => b.Review != null)
+                     .Average(b =>
+                         (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
+                          b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
+                ),
+                _ => query.OrderByDescending(x => x.PricePerNight)
             };
 
             // Pagination
@@ -104,7 +120,7 @@ namespace Nestin.Infrastructure.Repositories
             };
         }
 
-        public async Task<PropertyDetailsDto?> GetPropertyDetails(string id)
+        public async Task<PropertyDetailsDto?> GetPropertyDetailsAsync(string id)
         {
             var property = await _dbContext.Properties
                 .Include(x => x.Owner)
@@ -112,6 +128,14 @@ namespace Nestin.Infrastructure.Repositories
                 .Include(x => x.PropertyType)
                 .Include(x => x.PropertyPhotos)
                 .ThenInclude(x => x.FileUpload)
+                .Include(x => x.Bookings)
+                .ThenInclude(x => x.Review)
+                .Include(x => x.PropertyGuests)
+                .Include(x => x.PropertySpaces)
+                .ThenInclude(x => x.PropertySpaceType)
+                .Include(x => x.PropertySpaces)
+                .ThenInclude(x => x.PropertySpaceItems)
+                .ThenInclude(x => x.PropertySpaceItemType)
                 .Where(x => x.Id == id)
                 .Select(p => p.ToPropertyDetailsDto()).FirstOrDefaultAsync();
 

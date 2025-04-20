@@ -6,6 +6,6 @@ namespace Nestin.Core.Interfaces
 {
     public interface IPropertyAmenityRepository
     {
-        public Task<PaginatedResult<PropertySpaceDto>> GetByPropertyId(string propertyId, GetAllQueryDto dto);
+        public Task<PaginatedResult<PropertySpaceDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto);
     }
 }

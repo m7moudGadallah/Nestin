@@ -5,7 +5,7 @@
       <div class="date-container">
         <div class="date-section">
           <h6>Dates</h6>
-           <button class="edit-button" (click)="openOverlay()">Edit</button>
+           <button class="edit-button" (click)="openOverlay('date')">Edit</button>
         </div>
         <div class="date-values">
           <span>
@@ -16,7 +16,7 @@
           </span>
         </div>
         <!--date overlay-->
-        <div class="overlay" *ngIf="isOverlayOpen" (click)="closeOverlay()">
+        <div class="overlay" *ngIf="overlayType === 'date'" (click)="closeOverlay()">
           <div class="popup-content" (click)="$event.stopPropagation()">
             <h2>Edit Booking Details</h2>
             <form>
@@ -38,7 +38,7 @@
     <!--guests div-->
       <div class="date-section">
         <h6>Guests</h6> 
-        <button class="edit-button" (click)="openOverlay()">Edit</button>
+        <button class="edit-button" (click)="openOverlay('guest')">Edit</button>
       </div>
       <div class="date-values">
         <!--display guests-->
@@ -47,7 +47,7 @@
         </span>
       </div>
       <!--guest overlay-->
-      <div class="overlay" *ngIf="isOverlayOpen" (click)="closeOverlay()">
+      <div class="overlay" *ngIf="overlayType === 'guest'" (click)="closeOverlay()">
         <div class="popup-content" (click)="$event.stopPropagation()">
           <h2>Guests</h2>
           <form>
@@ -103,13 +103,13 @@
       <hr>
       <!--cancellation policy-->
       <h4>Cancellation policy</h4>
+      <p>{{property?.cancellationPolicy || 'No cancellation policy found'}}</p>
       <hr>
       <!--ground rules-->
       <h4>Ground rules</h4>
-      <p>We ask every guest to remember a few simple things about what makes a graet guest.</p>
+      <p>We ask every guest to remember a few simple things about what makes a great guest.</p>
       <ul>
-        <li>Follow the house rules</li>
-        <li>Treat your host's home like your own</li>
+        <li>{{property?.houseRules || 'Follow host rules'}}</li>
       </ul>
       <button type="button" class="btn btn-danger">confirm and pay</button>
     </div>
@@ -122,7 +122,7 @@
         <p>{{ property.reviewCount }} reviews</p>
         <p>Rating: {{ property.averageRating }}</p>
         <p>Price per night: ${{ property.pricePerNight }}</p>
-        <!-- <p>Fees: ${{ property.fees }}</p> -->
+        <p>Fees: ${{ bookings[0]?.totalFees }}</p>
 
         <!-- اختيار التواريخ -->
   <!-- <div class="my-4">
@@ -146,9 +146,9 @@
   </div> -->
 
   <!-- حساب السعر -->
-  <p>Total Nights: {{ numberOfNights }}</p>
+  <!-- <p>Total Nights: {{ numberOfNights }}</p> -->
   <!-- جدول الفيز -->
-<div *ngIf="fees.length > 0">
+<!-- <div *ngIf="fees.length > 0">
   <h3 class="font-semibold mt-4">Fees:</h3>
   <ul class="list-disc pl-5">
     <li *ngFor="let fee of fees">
@@ -156,7 +156,7 @@
     </li>
   </ul>
 </div>
-  <p class="font-bold">Total Price: ${{ totalPrice }}</p>
+  <p class="font-bold">Total Price: ${{ totalPrice }}</p> -->
 
 
       </div>

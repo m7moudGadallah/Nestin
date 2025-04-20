@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Data;
+using Nestin.Infrastructure.Services;
 using Nestin.Infrastructure.Shared;
 using System.Text;
 
@@ -40,17 +41,33 @@ namespace Nestin.Infrastructure
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateAudience = false, // TODO: Turnned in prod environment
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audiance"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = ctx =>
+                    {
+                        ctx.Request.Cookies.TryGetValue("access_token", out var accessToken);
+
+
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            ctx.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
             services.AddScoped<IServiceFactory, ServiceFactory>();
 
             return services;

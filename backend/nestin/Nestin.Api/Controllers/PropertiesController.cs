@@ -48,7 +48,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
-            var result = await _unitOfWork.PropertyRepository.GetPropertyDetails(id);
+            var result = await _unitOfWork.PropertyRepository.GetPropertyDetailsAsync(id);
 
             if (result is null)
             {
@@ -65,7 +65,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetAmenitiesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
-            var result = await _unitOfWork.PropertyAmenityRepository.GetByPropertyId(id, dto);
+            var result = await _unitOfWork.PropertyAmenityRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
         }
@@ -77,7 +77,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetGuestsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
-            var result = await _unitOfWork.PropertyGuestRepository.GetByPropertyId(id, dto);
+            var result = await _unitOfWork.PropertyGuestRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
         }
@@ -89,7 +89,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetFeesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
-            var result = await _unitOfWork.PropertyFeeRepository.GetByPropertyId(id, dto);
+            var result = await _unitOfWork.PropertyFeeRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
         }
@@ -101,7 +101,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetAvailabilitiesById([FromRoute] string id, [FromQuery] PropertyAvailabilityQueryParamsDto dto)
         {
-            var result = await _unitOfWork.PropertyAvailabilityRepository.GetByPropertyId(id, dto);
+            var result = await _unitOfWork.PropertyAvailabilityRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
         }
@@ -113,7 +113,7 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetSpacesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
-            var result = await _unitOfWork.PropertySpaceRepository.GetByPropertyId(id, dto);
+            var result = await _unitOfWork.PropertySpaceRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
         }

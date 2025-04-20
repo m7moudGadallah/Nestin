@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 8; 
   totalItems: number = 0;
+  Math = Math;
 
   //---------------------------pagination-------------------------------------
 

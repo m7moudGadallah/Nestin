@@ -903,6 +903,259 @@ namespace Nestin.Infrastructure.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Nestin.Core.Entities.Booking", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime>("CheckIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CheckOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal>("PricePerNight")
+                        .HasColumnType("decimal(16,2)");
+
+                    b.Property<string>("PropertyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalFees")
+                        .HasColumnType("decimal(16,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckIn");
+
+                    b.HasIndex("CheckOut");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bookings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "7f6b0bb5-e99e-47c7-8d75-b5d46284e241",
+                            CheckIn = new DateTime(2025, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 3000m,
+                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
+                            Status = "Pending",
+                            TotalFees = 89981m,
+                            UpdatedAt = new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "49b69c8a-8b4b-4021-85f4-ff273b70c85d",
+                            CheckIn = new DateTime(2025, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 5000m,
+                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
+                            Status = "Confirmed",
+                            TotalFees = 1200m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "438d19e1-66fc-4219-9e3d-0519c9c27332",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 5000m,
+                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
+                            Status = "Confirmed",
+                            TotalFees = 1200m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "e42b9075-d67c-4b5f-8316-bde33ef7272a",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 5000m,
+                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
+                            Status = "Confirmed",
+                            TotalFees = 1200m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 1000m,
+                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
+                            Status = "Canceled",
+                            TotalFees = 1200m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "0fe8f9f5-7751-460b-b39f-dab6946c0ba2",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 2120m,
+                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
+                            Status = "Confirmed",
+                            TotalFees = 1900m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "7b479ff7-22c5-46ad-85a3-204b502e5d0b",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 3000m,
+                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
+                            Status = "Pending",
+                            TotalFees = 1900m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "8a45a4b6-24ab-4a5b-8ef3-17b7de41295a",
+                            CheckIn = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 3000m,
+                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
+                            Status = "Canceled",
+                            TotalFees = 1900m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        },
+                        new
+                        {
+                            Id = "d2bc71b9-d703-43fc-a90f-bf22f29a7b4e",
+                            CheckIn = new DateTime(2025, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CheckOut = new DateTime(2025, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedAt = new DateTime(2024, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PricePerNight = 3000m,
+                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
+                            Status = "Confirmed",
+                            TotalFees = 2000m,
+                            UpdatedAt = new DateTime(2024, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = "4dacdb51-fee9-4479-904c-cafe7dca22a8"
+                        });
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.BookingGuest", b =>
+                {
+                    b.Property<string>("BookingId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GuestTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GuestCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("BookingId", "GuestTypeId");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("GuestTypeId");
+
+                    b.ToTable("BookingGuests");
+
+                    b.HasData(
+                        new
+                        {
+                            BookingId = "7f6b0bb5-e99e-47c7-8d75-b5d46284e241",
+                            GuestTypeId = 1,
+                            GuestCount = 3
+                        },
+                        new
+                        {
+                            BookingId = "49b69c8a-8b4b-4021-85f4-ff273b70c85d",
+                            GuestTypeId = 2,
+                            GuestCount = 3
+                        },
+                        new
+                        {
+                            BookingId = "438d19e1-66fc-4219-9e3d-0519c9c27332",
+                            GuestTypeId = 3,
+                            GuestCount = 2
+                        },
+                        new
+                        {
+                            BookingId = "e42b9075-d67c-4b5f-8316-bde33ef7272a",
+                            GuestTypeId = 1,
+                            GuestCount = 2
+                        },
+                        new
+                        {
+                            BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
+                            GuestTypeId = 2,
+                            GuestCount = 1
+                        },
+                        new
+                        {
+                            BookingId = "0fe8f9f5-7751-460b-b39f-dab6946c0ba2",
+                            GuestTypeId = 2,
+                            GuestCount = 1
+                        },
+                        new
+                        {
+                            BookingId = "7b479ff7-22c5-46ad-85a3-204b502e5d0b",
+                            GuestTypeId = 4,
+                            GuestCount = 2
+                        },
+                        new
+                        {
+                            BookingId = "8a45a4b6-24ab-4a5b-8ef3-17b7de41295a",
+                            GuestTypeId = 1,
+                            GuestCount = 2
+                        },
+                        new
+                        {
+                            BookingId = "d2bc71b9-d703-43fc-a90f-bf22f29a7b4e",
+                            GuestTypeId = 2,
+                            GuestCount = 2
+                        });
+                });
+
             modelBuilder.Entity("Nestin.Core.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -4217,6 +4470,209 @@ namespace Nestin.Infrastructure.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Nestin.Core.Entities.Review", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<decimal>("Accuracy")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<string>("BookingId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("CheckIn")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<decimal>("Cleanliness")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Communication")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal>("Location")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId")
+                        .IsUnique();
+
+                    b.HasIndex("CreatedAt");
+
+                    b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "66d2f0d9-1f1f-4a02-81d6-0ecabc5215e6",
+                            Accuracy = 4.0m,
+                            BookingId = "7f6b0bb5-e99e-47c7-8d75-b5d46284e241",
+                            CheckIn = 5.0m,
+                            Cleanliness = 4.5m,
+                            Comment = "Great stay overall",
+                            Communication = 4.5m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 4.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 5.0m
+                        },
+                        new
+                        {
+                            Id = "a54b86b1-65e2-426b-81ef-c65c71e5b8d0",
+                            Accuracy = 4.5m,
+                            BookingId = "49b69c8a-8b4b-4021-85f4-ff273b70c85d",
+                            CheckIn = 4.0m,
+                            Cleanliness = 5.0m,
+                            Comment = "Comfortable and clean",
+                            Communication = 5.0m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 4.5m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 4.5m
+                        },
+                        new
+                        {
+                            Id = "2fca2c7e-263b-4d7e-99e7-0c1c3ad2aa08",
+                            Accuracy = 3.0m,
+                            BookingId = "438d19e1-66fc-4219-9e3d-0519c9c27332",
+                            CheckIn = 2.5m,
+                            Cleanliness = 3.5m,
+                            Comment = "Could be better",
+                            Communication = 4.0m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 3.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 3.0m
+                        },
+                        new
+                        {
+                            Id = "fca2e08b-0436-4f3f-8261-f69cf3eaa579",
+                            Accuracy = 3.5m,
+                            BookingId = "e42b9075-d67c-4b5f-8316-bde33ef7272a",
+                            CheckIn = 3.0m,
+                            Cleanliness = 3.0m,
+                            Comment = "Average experience",
+                            Communication = 3.5m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 3.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 3.0m
+                        },
+                        new
+                        {
+                            Id = "72b3d68d-234a-4ed7-b7f7-e07fc82f58ef",
+                            Accuracy = 4.0m,
+                            BookingId = "b6d7b477-9b64-4a79-b7a3-b01c45378d5e",
+                            CheckIn = 3.5m,
+                            Cleanliness = 4.0m,
+                            Comment = "Good value for money",
+                            Communication = 4.5m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 4.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 4.0m
+                        },
+                        new
+                        {
+                            Id = "ffc234ae-2820-4fd6-b9d7-6b315d91a790",
+                            Accuracy = 5.0m,
+                            BookingId = "0fe8f9f5-7751-460b-b39f-dab6946c0ba2",
+                            CheckIn = 5.0m,
+                            Cleanliness = 5.0m,
+                            Comment = "Perfect location",
+                            Communication = 5.0m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 5.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 5.0m
+                        },
+                        new
+                        {
+                            Id = "e62cd505-8d60-430b-8b52-16d40902a303",
+                            Accuracy = 4.5m,
+                            BookingId = "7b479ff7-22c5-46ad-85a3-204b502e5d0b",
+                            CheckIn = 4.0m,
+                            Cleanliness = 4.5m,
+                            Comment = "Very good host",
+                            Communication = 5.0m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 4.5m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 4.5m
+                        },
+                        new
+                        {
+                            Id = "84c03e84-cd8b-4dbf-a0f4-48ed3dd0b0aa",
+                            Accuracy = 5.0m,
+                            BookingId = "8a45a4b6-24ab-4a5b-8ef3-17b7de41295a",
+                            CheckIn = 5.0m,
+                            Cleanliness = 5.0m,
+                            Comment = "Excellent experience",
+                            Communication = 5.0m,
+                            CreatedAt = new DateTime(2025, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = 5.0m,
+                            UpdatedAt = new DateTime(2025, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = 5.0m
+                        });
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.UserProfile", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhotoId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("PhotoId")
+                        .IsUnique()
+                        .HasFilter("[PhotoId] IS NOT NULL");
+
+                    b.ToTable("UserProfiles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -4277,6 +4733,44 @@ namespace Nestin.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AmenityCategory");
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.Booking", b =>
+                {
+                    b.HasOne("Nestin.Core.Entities.Property", "Property")
+                        .WithMany("Bookings")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Nestin.Core.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.BookingGuest", b =>
+                {
+                    b.HasOne("Nestin.Core.Entities.Booking", "Booking")
+                        .WithMany("BookingGuests")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Nestin.Core.Entities.GuestType", "GuestType")
+                        .WithMany()
+                        .HasForeignKey("GuestTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("GuestType");
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.Country", b =>
@@ -4474,6 +4968,41 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.Navigation("PropertySpaceType");
                 });
 
+            modelBuilder.Entity("Nestin.Core.Entities.Review", b =>
+                {
+                    b.HasOne("Nestin.Core.Entities.Booking", "Booking")
+                        .WithOne("Review")
+                        .HasForeignKey("Nestin.Core.Entities.Review", "BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.UserProfile", b =>
+                {
+                    b.HasOne("Nestin.Core.Entities.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("Nestin.Core.Entities.FileUpload", "Photo")
+                        .WithOne()
+                        .HasForeignKey("Nestin.Core.Entities.UserProfile", "PhotoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Nestin.Core.Entities.AppUser", "AppUser")
+                        .WithOne()
+                        .HasForeignKey("Nestin.Core.Entities.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Photo");
+                });
+
             modelBuilder.Entity("Nestin.Core.Entities.AmenityCategory", b =>
                 {
                     b.Navigation("Amenities");
@@ -4482,6 +5011,13 @@ namespace Nestin.Infrastructure.Data.Migrations
             modelBuilder.Entity("Nestin.Core.Entities.AppUser", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.Booking", b =>
+                {
+                    b.Navigation("BookingGuests");
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Nestin.Core.Entities.Country", b =>
@@ -4506,6 +5042,8 @@ namespace Nestin.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Nestin.Core.Entities.Property", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("PropertyAvailabilities");
 
                     b.Navigation("PropertyFees");

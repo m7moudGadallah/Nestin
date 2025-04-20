@@ -1,4 +1,6 @@
 ﻿using Nestin.Core.Dtos.Properties;
+using Nestin.Core.Dtos.PropertySpaceItemTypes;
+using Nestin.Core.Dtos.PropertySpaceTypes;
 using Nestin.Core.Entities;
 
 namespace Nestin.Core.Mappings
@@ -7,6 +9,8 @@ namespace Nestin.Core.Mappings
     {
         public static PropertyListItemDto ToPropertyListItemDto(this Property property)
         {
+            var (averageRating, reviewCount) = CalculateRatingStats(property);
+
             return new PropertyListItemDto
             {
                 Id = property.Id,
@@ -18,13 +22,15 @@ namespace Nestin.Core.Mappings
                 Location = property.Location.ToDto(),
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                AverageRating = 0, // TODO: replace it with the actual rating
-                ReviewCount = 0 // TODO: replace it with the actual reviw count 
+                AverageRating = averageRating,
+                ReviewCount = reviewCount
             };
         }
 
         public static PropertyDetailsDto ToPropertyDetailsDto(this Property property)
         {
+            var (averageRating, reviewCount) = CalculateRatingStats(property);
+
             return new PropertyDetailsDto
             {
                 Id = property.Id,
@@ -40,9 +46,72 @@ namespace Nestin.Core.Mappings
                 Location = property.Location.ToDto(),
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
-                AverageRating = 0, // TODO: replace it with the actual rating
-                ReviewCount = 0 // TODO: replace it with the actual reviw count 
+                AverageRating = averageRating,
+                ReviewCount = reviewCount,
+                MaxGuestCount = MapMaxGuestCount(property),
+                SpaceSummaries = MapSpaceSummaries(property),
+                SpaceItemSummaries = MapSpaceItemSummaries(property)
             };
+        }
+
+        private static (decimal averageRating, int reviewCount) CalculateRatingStats(Property property)
+        {
+            var reviews = property.Bookings?
+                .Where(b => b.Review != null)
+                .Select(b => b.Review)
+                .ToList() ?? new List<Review>();
+
+            var reviewCount = reviews.Count;
+            var averageRating = reviewCount > 0
+                ? reviews.Average(r => (r.Cleanliness + r.Accuracy + r.CheckIn +
+                                      r.Communication + r.Location + r.Value) / 6)
+                : 0;
+
+            return (averageRating, reviewCount);
+        }
+
+        private static List<PropertySpaceSummaryDto> MapSpaceSummaries(Property property)
+        {
+            return property.PropertySpaces?
+                .GroupBy(ps => new
+                {
+                    ps.PropertySpaceTypeId,
+                    ps.PropertySpaceType.Name,
+                    ps.IsShared
+                })
+                .Select(g => new PropertySpaceSummaryDto
+                {
+                    SpaceType = new PropertySpaceTypeDto
+                    {
+                        Id = g.Key.PropertySpaceTypeId,
+                        Name = g.Key.Name
+                    },
+                    Count = g.Count(),
+                    IsShared = g.Key.IsShared
+                })
+                .ToList() ?? new List<PropertySpaceSummaryDto>();
+        }
+
+        private static List<PropertySpaceItemSummaryDto> MapSpaceItemSummaries(Property property)
+        {
+            return property?.PropertySpaces?
+                .SelectMany(space => space.PropertySpaceItems)
+                .GroupBy(item => item.PropertySpaceItemType)
+                .Select(g => new PropertySpaceItemSummaryDto
+                {
+                    ItemType = new PropertySpaceItemTypeDto
+                    {
+                        Id = g.First().PropertySpaceItemType.Id,
+                        Name = g.First().PropertySpaceItemType.Name
+                    },
+                    Quantity = g.Sum(item => item.Quantity)
+                })
+                .ToList() ?? new List<PropertySpaceItemSummaryDto>();
+        }
+
+        private static int MapMaxGuestCount(Property property)
+        {
+            return property?.PropertyGuests.Sum(x => x.GuestCount) ?? 0;
         }
     }
 }
