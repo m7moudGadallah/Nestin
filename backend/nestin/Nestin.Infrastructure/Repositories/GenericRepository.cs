@@ -37,14 +37,21 @@ namespace Nestin.Infrastructure.Repositories
             return GetPaginatedResultAsync(queryDto, orderBy, includes);
         }
 
-        public virtual Task<TEntity?> GetByIdAsync(TKey id)
+        public virtual async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual Task<TEntity?> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
+        public virtual async Task<TEntity?> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
-            throw new NotImplementedException();
+            var query = _dbContext.Set<TEntity>().AsQueryable();
+
+            if (includes is not null && includes.Length > 0)
+            {
+                query = ApplyIncludesToQuery(query, includes);
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
         public virtual void Update(TEntity entity)
