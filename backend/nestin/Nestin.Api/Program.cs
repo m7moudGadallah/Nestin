@@ -41,6 +41,18 @@ namespace Nestin.Api
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
+
+                options.AddPolicy("AllowTrusted", policy =>
+                {
+                    var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+                    policy.WithOrigins(allowedOrigins)
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials() // For cookies
+                          .WithHeaders("Authorization", "Content-Type", "X-Requested-With");
+                });
+
             });
 
             var app = builder.Build();
