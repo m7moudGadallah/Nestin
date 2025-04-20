@@ -19,10 +19,11 @@ namespace Nestin.Core.Dtos.Bookings
         {
             var errors = new List<ValidationResult>();
 
-            if (!Guid.TryParse(PropertyId, out var parsedGuid) || parsedGuid.ToString() != PropertyId.ToLower())
+            if (!Guid.TryParse(PropertyId, out var parsedGuid))
             {
-                errors.Add(new ValidationResult("Invalid PropertyId format. Must be a valid UUID v4.", new[] { nameof(PropertyId) }));
+                errors.Add(new ValidationResult("Invalid PropertyId format. Must be a valid GUID.", new[] { nameof(PropertyId) }));
             }
+
 
             if (CheckIn <= DateTime.UtcNow)
             {

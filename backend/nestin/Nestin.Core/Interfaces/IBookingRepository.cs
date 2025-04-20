@@ -8,6 +8,5 @@ namespace Nestin.Core.Interfaces
     {
         public Task<PaginatedResult<BookingDto>> GetByUserIdAsync(string userId, GetAllBookingsQueryParamsDto queryDto);
         public Task<BookingDto> GetBookingDetailsByIdAsync(string bookingId);
-        public Task CancelBookingAsync(string bookingId, string userId, bool isAdmin);
     }
 }
