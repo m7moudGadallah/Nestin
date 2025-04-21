@@ -12,8 +12,11 @@ namespace Nestin.Api.Controllers
 {
     public class PropertiesController : BaseController
     {
-        public PropertiesController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+        private readonly IServiceFactory _serviceFactory;
+        public PropertiesController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        {
+            _serviceFactory = serviceFactory;
+        }
 
         [HttpGet]
         [EndpointSummary("Fetch all properties.")]
@@ -39,6 +42,27 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> GetAll([FromQuery] FilterPropertyQueryParamsDto dto)
         {
             return Ok(await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto));
+        }
+
+        [HttpPost("search")]
+        [EndpointSummary("Smart search for properity.")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PropertySearchResultDto), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> Search([FromBody] string query)
+        {
+            var dto = await _serviceFactory.PropertyFilterExtractorService.ExtractFiltersAsync(query);
+            var propertiesResult = await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto);
+
+            var result = new PropertySearchResultDto
+            {
+                Items = propertiesResult.Items,
+                MetaData = propertiesResult.MetaData,
+                SearchParams = dto,
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
