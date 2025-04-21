@@ -11,6 +11,7 @@
         public DateOnly? CheckIn { get; set; }
         public DateOnly? CheckOut { get; set; }
         public int? CountryId { get; set; }
+        public string? CountryName { get; set; }
         public int? RegionId { get; set; }
         public string? Sort { get; set; }
     }
