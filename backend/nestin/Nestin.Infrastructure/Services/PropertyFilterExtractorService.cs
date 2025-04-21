@@ -1,0 +1,175 @@
+﻿using Nestin.Core.Dtos;
+using Nestin.Core.Dtos.Properties;
+using Nestin.Core.Interfaces;
+using OpenAI.Chat;
+using System.Text.Json;
+
+namespace Nestin.Infrastructure.Services
+{
+    public class PropertyFilterExtractorService : IPropertyFilterExtractorService
+    {
+        private readonly ChatClient _openAiChatClient;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public PropertyFilterExtractorService(
+            ChatClient openAiChatClient,
+            IUnitOfWork unitOfWork)
+        {
+            _openAiChatClient = openAiChatClient;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<FilterPropertyQueryParamsDto> ExtractFiltersAsync(string naturalLanguageQuery)
+        {
+            if (string.IsNullOrWhiteSpace(naturalLanguageQuery))
+            {
+                return new FilterPropertyQueryParamsDto();
+            }
+
+            try
+            {
+                // Create Chat Messages
+                List<ChatMessage> messages = new()
+                {
+                    new SystemChatMessage(await GetSystemPrompt()),
+                    new UserChatMessage(naturalLanguageQuery)
+                };
+
+                // Create Chat Completetion
+                ChatCompletion completion = await _openAiChatClient.CompleteChatAsync(messages);
+
+                // Extract the AI's message (first response)
+                string? jsonResponse = completion.Content[0].Text;
+
+                if (string.IsNullOrWhiteSpace(jsonResponse))
+                {
+                    throw new Exception("AI response was empty.");
+                }
+
+                // Parse the JSON result
+                return ParseAiResponse(jsonResponse);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error extracting filters from natural language\nDetails: {ex.Message}");
+            }
+        }
+
+        private async Task<string> GetSystemPrompt()
+        {
+            // Get regions for the prompt
+            var regions = (await _unitOfWork.RegionRepository.GetAllAsync(
+                new GetAllQueryDto { Page = 1, PageSize = int.MaxValue },
+                q => q.OrderBy(x => x.Id)))
+                .Items.Select(x => new { x.Id, x.Name });
+
+            var propertyTypes = (await _unitOfWork.PropertyTypeRepository.GetAllAsync(
+                new GetAllQueryDto { Page = 1, PageSize = int.MaxValue },
+                q => q.OrderBy(x => x.Id)))
+                .Items.Select(x => new { x.Id, x.Name });
+
+
+            var regionsList = string.Join("\n", regions.Select(r => $"- {r.Id}: {r.Name}"));
+
+            var propertyTypeList = string.Join("\n", propertyTypes.Select(r => $"- {r.Id}: {r.Name}"));
+
+            var today = DateOnly.FromDateTime(DateTime.UtcNow).ToString("yyyy-MM-dd");
+
+            return $@"
+You are an assistant that extracts property search filters from natural language queries.
+
+TODAY'S DATE IS: {today}
+
+Use this as the reference point when calculating any relative date expressions like 'next week', 'tomorrow', 'in 3 days', etc.
+
+Available Regions:
+{regionsList}
+
+Available PropertyTypes:
+{propertyTypeList}
+
+Extract ONLY the following information if mentioned in the query:
+1. Country name (as string, don't convert to ID)
+2. Region ID (from the available regions list)
+3. Check-in date (format: YYYY-MM-DD)
+4. Check-out date (format: YYYY-MM-DD)
+5. Guest count (as number) — this is the total of all people, including adults, children, infants, and pets
+6. Sort preference (one of: 'price_asc', 'price_desc', 'rating')
+7. PropertyTypeId (as number)
+
+Return a VALID JSON object with ONLY these fields (all nullable):
+{{
+  ""countryName"": string,
+  ""regionId"": number,
+  ""checkIn"": string,
+  ""checkOut"": string,
+  ""guestCount"": number,
+  ""sort"": string,
+  ""propertyTypeId"": int
+}}
+
+Important rules:
+- Only include fields that are explicitly mentioned
+- Use the exact field names specified
+- For dates, use YYYY-MM-DD format
+- For regions, only use IDs from the provided list
+- For property types, only use IDs from the provided list
+- ALWAYS return valid JSON
+
+IMPORTANT:
+- DO NOT wrap the JSON response in triple backticks or any markdown formatting.
+- Just return a raw JSON object.";
+        }
+
+        private FilterPropertyQueryParamsDto ParseAiResponse(string jsonResponse)
+        {
+            try
+            {
+                Console.WriteLine(jsonResponse);
+                string cleanJson = jsonResponse.Trim();
+
+                if (cleanJson.StartsWith("```"))
+                {
+                    int firstNewline = cleanJson.IndexOf('\n');
+                    int lastBacktick = cleanJson.LastIndexOf("```", StringComparison.Ordinal);
+
+                    if (firstNewline != -1 && lastBacktick > firstNewline)
+                    {
+                        cleanJson = cleanJson.Substring(firstNewline + 1, lastBacktick - firstNewline - 1).Trim();
+                    }
+                }
+
+                using var doc = JsonDocument.Parse(cleanJson);
+                var root = doc.RootElement;
+
+                return new FilterPropertyQueryParamsDto
+                {
+                    CountryName = root.TryGetProperty("countryName", out var cn) ? cn.GetString() : null,
+                    RegionId = root.TryGetProperty("regionId", out var ri) && ri.ValueKind != JsonValueKind.Null ? ri.GetInt32() : null,
+                    PropertyTypeId = root.TryGetProperty("propertyTypeId", out var pt) && pt.ValueKind != JsonValueKind.Null ? pt.GetInt32() : null,
+                    CheckIn = TryGetNullableDateOnly(root, "checkIn"),
+                    CheckOut = TryGetNullableDateOnly(root, "checkOut"),
+                    GuestCount = root.TryGetProperty("guestCount", out var gc) && gc.ValueKind != JsonValueKind.Null ? gc.GetInt32() : null,
+                    Sort = root.TryGetProperty("sort", out var s) ? s.GetString() : null
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to parse AI response: {jsonResponse}\nError: {ex.Message}", ex);
+            }
+        }
+
+        private DateOnly? TryGetNullableDateOnly(JsonElement root, string propertyName)
+        {
+            if (root.TryGetProperty(propertyName, out var prop) &&
+                prop.ValueKind == JsonValueKind.String &&
+                DateOnly.TryParse(prop.GetString(), out var date))
+            {
+                return date;
+            }
+
+            return null;
+        }
+
+    }
+}
