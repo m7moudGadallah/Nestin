@@ -114,7 +114,11 @@ Important rules:
 - For dates, use YYYY-MM-DD format
 - For regions, only use IDs from the provided list
 - For property types, only use IDs from the provided list
+- If a country name has a typo or is similar to an actual country name, assume it's a match to the closest available country name
+- For regions and property types, if a name has a typo or is similar to an item in the list, assume it's a match to the closest available option and return the corresponding ID from the list
+- Never invent or guess values that aren't in the provided lists
 - ALWAYS return valid JSON
+
 
 IMPORTANT:
 - DO NOT wrap the JSON response in triple backticks or any markdown formatting.
