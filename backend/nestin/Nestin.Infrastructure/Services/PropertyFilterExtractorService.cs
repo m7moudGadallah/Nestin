@@ -129,7 +129,6 @@ IMPORTANT:
         {
             try
             {
-                Console.WriteLine(jsonResponse);
                 string cleanJson = jsonResponse.Trim();
 
                 if (cleanJson.StartsWith("```"))
