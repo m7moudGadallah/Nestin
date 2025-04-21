@@ -10,6 +10,7 @@ using Nestin.Infrastructure.Data;
 using Nestin.Infrastructure.Services;
 using Nestin.Infrastructure.Shared;
 using OpenAI;
+using OpenAI.Chat;
 using System.Text;
 
 namespace Nestin.Infrastructure
@@ -69,6 +70,14 @@ namespace Nestin.Infrastructure
             // OpenAI configuration
             services.AddHttpClient();
             services.Configure<OpenAIClientOptions>(configuration.GetSection("OpenAI"));
+            services.AddKeyedSingleton<ChatClient>("MainOpenAIClient", (provider, key) =>
+            {
+                var apiKey = configuration["OpenAI:ApiKey"];
+                var chatModel = configuration["OpenAI:ChatModel"];
+                var client = new ChatClient(chatModel, apiKey);
+                return client;
+            });
+
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
