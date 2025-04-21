@@ -18,6 +18,7 @@ namespace Nestin.Infrastructure.Repositories
             var query = _dbContext.Properties
                     .Include(x => x.Owner)
                     .Include(x => x.Location)
+                    .ThenInclude(x => x.Country)
                     .Include(x => x.PropertyType)
                     .Include(x => x.PropertyPhotos)
                     .ThenInclude(x => x.FileUpload)
@@ -48,7 +49,7 @@ namespace Nestin.Infrastructure.Repositories
                 query = query.Where(x => x.PricePerNight <= queryDto.PriceMax.Value);
 
 
-            if (queryDto.CheckIn.HasValue)
+            if (queryDto.CheckIn.HasValue && queryDto.CheckIn.Value >= DateOnly.FromDateTime(DateTime.Today))
             {
                 var checkInDate = queryDto.CheckIn.Value.ToDateTime(TimeOnly.MinValue);
 
@@ -88,6 +89,8 @@ namespace Nestin.Infrastructure.Repositories
 
             if (queryDto.CountryId.HasValue)
                 query = query.Where(x => x.Location.CountryId == queryDto.CountryId.Value);
+            else if (!string.IsNullOrEmpty(queryDto.CountryName))
+                query = query.Where(x => EF.Functions.Like(x.Location.Country.Name, $"%{queryDto.CountryName}%"));
 
             if (queryDto.RegionId.HasValue)
                 query = query.Where(x => x.Location.Country.RegionId == queryDto.RegionId.Value);
