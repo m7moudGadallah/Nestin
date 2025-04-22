@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Services;
 using OpenAI.Chat;
+using Stripe;
 
 namespace Nestin.Infrastructure.Shared
 {
@@ -15,6 +16,7 @@ namespace Nestin.Infrastructure.Shared
         private IFileUploadManagementService _fileUploadManagementService;
         private IBookingManagementService _bookingManagementService;
         private IPropertyFilterExtractorService _propertyFilterExtractorService;
+        private ICheckoutManagementService _checkoutManagementService;
 
         public ServiceFactory(IServiceProvider provider, IConfiguration config)
         {
@@ -29,5 +31,10 @@ namespace Nestin.Infrastructure.Shared
         public IPropertyFilterExtractorService PropertyFilterExtractorService =>
             _propertyFilterExtractorService ??= new PropertyFilterExtractorService
                 (_provider.GetRequiredKeyedService<ChatClient>("MainOpenAIClient"), _provider.GetRequiredService<IUnitOfWork>());
+
+        public ICheckoutManagementService CheckoutManagementService =>
+            _checkoutManagementService ??= new StripeCheckoutService(
+                _provider.GetRequiredService<StripeClient>(),
+                _config);
     }
 }

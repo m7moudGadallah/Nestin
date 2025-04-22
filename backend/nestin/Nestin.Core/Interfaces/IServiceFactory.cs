@@ -6,5 +6,6 @@
         public IFileUploadManagementService FileUploadManagementService { get; }
         public IBookingManagementService BookingManagementService { get; }
         public IPropertyFilterExtractorService PropertyFilterExtractorService { get; }
+        public ICheckoutManagementService CheckoutManagementService { get; }
     }
 }
