@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AccountServiceService } from '../../services/account-service.service';
+import { AccountService } from '../../services/account.service';
 import { IRegisterRes } from '../../models/api/response/iregister-res';
 
 @Component({
@@ -21,14 +21,14 @@ import { IRegisterRes } from '../../models/api/response/iregister-res';
     RouterModule,
   ],
   templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.css',
+  styleUrl: './register-page.component.scss',
 })
 export class RegisterPageComponent {
   countries: string[] = [];
   signupForm: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountServiceService,
+    private accountService: AccountService,
     private router: Router
   ) {
     this.signupForm = this.fb.group({

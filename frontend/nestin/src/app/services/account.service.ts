@@ -5,13 +5,11 @@ import { ApiConstant } from '../utils/api-constant.util';
 import { IChangePasswordReq } from '../models/api/request/ichange-password-req';
 import { ILoginReq } from '../models/api/request/ilogin-req';
 import { IRegisterReq } from '../models/api/request/iregister-req';
-import { IRegisterRes } from '../models/api/response/iregister-res';
-import { ILoginRes } from '../models/api/response/ilogin-res';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AccountServiceService {
+export class AccountService {
   constructor(private http: HttpClient) {}
 
   register(dto: IRegisterReq): Observable<HttpResponse<any>> {

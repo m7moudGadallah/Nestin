@@ -1,5 +1,5 @@
 export interface IRegisterRes {
   id: string;
-  username: string;
+  userName: string;
   token: string;
 }
