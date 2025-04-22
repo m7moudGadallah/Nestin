@@ -1,5 +1,30 @@
-$primary: #ff385c;
+// Fonts
+$font-family-sans-serif: 'Open Sans', sans-serif;
+
+// Colors
+$airbnb-primary: #ff385c;
+
+// Bootstrap colors variables
+$primary: #ef7768;
 $secondary: #7c7c7c;
 $dark: #222222;
+
+// Navbar
+$navbar-light-hover-color: $primary;
+$navbar-light-active-color: $primary;
+
+// Spacing
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 6,
+  7: $spacer * 8,
+  8: $spacer * 12,
+);
 
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
