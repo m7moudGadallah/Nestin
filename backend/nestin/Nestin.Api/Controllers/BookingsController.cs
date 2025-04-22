@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Nestin.Core.Dtos.Bookings;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Shared;
@@ -9,9 +10,11 @@ namespace Nestin.Api.Controllers
     public class BookingsController : BaseController
     {
         private IServiceFactory _serviceFactory;
-        public BookingsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        private IIdentityFactory _identityFactory;
+        public BookingsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IIdentityFactory identityFactory) : base(unitOfWork)
         {
             _serviceFactory = serviceFactory;
+            _identityFactory = identityFactory;
         }
 
         [Authorize]
@@ -32,7 +35,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Create new booking.")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<BookingDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BookingDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateBookingDto dto)
@@ -56,6 +59,62 @@ namespace Nestin.Api.Controllers
 
             await _serviceFactory.BookingManagementService.CancelBookingAsync(bookingId, userId, isAdmin);
             return NoContent();
+        }
+
+        [Authorize]
+        [HttpPost("checkout")]
+        [EndpointSummary("Request for checkout session.")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<CreateCheckoutResult>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Checkout([FromBody] BookingCheckoutDto dto)
+        {
+            var userId = CurrentUser.Id;
+
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(dto.BookingId);
+
+            if (booking is null || booking.UserId != userId)
+            {
+                return NotFoundResponse($"Booking with id [{dto.BookingId}] is not found!");
+            }
+
+            var property = await _unitOfWork.PropertyRepository.GetPropertyDetailsAsync(booking.PropertyId);
+
+            var user = await _identityFactory.UserManager.Users.FirstAsync(x => x.Id == userId);
+
+            CheckoutOptions options = new CheckoutOptions
+            {
+                BookingId = dto.BookingId,
+                Guest = new UserInfo
+                {
+                    Id = userId,
+                    Email = user.Email
+                },
+                Property = new PropertyInfo
+                {
+                    Id = property.Id,
+                    Title = property.Title,
+                    Description = property.Description,
+                    MainPhotoUrl = property.Photos?.FirstOrDefault()?.PhotoUrl,
+                    LocationName = property.Location.Name
+                },
+                BookingPeriod = new BookingPeriod
+                {
+                    CheckInDate = booking.CheckIn,
+                    CheckOutDate = booking.CheckOut
+                },
+                Pricing = new PricingDetails
+                {
+                    PricePerNight = booking.PricePerNight,
+                    TotalFees = booking.TotalFees
+                }
+            };
+
+            var createSessoinResult = await _serviceFactory.CheckoutManagementService.CreateCheckoutSessionAsync(options);
+
+            return Ok(createSessoinResult);
         }
     }
 }
