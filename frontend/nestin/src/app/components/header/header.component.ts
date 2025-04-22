@@ -1,17 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StickyNavDirective } from '../../directive/sticky-nav.directive';
 import { AuthService } from '../../services/auth.service';
 import { AccountService } from '../../services/account.service';
+import {
+  LucideAngularModule,
+  Home,
+  Heart,
+  User,
+  LogIn,
+  LogOut,
+  Menu,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule, StickyNavDirective],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    StickyNavDirective,
+    LucideAngularModule,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+  readonly icons = {
+    home: Home,
+    heart: Heart,
+    user: User,
+    login: LogIn,
+    logout: LogOut,
+    menu: Menu,
+  };
+
   constructor(
     private authService: AuthService,
     private accountService: AccountService,
@@ -25,15 +49,11 @@ export class HeaderComponent {
   logout() {
     this.accountService.logout().subscribe({
       next: () => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userId');
-        // Redirect to home after successful logout
+        this.authService.unsetAuthData();
         this.router.navigate(['/home']);
       },
       error: err => {
         console.error('Logout failed:', err);
-        // Still redirect to home even if logout API fails
         this.router.navigate(['/home']);
       },
     });

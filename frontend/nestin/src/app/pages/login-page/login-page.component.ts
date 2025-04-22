@@ -11,6 +11,8 @@ import { AccountService } from '../../services/account.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ILoginRes } from '../../models/api/response/ilogin-res';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Eye, EyeOff, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-login-page',
@@ -20,6 +22,7 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    LucideAngularModule,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
@@ -27,13 +30,18 @@ import { CommonModule } from '@angular/common';
 export class LoginPageComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
-  showPassword: boolean = false;
+  showPassword = false;
+  icons = {
+    eye: Eye,
+    eyeOff: EyeOff,
+  };
   isLoggingIn: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -41,7 +49,11 @@ export class LoginPageComponent {
     });
   }
 
-  togglePassword() {
+  get passwordFieldType(): string {
+    return this.showPassword ? 'text' : 'password';
+  }
+
+  togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
@@ -55,9 +67,7 @@ export class LoginPageComponent {
         next: (response: HttpResponse<ILoginRes>) => {
           const body = response.body;
           if (response.status === 200 && body && body.token) {
-            localStorage.setItem('accessToken', body.token);
-            localStorage.setItem('userName', body.userName);
-            localStorage.setItem('userId', body.id);
+            this.authService.setAuthData(body.id, body.userName, body.token);
             this.router.navigate(['/home']);
           } else {
             this.handleLoginError('Invalid credentials');

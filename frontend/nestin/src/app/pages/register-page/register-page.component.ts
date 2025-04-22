@@ -10,6 +10,8 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../services/account.service';
 import { IRegisterRes } from '../../models/api/response/iregister-res';
+import { AuthService } from '../../services/auth.service';
+import { Eye, EyeOff, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   standalone: true,
@@ -19,16 +21,23 @@ import { IRegisterRes } from '../../models/api/response/iregister-res';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    LucideAngularModule,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.scss',
 })
 export class RegisterPageComponent {
-  countries: string[] = [];
   signupForm: FormGroup;
+  showPassword = false;
+  icons = {
+    eye: Eye,
+    eyeOff: EyeOff,
+  };
+
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.signupForm = this.fb.group({
@@ -50,6 +59,14 @@ export class RegisterPageComponent {
     return this.signupForm.controls;
   }
 
+  get passwordFieldType(): string {
+    return this.showPassword ? 'text' : 'password';
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit(): void {
     if (this.signupForm.valid) {
       const formData = this.signupForm.value;
@@ -63,9 +80,7 @@ export class RegisterPageComponent {
           next: (res: { body: IRegisterRes }) => {
             const body = res.body;
             if (body && body.token) {
-              localStorage.setItem('accessToken', body.token);
-              localStorage.setItem('userName', body.userName);
-              localStorage.setItem('userId', body.id);
+              this.authService.setAuthData(body.id, body.userName, body.token);
               this.router.navigate(['/home']);
             }
           },
