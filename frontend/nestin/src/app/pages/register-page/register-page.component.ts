@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,15 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
-import { RouterModule } from '@angular/router';
-//import { CountryNamesService } from '../../Services/country-names.service';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-//import { AuthService } from '../../Services/services/auth.service';
-import { Router } from '@angular/router';
+import { AccountServiceService } from '../../services/account-service.service';
+import { IRegisterRes } from '../../models/api/response/iregister-res';
 
 @Component({
-  selector: 'app-register',
   standalone: true,
   imports: [
     RouterModule,
@@ -23,24 +20,18 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
   ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+  templateUrl: './register-page.component.html',
+  styleUrl: './register-page.component.css',
 })
-export class RegisterComponent implements OnInit {
+export class RegisterPageComponent {
   countries: string[] = [];
   signupForm: FormGroup;
   constructor(
-    private countryName: CountryNamesService,
     private fb: FormBuilder,
-    private authService: AuthService,
+    private accountService: AccountServiceService,
     private router: Router
   ) {
     this.signupForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      phone: ['', [Validators.required, Validators.pattern(/^\d{8,11}$/)]],
-      country: ['', Validators.required],
-      birthday: ['', [Validators.required, this.minimumAgeValidator(18)]],
       email: ['', [Validators.required, Validators.email]],
       password: [
         '',
@@ -54,10 +45,8 @@ export class RegisterComponent implements OnInit {
       ],
     });
   }
-  ngOnInit(): void {
-    this.countries = this.countryName.getCountries();
-  }
-  get f() {
+
+  get formControls() {
     return this.signupForm.controls;
   }
 
@@ -65,18 +54,28 @@ export class RegisterComponent implements OnInit {
     if (this.signupForm.valid) {
       const formData = this.signupForm.value;
 
-      this.authService.register(formData).subscribe({
-        next: res => {
-          this.router.navigate(['/home']);
-        },
-        error: err => {
-          console.error('Registration error:', err);
-        },
-      });
+      this.accountService
+        .register({
+          email: formData.email,
+          password: formData.password,
+        })
+        .subscribe({
+          next: (res: { body: IRegisterRes }) => {
+            const body = res.body;
+            if (body && body.token) {
+              localStorage.setItem('RegisterToken', body.token);
+              this.router.navigate(['/home']);
+            }
+          },
+          error: err => {
+            console.error('Registration error:', err);
+          },
+        });
     } else {
       this.signupForm.markAllAsTouched();
     }
   }
+
   minimumAgeValidator(minAge: number) {
     return (control: any) => {
       const birthDate = new Date(control.value);
