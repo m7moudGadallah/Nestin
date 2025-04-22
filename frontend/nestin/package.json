@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:dev": "npx concurrently \"npm run format\" \"npm run json-server\" \"ng s -o\"",
+    "start:dev": "npx concurrently \"npm run format\" \"ng s -o\"",
+    "start:moc-dev": "npx concurrently \"npm run format\" \"npm run json-server\" \"ng s -o\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
