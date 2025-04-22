@@ -11,6 +11,7 @@ using Nestin.Infrastructure.Services;
 using Nestin.Infrastructure.Shared;
 using OpenAI;
 using OpenAI.Chat;
+using Stripe;
 using System.Text;
 
 namespace Nestin.Infrastructure
@@ -78,6 +79,9 @@ namespace Nestin.Infrastructure
                 return client;
             });
 
+
+            // Stripe Configurations
+            services.AddSingleton<StripeClient>(new StripeClient(configuration["Stripe:SecretApiKey"]));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IIdentityFactory, IdentityFactory>();
