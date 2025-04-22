@@ -97,7 +97,7 @@ namespace Nestin.Infrastructure.Repositories
         {
             foreach (var expr in includes)
             {
-                query.Include(expr);
+                query = query.Include(expr);
             }
 
             return query;
