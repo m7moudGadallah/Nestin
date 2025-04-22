@@ -13,8 +13,9 @@ export class ApiConstant {
     getAllPropertyTypes: `${ApiConstant.baseUrl}/PropertyTypes`,
   };
 
-  public static wishlist = {
-    wish: `${ApiConstant.baseUrl}/FavoriteProperties`,
+  public static FavoritePropertiesApi = {
+    getAll: `${ApiConstant.baseUrl}/FavoriteProperties`,
+    delete: `${ApiConstant.baseUrl}/FavoriteProperties`,
   };
   public static booking = {
     getAllBookings: `${ApiConstant.baseUrl}/Bookings`,
