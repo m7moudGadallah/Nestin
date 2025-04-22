@@ -24,6 +24,7 @@ namespace Nestin.Api.Controllers
         {
             var userId = CurrentUser.Id;
             await _unitOfWork.FavoritePropertyRepository.CreateAsync(userId, dto.PropertyId);
+            await _unitOfWork.SaveChangesAsync();
             return Created();
         }
 
