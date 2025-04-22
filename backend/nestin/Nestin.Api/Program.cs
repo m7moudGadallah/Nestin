@@ -55,6 +55,8 @@ namespace Nestin.Api
 
             });
 
+            builder.Services.AddHttpContextAccessor();
+
             var app = builder.Build();
 
             app.UseIpRateLimiting();
@@ -70,7 +72,13 @@ namespace Nestin.Api
 
             app.UseCors(builder.Configuration["Cors:Policy"]);
 
-            FileUploadPathMappingExtensions.Init(builder.Configuration);
+            // Initialize FileUploadPathMappingExtensions with the service provider
+            using (var scope = app.Services.CreateScope())
+            {
+                var httpContextAccessor = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
+                FileUploadPathMappingExtensions.Init(app.Configuration, httpContextAccessor);
+            }
+            ;
 
             app.UseCustomStaticFiles();
 

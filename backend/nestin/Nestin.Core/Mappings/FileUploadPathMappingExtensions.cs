@@ -1,22 +1,35 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Nestin.Core.Mappings
 {
     public static class FileUploadPathMappingExtensions
     {
-        private static string _baseUrl;
+        private static IHttpContextAccessor _httpContextAccessor;
+        private static string _configuredBaseUrl;
 
-        public static void Init(IConfiguration configuration)
+        public static void Init(IConfiguration configuration, IHttpContextAccessor httpContextAccessor = null)
         {
-            _baseUrl = configuration["AppSettings:BaseUrl"]?.TrimEnd('/');
+            _configuredBaseUrl = configuration["AppSettings:BaseUrl"]?.TrimEnd('/');
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public static string ToFullUrl(this string relativePath)
         {
-            if (string.IsNullOrWhiteSpace(relativePath) || string.IsNullOrWhiteSpace(_baseUrl))
+            if (string.IsNullOrWhiteSpace(relativePath))
                 return string.Empty;
 
-            return $"{_baseUrl}/{relativePath.TrimStart('/')}";
+            // Try to get the base URL from the current request first
+            var baseUrl = _httpContextAccessor?.HttpContext?.Request?
+                .GetTypedHeaders()?
+                .Host.Value is string host
+                ? $"{_httpContextAccessor.HttpContext.Request.Scheme}://{host}"
+                : _configuredBaseUrl;
+
+            if (string.IsNullOrWhiteSpace(baseUrl))
+                return string.Empty;
+
+            return $"{baseUrl}/{relativePath.TrimStart('/')}";
         }
     }
 }
