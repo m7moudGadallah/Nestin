@@ -3,7 +3,7 @@ using Nestin.Core.Entities;
 
 namespace Nestin.Core.Interfaces
 {
-    public interface ITokenService
+    public interface IAuthTokenService
     {
         public void SetAccessTokenCookie(HttpContext ctx, string token);
         public void UnsetAccessTokenCookie(HttpContext ctx);

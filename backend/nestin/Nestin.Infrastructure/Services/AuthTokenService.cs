@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Nestin.Infrastructure.Services
 {
-    public class TokenService : ITokenService
+    public class AuthTokenService : IAuthTokenService
     {
         private readonly IIdentityFactory _identityFactory;
         private readonly SymmetricSecurityKey _key;
@@ -18,7 +18,7 @@ namespace Nestin.Infrastructure.Services
         private readonly int _expirationInDays;
         private readonly CookieOptions _cookieOptions;
 
-        public TokenService(IConfiguration config, IIdentityFactory identityFactory)
+        public AuthTokenService(IConfiguration config, IIdentityFactory identityFactory)
         {
             _identityFactory = identityFactory;
 

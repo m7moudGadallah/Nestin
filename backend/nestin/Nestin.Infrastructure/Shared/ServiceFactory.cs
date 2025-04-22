@@ -11,7 +11,7 @@ namespace Nestin.Infrastructure.Shared
         private readonly IServiceProvider _provider;
         private readonly IConfiguration _config;
 
-        private ITokenService _tokenService;
+        private IAuthTokenService _authTokenService;
         private IFileUploadManagementService _fileUploadManagementService;
         private IBookingManagementService _bookingManagementService;
         private IPropertyFilterExtractorService _propertyFilterExtractorService;
@@ -22,7 +22,7 @@ namespace Nestin.Infrastructure.Shared
             _config = config;
         }
 
-        public ITokenService TokenService => _tokenService ??= new TokenService(_config, _provider.GetRequiredService<IIdentityFactory>());
+        public IAuthTokenService AuthTokenService => _authTokenService ??= new AuthTokenService(_config, _provider.GetRequiredService<IIdentityFactory>());
         public IFileUploadManagementService FileUploadManagementService => _fileUploadManagementService ??= new FileUploadManagementService(_provider.GetRequiredService<IUnitOfWork>(), _provider.GetRequiredService<IFileStorageService>());
         public IBookingManagementService BookingManagementService =>
             _bookingManagementService ??= new BookingManagementService(_provider.GetRequiredService<IUnitOfWork>());

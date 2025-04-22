@@ -44,8 +44,8 @@ namespace Nestin.Api.Controllers
 
                 if (roleResult.Succeeded)
                 {
-                    var token = await _serviceFactory.TokenService.CreateTokenAsync(appUser);
-                    _serviceFactory.TokenService.SetAccessTokenCookie(HttpContext, token);
+                    var token = await _serviceFactory.AuthTokenService.CreateTokenAsync(appUser);
+                    _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
 
                     return StatusCode(201, new NewUserDto
                     {
@@ -67,7 +67,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Login user.")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(NewUserDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewUserDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
@@ -81,9 +81,9 @@ namespace Nestin.Api.Controllers
 
                 if (passCheckResult.Succeeded)
                 {
-                    var token = await _serviceFactory.TokenService.CreateTokenAsync(user);
+                    var token = await _serviceFactory.AuthTokenService.CreateTokenAsync(user);
                     // Set secure HTTP-only cookie
-                    _serviceFactory.TokenService.SetAccessTokenCookie(HttpContext, token);
+                    _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
 
                     return Ok(new NewUserDto
                     {
@@ -100,7 +100,7 @@ namespace Nestin.Api.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            _serviceFactory.TokenService.UnsetAccessTokenCookie(HttpContext);
+            _serviceFactory.AuthTokenService.UnsetAccessTokenCookie(HttpContext);
             return Ok();
         }
 
@@ -146,7 +146,7 @@ namespace Nestin.Api.Controllers
             }
 
 
-            _serviceFactory.TokenService.UnsetAccessTokenCookie(HttpContext);
+            _serviceFactory.AuthTokenService.UnsetAccessTokenCookie(HttpContext);
 
             return NoContent();
         }
