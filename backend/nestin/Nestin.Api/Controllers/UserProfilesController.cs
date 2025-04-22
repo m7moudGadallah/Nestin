@@ -7,17 +7,17 @@ using Nestin.Core.Mappings;
 namespace Nestin.Api.Controllers
 {
     [Authorize]
-    public class UserProfileController : BaseController
+    public class UserProfilesController : BaseController
     {
         private readonly IServiceFactory _serviceFactory;
-        public UserProfileController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        public UserProfilesController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
         {
             _serviceFactory = serviceFactory;
         }
 
 
-        [HttpGet]
-        [EndpointSummary("Get UserProfile Info.")]
+        [HttpGet("/me")]
+        [EndpointSummary("Get my profile Info.")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetByUserId()
@@ -30,8 +30,8 @@ namespace Nestin.Api.Controllers
         }
 
 
-        [HttpPatch]
-        [EndpointSummary("Update UserProfile Info.")]
+        [HttpPatch("/me")]
+        [EndpointSummary("Update my profile Info.")]
         [Consumes("multipart/form-data")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
