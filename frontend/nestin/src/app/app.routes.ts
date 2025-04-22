@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -10,6 +11,22 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
+    ],
+  },
+  {
+    path: '',
+    canActivate: [authGuard],
+    component: MainLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomePageComponent },
+      {
+        path: 'favorites',
+        loadComponent: () =>
+          import('./pages/favorites-page/favorites-page.component').then(
+            m => m.FavoritesPageComponent
+          ),
+      },
     ],
   },
   {

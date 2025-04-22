@@ -1,0 +1,22 @@
+<div class="bg-secondary">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+    @for (item of dummyArray; track $index) {
+      <div class="col">
+        <div class="card-container h-100 p-3">
+          <div class="card w-100 position-relative">
+            <lucide-icon
+              [img]="icons.heart"
+              class="position-absolute top-0 end-0 me-2 mt-2 my-icon"></lucide-icon>
+            <img
+              src="https://fakeimg.pl/250x100/"
+              class="card-img-top"
+              alt="property main photo" />
+            <div class="card-body">
+              <h5 class="card-title fw-semibold">Card title</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

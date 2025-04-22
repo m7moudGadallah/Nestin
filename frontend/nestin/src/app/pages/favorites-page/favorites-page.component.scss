@@ -1,0 +1,7 @@
+.my-icon {
+  color: var(--bs-primary);
+
+  ::ng-deep svg {
+    fill: currentColor;
+  }
+}
