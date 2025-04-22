@@ -1,5 +1,5 @@
-import { ICountry } from '../country/icountry';
-import { IUserPhoto } from './iuser-photo';
+import { ICountry } from './icountry';
+import { IPhoto } from './iphoto';
 
 export interface IUserProfile {
   userId: string;
@@ -11,5 +11,5 @@ export interface IUserProfile {
   bio: string;
   birthDate: string;
   country: ICountry;
-  photo: IUserPhoto;
+  photo: IPhoto;
 }

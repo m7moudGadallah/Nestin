@@ -1,4 +1,4 @@
-export interface IUserPhoto {
+export interface IPhoto {
   id: string;
   photoUrl: string;
 }
