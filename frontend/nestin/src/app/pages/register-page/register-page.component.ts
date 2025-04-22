@@ -63,7 +63,9 @@ export class RegisterPageComponent {
           next: (res: { body: IRegisterRes }) => {
             const body = res.body;
             if (body && body.token) {
-              localStorage.setItem('RegisterToken', body.token);
+              localStorage.setItem('accessToken', body.token);
+              localStorage.setItem('userName', body.userName);
+              localStorage.setItem('userId', body.id);
               this.router.navigate(['/home']);
             }
           },

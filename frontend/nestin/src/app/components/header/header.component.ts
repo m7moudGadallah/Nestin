@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { StickyNavDirective } from '../../directive/sticky-nav.directive';
+import { AuthService } from '../../services/auth.service';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +12,30 @@ import { StickyNavDirective } from '../../directive/sticky-nav.directive';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  isLoggedIn: boolean = false;
+  constructor(
+    private authService: AuthService,
+    private accountService: AccountService,
+    private router: Router
+  ) {}
 
-  logout() {}
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  logout() {
+    this.accountService.logout().subscribe({
+      next: () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userId');
+        // Redirect to home after successful logout
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error('Logout failed:', err);
+        // Still redirect to home even if logout API fails
+        this.router.navigate(['/home']);
+      },
+    });
+  }
 }

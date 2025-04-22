@@ -54,12 +54,11 @@ export class LoginPageComponent {
       this.accountService.login({ email, password }).subscribe({
         next: (response: HttpResponse<ILoginRes>) => {
           const body = response.body;
-          console.log(response);
           if (response.status === 200 && body && body.token) {
-            localStorage.setItem('authToken', body.token);
+            localStorage.setItem('accessToken', body.token);
             localStorage.setItem('userName', body.userName);
             localStorage.setItem('userId', body.id);
-            this.router.navigate(['/wishlist']);
+            this.router.navigate(['/home']);
           } else {
             this.handleLoginError('Invalid credentials');
           }
