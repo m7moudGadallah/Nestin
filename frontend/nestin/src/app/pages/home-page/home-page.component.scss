@@ -1,55 +1,64 @@
-.brand-hover:hover {
-    color: #dc3545; 
-    cursor: pointer;
-  }
-  /*header dropdown menu*/
-  #profileMenu:hover{
-    transform: scale(1.1);
-  }
-  /*search bar*/
-  .search-section {
-    transition: box-shadow 0.2s ease, background-color 0.2s ease;
-    cursor: pointer;
-  }
-  
-  .search-section:hover {
-    background-color: #f7f7f7;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-radius: 999px;
-  }
-  /*location suggestion menu*/
-  .list-group-item {
-    cursor: pointer;
-  }
-  
-  .list-group-item:hover {
-    background-color: #f0f0f0;
-  }
-  .zindex-dropdown {
-    z-index: 1050; 
-  }
-hr{
-  color:rgb(51, 51, 51, 0.3);
-}
-.property-type-bar {
-  white-space: nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: #ccc transparent;
+// Variables
+$search-container-max-width: 800px;
+$search-bar-height: 48px;
+$focus-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+$breakpoint-xl: 1200px;
+$breakpoint-lg: 992px;
+$breakpoint-sm: 576px;
 
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
+// Search Container
+.ai-search-container {
+  max-width: $search-container-max-width;
+  margin: 0 auto;
 
-  &::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
-  }
+  // Search Bar
+  .ai-search-bar {
+    transition: all 0.3s ease;
 
-  .cursor-pointer {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    &:hover {
-      background-color: #f8f9fa;
+    // Input styles
+    input {
+      outline: none;
+      box-shadow: none;
+      min-height: $search-bar-height;
+    }
+
+    // Focus state
+    &:focus-within {
+      box-shadow: $focus-shadow;
     }
   }
+}
+
+// Search Bars Container
+.search-bars-container {
+  top: 10vh;
+  background-color: white;
+
+  // Responsive adjustments
+
+  @media (max-width: $breakpoint-xl) {
+    top: 4.5vh;
+    z-index: 1;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    top: 5vh;
+    z-index: 1;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    top: 7vh;
+  }
+}
+
+.btn-outline-primary {
+  &.active,
+  &:hover {
+    color: var(--bs-white);
+    font-weight: 600;
+  }
+}
+
+.btn-primary {
+  color: var(--bs-white);
 }

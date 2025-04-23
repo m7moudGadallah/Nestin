@@ -1,114 +1,189 @@
-<!-- AI Search Bar -->
-<div class="container d-none d-lg-block" style="margin-top: 20px; margin-left: 110px; max-width: 1000px;">
-  <div
-    class="ai-search-bar d-flex align-items-center p-2 rounded-pill shadow bg-white"
-    style="width: 100%; margin-bottom: 15px; height: 60px;"
-  >
-    <input
-      type="text"
-      class="form-control border-0 bg-transparent"
-      placeholder="What are you thinking? Describe your perfect stay..."
-      style="flex: 1; font-size: 0.95rem; padding: 0;"
-    />
-    <button
-      class="btn btn-primary ms-2 rounded-circle d-flex align-items-center justify-content-center"
-      style="width: 36px; height: 36px;"
-    >
-      <fa-icon [icon]="icons['search']" class="text-white"></fa-icon>
-    </button>
+<div class="container-fluid search-bars-container mb-5 fixed-top p-5 bg-white shadow-sm">
+  <!-- Search Mode Toggle -->
+  <div class="d-flex justify-content-center mb-3">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-primary" (click)="setSearchMode('simple')" [class.active]="searchMode === 'simple'">
+        Simple Search
+      </button>
+      <button type="button" class="btn btn-outline-primary" (click)="setSearchMode('advanced')" [class.active]="searchMode === 'advanced'">
+        Advanced Search
+      </button>
+    </div>
   </div>
-</div>
 
-<!-- Main Search Bar -->
-<div class="container d-flex justify-content-center d-none d-lg-block" style="margin-left: 100px;">
-  <div
-    class="search-bar d-flex flex-wrap justify-content-between align-items-center p-3 rounded-pill shadow bg-white w-100"
-    style="max-width: 1000px;"
-  >
-    <!-- Location -->
-    <div class="px-3 border-end flex-grow-1 search-section">
-      <label class="form-label mb-0 text-muted small">Where</label>
-      <div class="position-relative w-100">
-        <input
-          type="text"
-          class="form-control border-0 p-0 bg-transparent"
-          placeholder="Search destination"
-        />
+  <!-- AI Search Bar (Simple Mode) -->
+  <div *ngIf="searchMode === 'simple'" class="container-fluid">
+    <div class="text-center mb-3">
+      <h3>How can we help you find your perfect stay?</h3>
+      <p class="text-muted">
+        Describe what you're looking for in natural language
+      </p>
+    </div>
+
+    <div class="ai-search-container w-100">
+      <div class="ai-search-bar d-flex align-items-center p-1 rounded-pill shadow bg-white" style="min-height: 60px">
+        <div class="flex-grow-1 position-relative">
+          <input
+            type="text"
+            class="form-control border-0 bg-transparent py-1 ps-3 pe-2 w-100"
+            style="min-width: 100px"
+            placeholder="Example: 'Beachfront villa with pool for family of 4 in Bali next month'" />
+        </div>
+        <button
+          class="btn btn-primary ms-2 rounded-pill d-flex align-items-center text-white fw-semibold justify-content-center px-4 flex-shrink-0"
+          style="height: 48px; white-space: nowrap">
+          <fa-icon [icon]="icons['search']" class="text-white me-2"></fa-icon>
+          Find Stays
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Search (Main Search Bar) -->
+  <div *ngIf="searchMode === 'advanced'" class="container-fluid">
+    <div class="d-flex justify-content-center">
+      <div class="search-bar d-flex flex-wrap justify-content-between align-items-center p-3 rounded-pill shadow bg-white w-100" style="max-width: 1000px">
+        <!-- Location -->
+        <div class="px-3 border-end flex-grow-1 search-section">
+          <label class="form-label mb-0 text-muted small">Where</label>
+          <div class="position-relative w-100">
+            <input
+              type="text"
+              class="form-control border-0 p-0 bg-transparent"
+              placeholder="Search destination" />
+          </div>
+        </div>
+
+        <!-- Check in -->
+        <div class="px-3 border-end search-section">
+          <label class="form-label mb-1 text-muted small">Check in</label>
+          <input type="date" class="form-control border-0 p-0 bg-transparent" />
+        </div>
+
+        <!-- Check out -->
+        <div class="px-3 border-end search-section">
+          <label class="form-label mb-1 text-muted small">Check out</label>
+          <input type="date" class="form-control border-0 p-0 bg-transparent" />
+        </div>
+
+        <!-- Guests -->
+        <div class="position-relative px-3 flex-grow-1 search-section">
+          <div class="d-flex align-items-center justify-between w-100 h-100">
+            <button
+              type="button"
+              class="btn p-0 border-0 bg-transparent text-start w-100"
+              (click)="toggleGuestMenu()">
+              <label class="form-label mb-0 text-muted small">Guests</label>
+              <h6 class="mb-0 fw-semibold">{{getGuestSummary()}}</h6>
+            </button>
+
+            <!-- Search button -->
+            <button
+              type="button"
+              class="btn btn-primary rounded-pill ms-2 d-flex align-items-center justify-content-center px-4"
+              style="height: 48px; white-space: nowrap">
+              <fa-icon [icon]="icons['search']" class="text-white me-2"></fa-icon>
+              Search
+            </button>
+          </div>
+
+          <!-- Guests Dropdown -->
+          <div
+            *ngIf="guestMenuVisible"
+            class="position-absolute end-0 mt-2 p-3 bg-white border rounded shadow-sm"
+            style="width: 300px; z-index: 100">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Adults</span>
+              <input
+                type="number"
+                class="form-control form-control-sm w-25"
+                min="1"
+                [(ngModel)]="guests.adults" />
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Children</span>
+              <input
+                type="number"
+                class="form-control form-control-sm w-25"
+                min="0"
+                [(ngModel)]="guests.children" />
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Infants</span>
+              <input
+                type="number"
+                class="form-control form-control-sm w-25"
+                min="0"
+                [(ngModel)]="guests.infants" />
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span>Pets</span>
+              <input
+                type="number"
+                class="form-control form-control-sm w-25"
+                min="0"
+                [(ngModel)]="guests.pets" />
+            </div>
+            <div class="text-end">
+              <button class="btn btn-sm btn-primary" (click)="toggleGuestMenu()">Apply</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Check in -->
-    <div class="px-3 border-end search-section">
-      <label class="form-label mb-1 text-muted small">Check in</label>
-      <input type="date" class="form-control border-0 p-0 bg-transparent" />
-    </div>
-
-    <!-- Check out -->
-    <div class="px-3 border-end search-section">
-      <label class="form-label mb-1 text-muted small">Check out</label>
-      <input type="date" class="form-control border-0 p-0 bg-transparent" />
-    </div>
-
-    <!-- Guests -->
-    <div class="position-relative px-3 flex-grow-1 search-section">
-      <div class="d-flex align-items-center justify-between w-100 h-100">
-        <button
-          type="button"
-          class="btn p-0 border-0 bg-transparent text-start w-100"
-          (click)="toggleGuestMenu()"
-        >
-          <h6 class="mb-0 fw-semibold">Guests</h6>
-        </button>
-
-        <!-- Search button -->
-        <button
-          type="button"
-          class="btn btn-danger rounded-circle ms-2 d-flex align-items-center justify-content-center"
-          style="width: 40px; height: 40px"
-        >
-          <fa-icon [icon]="icons['search']" class="text-white"></fa-icon>
-        </button>
-      </div>
-
-      <!-- Guests Dropdown -->
+    <!-- Property Type Bar -->
+    <div class="property-type-bar d-flex overflow-auto gap-3 py-3 px-4 justify-content-center">
       <div
-        *ngIf="guestMenuVisible"
-        class="position-absolute end-0 mt-2 p-3 bg-white border rounded shadow-sm"
-        style="width: 300px; z-index: 100"
-      >
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Adults</span>
-          <input type="number" class="form-control form-control-sm w-25" min="1" />
+        *ngFor="let type of propertyTypes"
+        class="d-flex flex-column align-items-center cursor-pointer px-3 py-2 rounded border"
+        [class.bg-primary]="selectedPropertyType === type.id"
+        [class.text-white]="selectedPropertyType === type.id"
+        (click)="selectPropertyType(type.id)">
+        <fa-icon [icon]="icons[type.icon]" [class.text-primary]="selectedPropertyType !== type.id"></fa-icon>
+        <span class="fw-semibold small mt-1">{{ type.name }}</span>
+      </div>
+    </div>
+
+    <!-- Additional Filters Button -->
+    <div class="text-center mt-3">
+      <button class="btn btn-outline-primary" (click)="toggleFilters()">
+        <fa-icon [icon]="icons['sliders']" class="me-2"></fa-icon>
+        {{ showFilters ? 'Hide Filters' : 'More Filters' }}
+      </button>
+    </div>
+
+    <!-- Additional Filters Panel -->
+    <div *ngIf="showFilters" class="filters-panel mt-3 p-4 border rounded bg-light">
+      <div class="row">
+        <div class="col-md-4">
+          <h6>Price Range</h6>
+          <input type="range" class="form-range" min="0" max="1000" step="10" [(ngModel)]="priceRange">
+          <div class="d-flex justify-content-between">
+            <span>$0</span>
+            <span>${{priceRange}}</span>
+          </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Children</span>
-          <input type="number" class="form-control form-control-sm w-25" min="0" />
+        <div class="col-md-4">
+          <h6>Amenities</h6>
+          <div *ngFor="let amenity of amenities" class="form-check">
+            <input class="form-check-input" type="checkbox" [id]="'amenity-'+amenity.id" [(ngModel)]="amenity.selected">
+            <label class="form-check-label" [for]="'amenity-'+amenity.id">{{amenity.name}}</label>
+          </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Infants</span>
-          <input type="number" class="form-control form-control-sm w-25" min="0" />
-        </div>
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Pets</span>
-          <input type="number" class="form-control form-control-sm w-25" min="0" />
-        </div>
-        <div class="text-end">
-          <button class="btn btn-sm btn-primary">Apply</button>
+        <div class="col-md-4">
+          <h6>Property Rating</h6>
+          <div *ngFor="let rating of [4,3,2,1]" class="form-check">
+            <input class="form-check-input" type="radio" name="rating" [id]="'rating-'+rating" [(ngModel)]="selectedRating" [value]="rating">
+            <label class="form-check-label" [for]="'rating-'+rating">
+              <span *ngFor="let star of [1,2,3,4,5]">
+                <fa-icon [icon]="star <= rating ? icons['star'] : icons['star-half-alt']" [class.text-warning]="star <= rating"></fa-icon>
+              </span>
+              {{rating}}+ Stars
+            </label>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Property Type Bar -->
-<div class="property-type-bar d-flex overflow-auto gap-6 py-3 px-6 border-bottom">
-  <div
-    *ngFor="let type of propertyTypes"
-    class="d-flex align-items-center gap-2 cursor-pointer px-3 py-2 rounded border"
-    
-  >
-    <!-- Static Font Awesome Icon -->
-    <fa-icon [icon]="icons[type.icon]" class="text-primary"></fa-icon>
-    <span class="fw-semibold">{{ type.name }}</span>
   </div>
 </div>

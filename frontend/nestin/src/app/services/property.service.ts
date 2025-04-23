@@ -5,18 +5,18 @@ import { ApiConstant } from '../utils/api-constant.util';
 import { IpropertyTypeApiResponse } from '../models/api/response/iproperty-type-api-response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PropertyService {
-
   constructor(private http: HttpClient) {}
-    
-  
-      showPropertyType(): Observable<HttpResponse<IpropertyTypeApiResponse>> {
-        return this.http.get<any>(`${ApiConstant.PropertiesApi.getAllPropertyTypes}`, {
+
+  showPropertyType(): Observable<HttpResponse<IpropertyTypeApiResponse>> {
+    return this.http.get<any>(
+      `${ApiConstant.PropertiesApi.getAllPropertyTypes}`,
+      {
         observe: 'response',
         withCredentials: true,
-      });
-    }
-    }
-    
+      }
+    );
+  }
+}
