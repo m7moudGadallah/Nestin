@@ -11,17 +11,14 @@ namespace Nestin.Infrastructure.Services
 {
     public class AuthTokenService : IAuthTokenService
     {
-        private readonly IIdentityFactory _identityFactory;
         private readonly SymmetricSecurityKey _key;
         private readonly string _issuer;
         private readonly string _audiance;
         private readonly int _expirationInDays;
         private readonly CookieOptions _cookieOptions;
 
-        public AuthTokenService(IConfiguration config, IIdentityFactory identityFactory)
+        public AuthTokenService(IConfiguration config)
         {
-            _identityFactory = identityFactory;
-
             // JWT Configs
             var signingKey = config["Jwt:SigningKey"];
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
@@ -41,10 +38,10 @@ namespace Nestin.Infrastructure.Services
         }
 
 
-        public async Task<string> CreateTokenAsync(AppUser user)
+        public string CreateToken(AppUser user)
         {
             // Retrieve user roles using RoleManager
-            var userRoles = await _identityFactory.UserManager.GetRolesAsync(user);
+            var userRoles = user.Roles;
 
             // Set claims (the information we want to store in the JWT)
             var claims = new List<Claim>
@@ -56,7 +53,7 @@ namespace Nestin.Infrastructure.Services
             // Add each role as a claim
             foreach (var role in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
             }
 
             // Get the JWT secret key and issuer from configuration
@@ -85,7 +82,7 @@ namespace Nestin.Infrastructure.Services
 
         public void UnsetAccessTokenCookie(HttpContext ctx)
         {
-            ctx.Response.Cookies.Delete("access_token");
+            ctx.Response.Cookies.Delete("access_token", _cookieOptions);
         }
     }
 }
