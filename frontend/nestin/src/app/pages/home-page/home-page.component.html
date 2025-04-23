@@ -1,0 +1,114 @@
+<!-- AI Search Bar -->
+<div class="container d-none d-lg-block" style="margin-top: 20px; margin-left: 110px; max-width: 1000px;">
+  <div
+    class="ai-search-bar d-flex align-items-center p-2 rounded-pill shadow bg-white"
+    style="width: 100%; margin-bottom: 15px; height: 60px;"
+  >
+    <input
+      type="text"
+      class="form-control border-0 bg-transparent"
+      placeholder="What are you thinking? Describe your perfect stay..."
+      style="flex: 1; font-size: 0.95rem; padding: 0;"
+    />
+    <button
+      class="btn btn-primary ms-2 rounded-circle d-flex align-items-center justify-content-center"
+      style="width: 36px; height: 36px;"
+    >
+      <fa-icon [icon]="icons['search']" class="text-white"></fa-icon>
+    </button>
+  </div>
+</div>
+
+<!-- Main Search Bar -->
+<div class="container d-flex justify-content-center d-none d-lg-block" style="margin-left: 100px;">
+  <div
+    class="search-bar d-flex flex-wrap justify-content-between align-items-center p-3 rounded-pill shadow bg-white w-100"
+    style="max-width: 1000px;"
+  >
+    <!-- Location -->
+    <div class="px-3 border-end flex-grow-1 search-section">
+      <label class="form-label mb-0 text-muted small">Where</label>
+      <div class="position-relative w-100">
+        <input
+          type="text"
+          class="form-control border-0 p-0 bg-transparent"
+          placeholder="Search destination"
+        />
+      </div>
+    </div>
+
+    <!-- Check in -->
+    <div class="px-3 border-end search-section">
+      <label class="form-label mb-1 text-muted small">Check in</label>
+      <input type="date" class="form-control border-0 p-0 bg-transparent" />
+    </div>
+
+    <!-- Check out -->
+    <div class="px-3 border-end search-section">
+      <label class="form-label mb-1 text-muted small">Check out</label>
+      <input type="date" class="form-control border-0 p-0 bg-transparent" />
+    </div>
+
+    <!-- Guests -->
+    <div class="position-relative px-3 flex-grow-1 search-section">
+      <div class="d-flex align-items-center justify-between w-100 h-100">
+        <button
+          type="button"
+          class="btn p-0 border-0 bg-transparent text-start w-100"
+          (click)="toggleGuestMenu()"
+        >
+          <h6 class="mb-0 fw-semibold">Guests</h6>
+        </button>
+
+        <!-- Search button -->
+        <button
+          type="button"
+          class="btn btn-danger rounded-circle ms-2 d-flex align-items-center justify-content-center"
+          style="width: 40px; height: 40px"
+        >
+          <fa-icon [icon]="icons['search']" class="text-white"></fa-icon>
+        </button>
+      </div>
+
+      <!-- Guests Dropdown -->
+      <div
+        *ngIf="guestMenuVisible"
+        class="position-absolute end-0 mt-2 p-3 bg-white border rounded shadow-sm"
+        style="width: 300px; z-index: 100"
+      >
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Adults</span>
+          <input type="number" class="form-control form-control-sm w-25" min="1" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Children</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Infants</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" />
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Pets</span>
+          <input type="number" class="form-control form-control-sm w-25" min="0" />
+        </div>
+        <div class="text-end">
+          <button class="btn btn-sm btn-primary">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Property Type Bar -->
+<div class="property-type-bar d-flex overflow-auto gap-6 py-3 px-6 border-bottom">
+  <div
+    *ngFor="let type of propertyTypes"
+    class="d-flex align-items-center gap-2 cursor-pointer px-3 py-2 rounded border"
+    
+  >
+    <!-- Static Font Awesome Icon -->
+    <fa-icon [icon]="icons[type.icon]" class="text-primary"></fa-icon>
+    <span class="fw-semibold">{{ type.name }}</span>
+  </div>
+</div>
