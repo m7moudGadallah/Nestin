@@ -6,7 +6,10 @@ import { IPropertyTypeRes } from '../../models/api/response/i-property-type-res'
 import { HttpResponse } from '@angular/common/http';
 import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-type-api-response';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HostListener } from '@angular/core';
+import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
 import {
+  
   faHouse,
   faBed,
   faHotel,
@@ -21,7 +24,10 @@ import {
   faMountain,
   faTractor,
   faCity,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
+import { IProperty } from '../../models/domain/iproperty';
+import { IpropertyRes } from '../../models/api/response/iproperty-res';
 
 @Component({
   selector: 'app-home-page',
@@ -38,7 +44,19 @@ export class HomePageComponent {
   priceRange: number = 500;
   selectedRating: number = 4;
   propertyTypes: IPropertyTypeRes[] = [];
+  property:IPropertyWithDistance[] = [];
+  allProperties: IPropertyWithDistance[] = [];
   errorMessage: string = '';
+   userLat:number = 30.033333;
+   userLon:number = 31.233334;
+   scrollY = 0;
+   isFocused = false;
+     //pagination variables-----------------------------------
+  currentPage: number = 1;
+  itemsPerPage: number = 0; 
+  totalItems: number = 0;
+  Math = Math;
+
 
   guests = {
     adults: 2,
@@ -57,6 +75,7 @@ export class HomePageComponent {
 
   // Extended Font Awesome icons
   icons: { [key: string]: any } = {
+    heart:faHeart,
     house: faHouse,
     'bed-single': faBed,
     hotel: faHotel,
@@ -77,6 +96,7 @@ export class HomePageComponent {
 
   ngOnInit(): void {
     this.getPropertyTypes();
+    this.getAllProperty();
   }
 
   setSearchMode(mode: 'simple' | 'advanced'): void {
@@ -130,7 +150,39 @@ export class HomePageComponent {
       },
     });
   }
-
+  getAllProperty(): void {
+    this.propertyService.getAllProperty().subscribe({
+      next: (response: HttpResponse<IpropertyRes>) => {
+        if (response.status === 200 && response.body) {
+          this.property = response.body.items.map(prop => ({
+            ...prop,
+            distanceFromMe: this.getDistanceFromLatLonInKm(
+              this.userLat,
+              this.userLon,
+              prop.latitude,
+              prop.longitude
+            ).toFixed(1),
+          }));
+          this.totalItems = response.body.metaData.total;
+          this.itemsPerPage = response.body.metaData.pageSize; 
+          this.currentPage = response.body.metaData.page;
+          console.log(this.property);
+          
+        } else {
+          this.handlePropertyerror('Invalid Loading Property');
+         
+        }
+      },
+      error: error => {
+        console.error('Error fetching property:', error);
+        this.handlePropertyerror('Failed to load property');
+      },
+    });
+  }
+  
+  
+  
+  
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
   }
@@ -139,4 +191,54 @@ export class HomePageComponent {
   getPropertyIcon(iconName: string): any {
     return this.icons[iconName] || this.icons['house']; // Default to house icon if not found
   }
+  getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  }
+  
+  deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+  getMarginTop() {
+    if (this.searchMode === 'advanced' && this.showFilters) {
+      return 250; // 250px if Advanced and showFilters is visible
+    } else if (this.searchMode === 'advanced') {
+      return 200; // 200px if Advanced and showFilters is not visible
+    } else {
+      return 100; // 100px if Simple search mode
+    }
+  }
+
+  
+@HostListener('window:scroll', [])
+onWindowScroll() {
+  this.scrollY = window.scrollY;
 }
+onFocus() {
+  
+  this.isFocused = true;
+}
+
+onBlur() {
+  
+  this.isFocused = false;
+}
+updatePageData(): void {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  this.allProperties = this.property.slice(startIndex, endIndex);
+}
+onPageChange(pageNumber: number): void {
+  this.currentPage = pageNumber;
+  this.updatePageData();
+}
+}
+
