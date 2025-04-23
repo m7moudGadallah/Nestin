@@ -47,10 +47,13 @@ namespace Nestin.Api.Controllers
                     var token = await _serviceFactory.AuthTokenService.CreateTokenAsync(appUser);
                     _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
 
+                    var roles = await _identityFactory.UserManager.GetRolesAsync(appUser);
+
                     return StatusCode(201, new NewUserDto
                     {
                         Id = appUser.Id,
                         UserName = appUser.UserName,
+                        Roles = roles.ToList(),
                         Token = token,
                     });
                 }
@@ -85,10 +88,13 @@ namespace Nestin.Api.Controllers
                     // Set secure HTTP-only cookie
                     _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
 
+                    var roles = await _identityFactory.UserManager.GetRolesAsync(user);
+
                     return Ok(new NewUserDto
                     {
                         Id = user.Id,
                         UserName = user.UserName,
+                        Roles = roles.ToList(),
                         Token = token
                     });
                 }
