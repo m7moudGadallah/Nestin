@@ -36,6 +36,7 @@ namespace Nestin.Infrastructure.Repositories
             var query = _dbContext.UserProfiles.Include(u => u.AppUser)
                 .Include(u => u.Country)
                 .Include(u => u.AppUser)
+                .ThenInclude(u => u.Roles)
                 .Include(u => u.Photo)
                 .Where(u => u.UserId == userId)
                 .Select(u => u.ToDto());
