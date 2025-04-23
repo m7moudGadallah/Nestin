@@ -19,4 +19,10 @@ export class PropertyService {
       }
     );
   }
+    getAllProperty(): Observable<HttpResponse<any>> {
+      return this.http.get<any>(`${ApiConstant.PropertiesApi.getAll}`, {
+        observe: 'response',
+        withCredentials: true,
+      });
+  }
 }

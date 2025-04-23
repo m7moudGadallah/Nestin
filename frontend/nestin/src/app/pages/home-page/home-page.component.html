@@ -1,5 +1,14 @@
-<div class="container-fluid search-bars-container mb-5 fixed-top p-5 bg-white shadow-sm">
-  <!-- Search Mode Toggle -->
+
+<div
+  class="container-fluid search-bars-container mb-5 fixed-top p-5 bg-white shadow-sm"
+  [style.opacity]="isFocused ? 1 : (scrollY > 50 ? 0.5 : 1)"
+  tabindex="0"  
+  (focus)="onFocus()" 
+  (blur)="onBlur()" 
+>
+
+
+   <!-- Search Mode Toggle -->
   <div class="d-flex justify-content-center mb-3">
     <div class="btn-group" role="group">
       <button type="button" class="btn btn-outline-primary" (click)="setSearchMode('simple')" [class.active]="searchMode === 'simple'">
@@ -186,4 +195,71 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Property Cards -->
+<div class="container py-8" id="cards" [ngStyle]="{'margin-top': getMarginTop() + 'px'}">
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="col" *ngFor="let prop of property">
+      <div class="card h-100 border-0 shadow rounded-4 overflow-hidden position-relative">
+        <!-- Image container with ratio -->
+        <div class="ratio ratio-4x3 position-relative">
+          <img [src]="prop.photos[0]?.photoUrl" class="card-img-top object-fit-cover rounded-top-4" alt="Property photo" />
+          
+          <!-- Font Awesome Heart Icon for Wishlist -->
+          <!-- <button class="btn btn-light position-absolute bottom-0 end-0 m-3 p-1 shadow-sm rounded-circle" style="font-size: 1rem;">
+            <fa-icon [icon]="icons['heart']" class="text-danger"></fa-icon>
+          </button> -->
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body d-flex flex-column justify-content-between p-3">
+          <!-- Title and Info -->
+          <div class="mb-2">
+            <h6 class="card-title fw-semibold mb-1 text-truncate" style="font-size: 1rem">
+              {{ prop.title }}
+            </h6>
+            <p class="card-text text-muted small mb-0" style="line-height: 1.4;">
+              {{ prop.distanceFromMe }} km away <br />
+              Jun 16 - 21
+            </p>
+          </div>
+
+          <!-- Price -->
+          <h6 class="fw-bold text-dark mb-0" style="font-size: 0.95rem;">
+            {{ prop.pricePerNight }} ج.م / night
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Pagination -->
+<div class="pagination-container text-center mt-4">
+  <ul class="pagination justify-content-center">
+    <li *ngIf="currentPage > 1" class="page-item">
+      <button (click)="onPageChange(currentPage - 1)" class="page-link rounded-pill">
+        <fa-icon [icon]="icons['chevron-left']"></fa-icon>
+      </button>
+    </li>
+
+    <li *ngFor="let page of [].constructor(Math.ceil(totalItems / itemsPerPage)); let i = index" class="page-item">
+      <button
+        (click)="onPageChange(i + 1)"
+        [class.active]="i + 1 === currentPage"
+        class="page-link rounded-pill px-3"
+      >
+        {{ i + 1 }}
+      </button>
+    </li>
+
+    <li *ngIf="currentPage < Math.ceil(totalItems / itemsPerPage)" class="page-item">
+      <button (click)="onPageChange(currentPage + 1)" class="page-link rounded-pill">
+        <fa-icon [icon]="icons['chevron-right']"></fa-icon>
+      </button>
+    </li>
+  </ul>
 </div>
