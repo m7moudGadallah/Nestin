@@ -1,0 +1,94 @@
+
+
+
+<div class="max-w-6xl mx-auto px-4 py-6 space-y-8 md:space-y-10" *ngIf="!loading && !error">
+  <h1>{{ property?.title }}</h1>
+<!-- Image Gallery -->
+<ng-container *ngIf="!loading">
+  <div *ngIf="!error" class="property-container">
+    <!-- Main Gallery -->
+    <div class="gallery">
+      <button (click)="prevImage()" class="nav-button2" [class.disabled]="activeImageIndex === 0">
+        ❮
+      </button>
+      
+      <div class="image-container">
+        <img [src]="property.photos[activeImageIndex].photoUrl || 'assets/default-image.jpg'" 
+             [alt]="property.title + ' image ' + (activeImageIndex + 1)"
+             class="main-image"
+             (error)="property.photos[activeImageIndex].photoUrl = 'assets/default-image.jpg'">
+      </div>
+      
+      <button (click)="nextImage()" class="nav-button1" 
+              [class.disabled]="activeImageIndex === propertyImages.length - 1">
+        ❯
+      </button>
+
+      <!-- Image Counter -->
+      <div class="image-counter" *ngIf="propertyImages.length > 1">
+        {{activeImageIndex + 1}} / {{propertyImages.length}}
+      </div>
+
+      <!-- Fullscreen Toggle -->
+      <button class="fullscreen-button" (click)="toggleFullscreen()">
+        <i class="fas fa-expand"></i>
+      </button>
+
+    </div>
+
+    <!-- Thumbnail Strip -->
+    <div class="thumbnail-strip" *ngIf="property.photos.length > 1">
+      <div *ngFor="let img of property.photos; let i = index" 
+           [class.active-thumb]="i === activeImageIndex"
+           (click)="activeImageIndex = i"
+           class="thumbnail-item">
+        <img [src]="img.photoUrl || 'assets/default-image.jpg'" 
+             [alt]="'Thumbnail ' + (i + 1) + ' for ' + property.title"
+             class="thumbnail-image"
+             (error)="img.photoUrl  = 'assets/default-image.jpg'">
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- favorite button  -->
+<div class="favorite-button-container">
+  <app-favorite-button 
+    [isFavorite]="isFavorite" 
+    (toggle)="onFavoriteToggle($event)"
+    [size]="24"
+  ></app-favorite-button>
+</div>
+
+
+<div class="row">
+  <div class="col-12 col-md-5 mb-4">
+    <app-booking-card [property]="property"></app-booking-card>
+  </div>
+
+
+  <div class="col-12 col-md-7">
+    <app-property-header [property]="property"></app-property-header>
+    <app-rating-header [property]="property"></app-rating-header>
+    <app-property-availability [property]="property"></app-property-availability>
+    <app-property-host [property]="property"></app-property-host>
+    <app-property-highlights [property]="property"></app-property-highlights>
+    <app-sleeping-arrangement [property]="property"></app-sleeping-arrangement>
+   
+    <!-- <app-property-aminities [property]="property"></app-property-aminities> -->
+    <app-property-aminities [propertyId]="propertyId"></app-property-aminities>
+    <app-things-to-know [property]="property"></app-things-to-know>
+  </div>
+</div>
+
+
+
+
+
+
+<app-property-description [property]="property"></app-property-description>
+
+<app-property-map [property]="property"></app-property-map>
+
+</div>

@@ -1,0 +1,12 @@
+
+<div class="availability-container">
+    <h3>Availability</h3>
+    
+    <div *ngIf="loading" class="loading-spinner">
+      Loading availability...
+    </div>
+  
+    <div *ngIf="!loading" class="calendar-wrapper">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </div>

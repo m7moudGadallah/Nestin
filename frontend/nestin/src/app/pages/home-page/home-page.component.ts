@@ -4,12 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
 import { IPropertyTypeRes } from '../../models/api/response/i-property-type-res';
 import { HttpResponse } from '@angular/common/http';
-import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-type-api-response';
+import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-type-api-res';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HostListener } from '@angular/core';
 import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
 import {
-  
   faHouse,
   faBed,
   faHotel,
@@ -44,19 +43,18 @@ export class HomePageComponent {
   priceRange: number = 500;
   selectedRating: number = 4;
   propertyTypes: IPropertyTypeRes[] = [];
-  property:IPropertyWithDistance[] = [];
+  property: IPropertyWithDistance[] = [];
   allProperties: IPropertyWithDistance[] = [];
   errorMessage: string = '';
-   userLat:number = 30.033333;
-   userLon:number = 31.233334;
-   scrollY = 0;
-   isFocused = false;
-     //pagination variables-----------------------------------
+  userLat: number = 30.033333;
+  userLon: number = 31.233334;
+  scrollY = 0;
+  isFocused = false;
+  //pagination variables-----------------------------------
   currentPage: number = 1;
-  itemsPerPage: number = 0; 
+  itemsPerPage: number = 0;
   totalItems: number = 0;
   Math = Math;
-
 
   guests = {
     adults: 2,
@@ -75,7 +73,7 @@ export class HomePageComponent {
 
   // Extended Font Awesome icons
   icons: { [key: string]: any } = {
-    heart:faHeart,
+    heart: faHeart,
     house: faHouse,
     'bed-single': faBed,
     hotel: faHotel,
@@ -164,13 +162,11 @@ export class HomePageComponent {
             ).toFixed(1),
           }));
           this.totalItems = response.body.metaData.total;
-          this.itemsPerPage = response.body.metaData.pageSize; 
+          this.itemsPerPage = response.body.metaData.pageSize;
           this.currentPage = response.body.metaData.page;
           console.log(this.property);
-          
         } else {
           this.handlePropertyerror('Invalid Loading Property');
-         
         }
       },
       error: error => {
@@ -179,10 +175,7 @@ export class HomePageComponent {
       },
     });
   }
-  
-  
-  
-  
+
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
   }
@@ -191,19 +184,26 @@ export class HomePageComponent {
   getPropertyIcon(iconName: string): any {
     return this.icons[iconName] || this.icons['house']; // Default to house icon if not found
   }
-  getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  getDistanceFromLatLonInKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number {
     const R = 6371; // Radius of the earth in km
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; // Distance in km
     return d;
   }
-  
+
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
@@ -217,28 +217,24 @@ export class HomePageComponent {
     }
   }
 
-  
-@HostListener('window:scroll', [])
-onWindowScroll() {
-  this.scrollY = window.scrollY;
-}
-onFocus() {
-  
-  this.isFocused = true;
-}
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.scrollY = window.scrollY;
+  }
+  onFocus() {
+    this.isFocused = true;
+  }
 
-onBlur() {
-  
-  this.isFocused = false;
+  onBlur() {
+    this.isFocused = false;
+  }
+  updatePageData(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.allProperties = this.property.slice(startIndex, endIndex);
+  }
+  onPageChange(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.updatePageData();
+  }
 }
-updatePageData(): void {
-  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-  const endIndex = startIndex + this.itemsPerPage;
-  this.allProperties = this.property.slice(startIndex, endIndex);
-}
-onPageChange(pageNumber: number): void {
-  this.currentPage = pageNumber;
-  this.updatePageData();
-}
-}
-
