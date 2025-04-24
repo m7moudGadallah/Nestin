@@ -140,7 +140,7 @@ namespace Nestin.Api.Controllers
             return Ok(exitingRequest.ToDto());
         }
 
-        [HttpPatch("{id}/approve")]
+        [HttpPatch("{requestId}/approve")]
         [Authorize(Roles = "Admin")]
         [EndpointSummary("Allow admins to approve Host upgrade request.")]
         [Consumes("application/json")]
@@ -149,9 +149,24 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status500InternalServerError)]
-        public Task<IActionResult> ApproveRequest([FromRoute] string id)
+        public async Task<IActionResult> ApproveRequest([FromRoute] string requestId)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var adminId = CurrentUser.Id;
+            var request = await _unitOfWork.HostUpgradeRequestRepository.GetByIdAsync(requestId);
+
+            if (request is null)
+                return NotFoundResponse();
+
+            request.ApprovedBy = adminId;
+            request.Status = HostUgradeRequestStatus.Approved;
+            request.ApprovalDate = DateTime.UtcNow;
+
+            _unitOfWork.HostUpgradeRequestRepository.Update(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            var updatesRequest = await _unitOfWork.HostUpgradeRequestRepository.GetByIdAsync(requestId, x => x.FrontPhoto, x => x.BackPhoto);
+
+            return Ok(updatesRequest.ToDto());
         }
 
         [HttpPatch("{id}/reject")]
