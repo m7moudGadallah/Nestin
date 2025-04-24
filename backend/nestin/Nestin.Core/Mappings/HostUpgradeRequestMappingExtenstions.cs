@@ -9,6 +9,7 @@ namespace Nestin.Core.Mappings
         {
             return new HostUpgradeRequestDto
             {
+                Id = entity.Id,
                 UserId = entity.UserId,
                 Status = entity.Status.ToString(),
                 ApprovedBy = entity.ApprovedBy,
