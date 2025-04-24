@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.HostUpgradeRequests;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 
 namespace Nestin.Api.Controllers
 {
@@ -22,9 +24,41 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status500InternalServerError)]
-        public Task<IActionResult> Create([FromForm] HostUpgradeRequestCreateDto reqDto)
+        public async Task<IActionResult> Create([FromForm] HostUpgradeRequestCreateDto reqDto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var userId = CurrentUser.Id;
+
+            if (CurrentUser.Roles.Contains("Host"))
+            {
+                return BadRequest(new List<string> { "You are already a Host. Upgrade request is not allowed." });
+            }
+
+            var existingRequest = await _unitOfWork.HostUpgradeRequestRepository.GetPendingRequestByUserIdAsync(userId);
+
+            if (existingRequest != null)
+            {
+                return BadRequest(new List<string> { "You already have a pending host upgrade request." });
+            }
+
+            var frontPhoto = await _serviceFactory.FileUploadManagementService.UploadAsync(reqDto.FrontPhoto);
+            var backPhoto = await _serviceFactory.FileUploadManagementService.UploadAsync(reqDto.BackPhoto);
+
+            var documentType = Enum.Parse<HostUpgradeRequestDocumentType>(reqDto.DocumentType, ignoreCase: true);
+
+            var hostUpgradeRequest = new HostUpgradeRequest
+            {
+                UserId = userId,
+                Status = HostUgradeRequestStatus.Pending,
+                DocumentType = documentType,
+                DocumentNumber = reqDto.DocumentNumber,
+                FrontPhotoId = frontPhoto.Id,
+                BackPhotoId = backPhoto.Id
+            };
+
+            _unitOfWork.HostUpgradeRequestRepository.Create(hostUpgradeRequest);
+            await _unitOfWork.SaveChangesAsync();
+            var createdRequest = await _unitOfWork.HostUpgradeRequestRepository.GetByIdAsync(hostUpgradeRequest.Id, x => x.FrontPhoto, x => x.BackPhoto);
+            return new ObjectResult(createdRequest.ToDto()) { StatusCode = 201 };
         }
 
         [HttpPatch("my-request")]
