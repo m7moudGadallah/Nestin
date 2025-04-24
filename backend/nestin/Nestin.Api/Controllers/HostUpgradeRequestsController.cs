@@ -4,6 +4,7 @@ using Nestin.Core.Dtos.HostUpgradeRequests;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
+using Nestin.Core.Shared;
 
 namespace Nestin.Api.Controllers
 {
@@ -170,15 +171,22 @@ namespace Nestin.Api.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")]
         [EndpointSummary("Allow admins to fetch Host upgrade requests.")]
-        [Consumes("application/json")]
+        [EndpointDescription("Sorting options for the 'sort' query parameter: \n" +
+            "• `status` – Sort by request status ascending\n" +
+            "• `created_at_asc` – Sort by creation date ascending\n" +
+            "• `created_at_desc` – Sort by creation date descending\n" +
+            "• `approval_date_asc` – Sort by approval date ascending\n" +
+            "• `approval_date_desc` – Sort by approval date descending")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(HostUpgradeRequestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<HostUpgradeRequestDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status500InternalServerError)]
-        public Task<IActionResult> GetAllRequests([FromQuery] HostUpgradeRequestFilterQueryParamsDto queryDto)
+        public async Task<IActionResult> GetAllRequests([FromQuery] HostUpgradeRequestFilterQueryParamsDto queryDto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var result = await _unitOfWork.HostUpgradeRequestRepository.GetAllAsync(queryDto);
+
+            return Ok(result);
         }
     }
 }
