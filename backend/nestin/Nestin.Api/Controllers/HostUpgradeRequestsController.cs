@@ -7,8 +7,11 @@ namespace Nestin.Api.Controllers
 {
     public class HostUpgradeRequestsController : BaseController
     {
-        public HostUpgradeRequestsController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+        private IServiceFactory _serviceFactory;
+        public HostUpgradeRequestsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        {
+            _serviceFactory = serviceFactory;
+        }
 
         [HttpPost]
         [Authorize(Roles = "Guest")]
