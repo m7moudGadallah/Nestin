@@ -70,9 +70,50 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status500InternalServerError)]
-        public Task<IActionResult> UpdateMyRequest([FromBody] HostUpgradeRequestUpdateDto updateDto)
+        public async Task<IActionResult> UpdateMyRequest([FromForm] HostUpgradeRequestUpdateDto updateDto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var userId = CurrentUser.Id;
+
+            var existingRequest = await _unitOfWork.HostUpgradeRequestRepository
+                .GetPendingRequestByUserIdAsync(userId);
+
+            if (existingRequest == null)
+            {
+                return BadRequest(new List<string> { "You do not have a pending request to update." });
+            }
+
+            if (!string.IsNullOrWhiteSpace(updateDto.DocumentType))
+            {
+                var parsed = Enum.Parse<HostUpgradeRequestDocumentType>(updateDto.DocumentType, ignoreCase: true);
+                existingRequest.DocumentType = parsed;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updateDto.DocumentNumber))
+            {
+                existingRequest.DocumentNumber = updateDto.DocumentNumber;
+            }
+
+            if (updateDto.FrontPhoto != null)
+            {
+                var uploadedFront = await _serviceFactory.FileUploadManagementService.UploadAsync(updateDto.FrontPhoto);
+                await _serviceFactory.FileUploadManagementService.RemoveFileAsync(existingRequest.FrontPhotoId);
+                existingRequest.FrontPhotoId = uploadedFront.Id;
+            }
+
+            if (updateDto.BackPhoto != null)
+            {
+                var uploadedBack = await _serviceFactory.FileUploadManagementService.UploadAsync(updateDto.BackPhoto);
+                await _serviceFactory.FileUploadManagementService.RemoveFileAsync(existingRequest.BackPhotoId);
+                existingRequest.BackPhotoId = uploadedBack.Id;
+            }
+
+            _unitOfWork.HostUpgradeRequestRepository.Update(existingRequest);
+            await _unitOfWork.SaveChangesAsync();
+
+            var updated = await _unitOfWork.HostUpgradeRequestRepository
+                .GetByIdAsync(existingRequest.Id, x => x.FrontPhoto, x => x.BackPhoto);
+
+            return Ok(updated.ToDto());
         }
 
         [HttpGet("my-request")]
@@ -84,9 +125,18 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status500InternalServerError)]
-        public Task<IActionResult> GetMyRequest()
+        public async Task<IActionResult> GetMyRequest()
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var userId = CurrentUser.Id;
+
+            var exitingRequest = await _unitOfWork.HostUpgradeRequestRepository.GetLastRequestByUserIdASync(userId);
+
+            if (exitingRequest is null)
+            {
+                return NotFoundResponse("You do not have any upgrade requests.");
+            }
+
+            return Ok(exitingRequest.ToDto());
         }
 
         [HttpPatch("{id}/approve")]
