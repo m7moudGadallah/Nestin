@@ -10,6 +10,12 @@ namespace Nestin.Infrastructure.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            // ID configuration
+            builder.Property(x => x.Id)
+                .IsRequired()
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("NEWID()");
+
             builder.Property(x => x.UserId)
                 .IsRequired();
 
