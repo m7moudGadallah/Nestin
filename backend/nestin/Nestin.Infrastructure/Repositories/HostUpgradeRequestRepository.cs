@@ -10,6 +10,16 @@ namespace Nestin.Infrastructure.Repositories
         public HostUpgradeRequestRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
+        public async Task<HostUpgradeRequest?> GetLastRequestByUserIdASync(string userId)
+        {
+            return await _dbContext.HostUpgradeRequests
+            .Include(x => x.FrontPhoto)
+            .Include(x => x.BackPhoto)
+            .Where(r => r.UserId == userId)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefaultAsync();
+        }
+
         public async Task<HostUpgradeRequest?> GetPendingRequestByUserIdAsync(string userId)
         {
             return await _dbContext.HostUpgradeRequests

@@ -11,7 +11,7 @@ namespace Nestin.Core.Validation
             var documentNumber = value as string;
             if (string.IsNullOrWhiteSpace(documentNumber))
             {
-                return new ValidationResult("DocumentNumber is required.");
+                return ValidationResult.Success;
             }
 
             // Get the DocumentType value from the model

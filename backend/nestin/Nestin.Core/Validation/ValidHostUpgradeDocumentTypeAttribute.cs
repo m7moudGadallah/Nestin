@@ -9,7 +9,7 @@ namespace Nestin.Core.Validation
         {
             if (value == null)
             {
-                return new ValidationResult("DocumentType is required.");
+                return ValidationResult.Success;
             }
 
             var documentType = value.ToString();
