@@ -19,10 +19,9 @@ namespace Nestin.Core.Validation
             var documentTypeProperty = instance.GetType().GetProperty("DocumentType");
             var documentTypeValue = documentTypeProperty?.GetValue(instance) as string;
 
+            // Relaxed behavior: if DocumentType is not present, skip validation
             if (string.IsNullOrWhiteSpace(documentTypeValue))
-            {
-                return new ValidationResult("DocumentType must be specified to validate DocumentNumber.");
-            }
+                return ValidationResult.Success;
 
             if (Enum.TryParse(typeof(HostUpgradeRequestDocumentType), documentTypeValue, true, out var documentType))
             {

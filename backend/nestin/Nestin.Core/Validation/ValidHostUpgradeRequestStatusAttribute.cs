@@ -7,6 +7,10 @@ namespace Nestin.Core.Validation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            // Relax validation
+            if (value is null)
+                return ValidationResult.Success;
+
             // Assume null/empty checks are handled by [Required] if needed
             if (value is string stringValue)
             {
