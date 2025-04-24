@@ -22,6 +22,7 @@
         public IFileUploadRepository FileUploadRepository { get; }
         public IUserProfileRepository UserProfileRepository { get; }
         public IBookingRepository BookingRepository { get; }
+        public IHostUpgradeRequestRepository HostUpgradeRequestRepository { get; }
         public Task SaveChangesAsync();
     }
 }
