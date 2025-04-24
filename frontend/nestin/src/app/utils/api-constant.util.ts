@@ -9,8 +9,16 @@ export class ApiConstant {
   };
 
   public static PropertiesApi = {
-    getAll: `${ApiConstant.baseUrl}/properties`,
+    getAll: `${ApiConstant.baseUrl}/Properties`,
+    getById: `${ApiConstant.baseUrl}/Properties/{id}`,
     getAllPropertyTypes: `${ApiConstant.baseUrl}/PropertyTypes`,
+    getPropertyAmenities: `${ApiConstant.baseUrl}/Properties/{id}/Amenities`,
+    getPropertyAvailability: `${ApiConstant.baseUrl}/Properties/{id}/Availabilities`,
+    getPropertyFees: `${ApiConstant.baseUrl}/Properties/{id}/Fees`,
+  };
+  public static AmenitiesApi = {
+    getAllAmenities: `${ApiConstant.baseUrl}/Amenities`,
+    getAllAmenitiesCategories: `${ApiConstant.baseUrl}/AmenityCategories`,
   };
 
   public static FavoritePropertiesApi = {
@@ -31,5 +39,8 @@ export class ApiConstant {
     getAllLocations: `${ApiConstant.baseUrl}/Locations`,
   };
 
+  public static Booking = {
+    createBooking: `${ApiConstant.baseUrl}/Bookings`,
+  };
   // Add other grouped APIs here
 }

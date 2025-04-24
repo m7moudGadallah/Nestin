@@ -1,0 +1,40 @@
+<div class="host-section">
+    <h2>About your host</h2>
+    <div class="host-profile">
+      <img 
+        *ngIf="property?.owner?.photo?.id"
+        [src]="property?.owner?.photo?.photoUrl" 
+        [alt]="hostName"
+        class="host-avatar"
+      >
+      <div class="host-details">
+        <h3>{{ hostName }}</h3>
+        <div class="host-meta">
+
+          <!-- joind at , back again -->
+          <!-- <p>
+            <lucide-icon [name]="icons.calendar" size="18"></lucide-icon>
+            Hosting for {{ hostingYears }} {{ hostingYears === 1 ? 'year' : 'years' }}
+          </p> -->
+          
+          <p>
+            <lucide-icon [name]="icons.star" size="18"></lucide-icon>
+            {{ property.averageRating || 'No' }} , reviews ({{ property.reviewCount || 0 }})
+          </p>
+          <p>
+            <lucide-icon [name]="icons.check" size="18"></lucide-icon>
+            {{ responseRate }}% response rate
+          </p>
+        </div>
+        <span class="host-badge" *ngIf="isSuperhost">
+          <lucide-icon [name]="icons.verified" size="18"></lucide-icon> Superhost
+        </span>
+      </div>
+    </div>
+    
+    <div class="host-contact">
+      <button class="contact-button">
+        <lucide-icon [name]="icons.mail" size="18"></lucide-icon> Contact Host
+      </button>
+    </div>
+  </div>

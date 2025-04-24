@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { PropertyInfoComponent } from './pages/property-info-page/property-info.component';
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { authGuard } from './guards/auth.guard';
@@ -11,6 +12,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
+      { path: 'property/:id', component: PropertyInfoComponent },
     ],
   },
   {
