@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
 import { IPropertyTypeRes } from '../../models/api/response/i-property-type-res';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-type-api-res';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HostListener } from '@angular/core';
@@ -30,6 +30,8 @@ import {
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
 import { Router } from '@angular/router';
+import { ISmartSearchReq } from '../../models/api/request/ismartSearch-req';
+import { ISmartSearchRes } from '../../models/api/response/ismartSearch-res';
 @Component({
   selector: 'app-home-page',
   standalone: true,
@@ -59,11 +61,12 @@ export class HomePageComponent {
   LocationName: string = '';
   checkInDate: string = '';
   checkOutDate: string = '';
-  guestsCount: number = 0;
-  minPrice: number = 0;
-  maxPrice: number = 500;
+  guestsCount: any = null;
+  minPrice: number = -1;
+  maxPrice: number = -1;
   propertyRating: number = 0;
   propertyTypeId: number = -1;
+  stringAiSearch: string | null = null; 
   //pagination variables-----------------------------------
   currentPage: number = 1;
   itemsPerPage: number = 0;
@@ -194,6 +197,7 @@ export class HomePageComponent {
       },
     });
   }
+ 
 
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
@@ -280,23 +284,23 @@ export class HomePageComponent {
     }
     
     // Add guestsCount if it's greater than 0
-    if (this.guestsCount > 0) {
-      queryParams.guests = this.guestsCount;
+    if (this.guestsCount !=null) {
+      queryParams.GuestCount = this.guestsCount;
     }
     
-    // Add minPrice if it's greater than or equal to 0
-    // if (this.minPrice >= 0) {
-    //   queryParams.minPrice = this.minPrice;
-    // }
+   
+    if (this.minPrice >= 0) {
+      queryParams.PriceMin = this.minPrice;
+    }
     
     // Add maxPrice if it's greater than 0
-    // if (this.maxPrice > 0) {
-    //   queryParams.maxPrice = this.maxPrice;
-    // }
+    if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
+      queryParams.PriceMax = this.maxPrice;
+    }
     
     // Add propertyRating if it's greater than 0
     if (this.selectedRating > 0) {
-      queryParams.Sort = 'rating';
+      queryParams.MinAvgRating = this.selectedRating;
     }
     
     // Add propertyTypeId if it's greater than 0
@@ -334,5 +338,38 @@ export class HomePageComponent {
       },
     });
   }
+  SmartSearch(): void {
+    if (this.stringAiSearch) {
+      console.log('Smart Search:', this.stringAiSearch);
+      this.propertyService.smartSearch(this.stringAiSearch).subscribe({
+        next: (response: HttpResponse<ISmartSearchRes>) => {
+          if (response.status === 200 && response.body) {
+            this.property = response.body.items.map(prop => ({
+              ...prop,
+              distanceFromMe: this.getDistanceFromLatLonInKm(
+                this.userLat,
+                this.userLon,
+                prop.latitude,
+                prop.longitude
+              ).toFixed(1),
+            }));
+            this.totalItems = response.body.metaData.total;
+            this.itemsPerPage = response.body.metaData.pageSize;
+            this.currentPage = response.body.metaData.page;
+          } else {
+            this.handlePropertyerror('Invalid search result');
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('SmartSearch error:', error);
+          this.handlePropertyerror('Failed to smart search properties');
+        },
+      });
+    } else {
+      console.log('No search term, loading all properties...');
+      this.getAllProperty(); 
+    }
+  }
+  
   // Add these methods to your component
 }

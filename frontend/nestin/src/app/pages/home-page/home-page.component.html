@@ -42,11 +42,14 @@
             type="text"
             class="form-control border-0 bg-transparent py-1 ps-3 pe-2 w-100 transition-all"
             [style.font-size]="scrollY > 50 ? '0.8rem' : '1rem'"
-            placeholder="Example: 'Beachfront villa with pool for family of 4 in Bali next month'" />
+            placeholder="Example: 'Beachfront villa with pool for family of 4 in Bali next month'"
+            [(ngModel)]="stringAiSearch" />
         </div>
         <button
           class="btn btn-primary ms-2 rounded-pill d-flex align-items-center text-white fw-semibold justify-content-center px-4 flex-shrink-0 transition-all"
-          [style.height]="scrollY > 50 ? '40px' : '48px'">
+          [style.height]="scrollY > 50 ? '40px' : '48px'"   (click)="SmartSearch()"
+          >
+   
           <fa-icon [icon]="icons['search']" class="text-white me-2"></fa-icon>
           <span [class.d-none]="scrollY > 50">Find Stays</span>
         </button>
@@ -123,7 +126,8 @@
                   type="text"
                   class="form-control border-0 p-0 bg-transparent transition-all"
                   [style.font-size]="scrollY > 50 ? '0.8rem' : '1rem'"
-                  placeholder="Guest Numbers" />
+                  placeholder="Guest Numbers" 
+                  [(ngModel)]="guestsCount"/>
               </h6>
             </button>
 
@@ -185,7 +189,7 @@
                   min="0"
                   max="1000"
                   step="10"
-                  [(ngModel)]="priceRange" />
+                  [(ngModel)]="minPrice" />
               </div>
               <div class="d-flex justify-content-between">
                 <span>$0</span>
@@ -198,12 +202,13 @@
                   class="form-range"
                   min="0"
                   max="1000"
-                  step="10" />
+                  step="10" 
+                  [(ngModel)]="maxPrice"/>
               </div>
 
               <div class="d-flex justify-content-between">
                 <span>$0</span>
-                <span>${{ priceRange }}</span>
+                <span>$1000</span>
               </div>
             </div>
           </div>
