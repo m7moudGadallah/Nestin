@@ -23,6 +23,7 @@
         public IUserProfileRepository UserProfileRepository { get; }
         public IBookingRepository BookingRepository { get; }
         public IHostUpgradeRequestRepository HostUpgradeRequestRepository { get; }
+        public IPropertyPhotoRepository PropertyPhotoRepository { get; }
         public Task SaveChangesAsync();
     }
 }
