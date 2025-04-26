@@ -224,5 +224,51 @@ namespace Nestin.Api.Controllers
             await _unitOfWork.SaveChangesAsync();
             return Ok(property.ToDto());
         }
+
+        [Authorize(Roles = "Host,Admin")]
+        [HttpDelete("{id}")]
+        [EndpointSummary("delete an existing property.")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(id);
+
+            if (property is null)
+            {
+                return NotFoundResponse();
+            }
+
+            property.IsDeleted = true;
+
+            _unitOfWork.PropertyRepository.Update(property);
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{id}/restore")]
+        [EndpointSummary("Restore deleted property (for Admin only).")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> Restore([FromRoute] string id)
+        {
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(id);
+
+            if (property is null)
+            {
+                return NotFoundResponse();
+            }
+
+            property.IsDeleted = false;
+
+            _unitOfWork.PropertyRepository.Update(property);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(property.ToDto());
+        }
     }
 }
