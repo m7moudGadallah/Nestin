@@ -1,0 +1,44 @@
+      :root {
+        --bookingcolor: #f18b7f;
+        --bookingcolor-hover: #e07a6f;
+      }
+
+      .bg-booking {
+        background-color: var(--bookingcolor) !important;
+      }
+
+      .btn-booking {
+        background-color: var(--bookingcolor);
+        border-color: var(--bookingcolor);
+        color: white;
+      }
+
+      .btn-booking:hover {
+        background-color: var(--bookingcolor-hover);
+        border-color: var(--bookingcolor-hover);
+        color: white;
+      }
+
+      .text-booking {
+        color: var(--bookingcolor) !important;
+      }
+
+      .booking-card {
+        transition: all 0.3s ease;
+      }
+
+      .booking-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+      }
+
+      .location-icon {
+        font-size: 0.875rem;
+        margin-right: 0.25rem;
+      }
+   

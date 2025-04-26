@@ -1,0 +1,307 @@
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <h1 class="fw-bold text-dark">Your Booking History</h1>
+      <div class="d-flex align-items-center">
+        <span class="me-2 text-muted">Sort by:</span>
+        <select class="form-select form-select-sm w-auto">
+          <option selected>Check-in Date (Newest first)</option>
+          <option>Check-in Date (Oldest first)</option>
+          <option>Price (Low to High)</option>
+          <option>Price (High to Low)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <button class="btn btn-primary btn-sm rounded-pill px-3 text-light fw-bold">
+        All Bookings
+      </button>
+      <button class="btn btn-outline-secondary btn-sm rounded-pill px-3  fw-bold">
+        Confirmed
+      </button>
+      <button class="btn btn-outline-secondary btn-sm rounded-pill px-3  fw-bold">
+        Pending
+      </button>
+      <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold">
+        Canceled
+      </button>
+    </div>
+
+    <!-- Booking List -->
+    <div class="row g-4">
+      <!-- Booking 1 -->
+      <div class="col-12">
+        <div
+          class="card booking-card h-100 border-0 shadow-sm transition-all"
+        >
+          <div class="row g-0 h-100">
+            <div class="col-md-4 position-relative">
+              <img
+                src="https://localhost:7026/images/barcelona1.avif"
+                class="img-fluid h-100 w-100 object-fit-cover rounded-start"
+                alt="Sunny and cozy Apartment Sagrada Familia"
+              />
+              <span
+                class="position-absolute top-0 end-0 m-3 badge bg-success bg-opacity-90 status-badge"
+              >
+                Confirmed
+              </span>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between mb-3">
+                  <div>
+                    <h3 class="card-title h5 mb-2">
+                      Sunny and cozy Apartment Sagrada Familia
+                    </h3>
+                    <p class="card-text text-muted small mb-2">
+                      <i class="bi bi-geo-alt-fill location-icon"></i>
+                      Barcelona, Catalunya
+                    </p>
+                    <div class="d-flex align-items-center">
+                      <div class="text-warning me-1">
+                        <i class="bi bi-star-fill"></i>
+                        <span class="text-dark ms-1">4.5</span>
+                      </div>
+                      <span class="text-muted small ms-2">(1 review)</span>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <span class="d-block text-muted small"
+                      >Booking #0fe8f9f5</span
+                    >
+                    <span class="d-block text-muted small">Oct 12, 2024</span>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-in</p>
+                    <p class="mb-0 fw-medium">May 15, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-out</p>
+                    <p class="mb-0 fw-medium">May 20, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Guests</p>
+                    <p class="mb-0 fw-medium">1 guest</p>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div
+                  class="mt-auto d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <p class="small text-muted mb-1">Total</p>
+                    <h4 class="text-primary mb-0">$12,500.00</h4>
+                    <p class="small text-muted">
+                      $2,500.00 per night × 5 nights
+                    </p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-danger btn-sm">
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary btn-sm">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking 2 -->
+      <div class="col-12">
+        <div
+          class="card booking-card h-100 border-0 shadow-sm transition-all"
+        >
+          <div class="row g-0 h-100">
+            <div class="col-md-4 position-relative">
+              <img
+                src="https://localhost:7026/images/makkah1.avif"
+                class="img-fluid h-100 w-100 object-fit-cover rounded-start"
+                alt="Rent an apartment near Alhar Mecca"
+              />
+              <span
+                class="position-absolute top-0 end-0 m-3 badge bg-success bg-opacity-90 status-badge"
+              >
+                Confirmed
+              </span>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between mb-3">
+                  <div>
+                    <h3 class="card-title h5 mb-2">
+                      Rent an apartment near Alhar Mecca
+                    </h3>
+                    <p class="card-text text-muted small mb-2">
+                      <i class="bi bi-geo-alt-fill location-icon"></i>
+                      Makkah, Makkah Province
+                    </p>
+                    <div class="d-flex align-items-center">
+                      <div class="text-warning me-1">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                        <span class="text-dark ms-1">3.0</span>
+                      </div>
+                      <span class="text-muted small ms-2">(1 review)</span>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <span class="d-block text-muted small"
+                      >Booking #438d19e1</span
+                    >
+                    <span class="d-block text-muted small">Oct 12, 2024</span>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-in</p>
+                    <p class="mb-0 fw-medium">May 15, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-out</p>
+                    <p class="mb-0 fw-medium">May 20, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Guests</p>
+                    <p class="mb-0 fw-medium">2 guests</p>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div
+                  class="mt-auto d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <p class="small text-muted mb-1">Total</p>
+                    <h4 class="text-primary mb-0">$26,200.00</h4>
+                    <p class="small text-muted">
+                      $5,240.00 per night × 5 nights
+                    </p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-danger btn-sm">
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary btn-sm">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking 3 -->
+      <div class="col-12">
+        <div
+          class="card booking-card h-100 border-0 shadow-sm transition-all"
+        >
+          <div class="row g-0 h-100">
+            <div class="col-md-4 position-relative">
+              <img
+                src="https://localhost:7026/images/jordan1.avif"
+                class="img-fluid h-100 w-100 object-fit-cover rounded-start"
+                alt="Wadi Rum Sunset Cave"
+              />
+              <span
+                class="position-absolute top-0 end-0 m-3 badge bg-warning bg-opacity-90 status-badge"
+              >
+                Pending
+              </span>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between mb-3">
+                  <div>
+                    <h3 class="card-title h5 mb-2">Wadi Rum Sunset Cave</h3>
+                    <p class="card-text text-muted small mb-2">
+                      <i class="bi bi-geo-alt-fill location-icon"></i>
+                      Wadi Rum Village, Aqaba Governorate
+                    </p>
+                    <div class="d-flex align-items-center">
+                      <div class="text-warning me-1">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                        <span class="text-dark ms-1">4.0</span>
+                      </div>
+                      <span class="text-muted small ms-2">(1 review)</span>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <span class="d-block text-muted small"
+                      >Booking #7b479ff7</span
+                    >
+                    <span class="d-block text-muted small">Oct 12, 2024</span>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-in</p>
+                    <p class="mb-0 fw-medium">May 15, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Check-out</p>
+                    <p class="mb-0 fw-medium">May 20, 2025</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="small text-muted mb-1">Guests</p>
+                    <p class="mb-0 fw-medium">2 guests</p>
+                  </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div
+                  class="mt-auto d-flex justify-content-between align-items-center"
+                >
+                  <div>
+                    <p class="small text-muted mb-1">Total</p>
+                    <h4 class="text-primary mb-0">$16,900.00</h4>
+                    <p class="small text-muted">
+                      $3,380.00 per night × 5 nights
+                    </p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-danger btn-sm">
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary btn-sm">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
