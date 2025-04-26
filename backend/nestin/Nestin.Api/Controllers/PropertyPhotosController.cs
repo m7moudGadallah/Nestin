@@ -124,9 +124,10 @@ namespace Nestin.Api.Controllers
         [HttpDelete("{id}")]
         [EndpointSummary("Reoder property photos.")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> Delete([FromRoute] string id)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            await _serviceFactory.FileUploadManagementService.RemoveFileAsync(id);
+            return NoContent();
         }
     }
 }
