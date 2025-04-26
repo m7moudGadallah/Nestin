@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.PropertyGuests;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
@@ -38,6 +39,28 @@ namespace Nestin.Infrastructure.Repositories
                     PageSize = dto.PageSize
                 }
             };
+        }
+
+        public async Task<PropertyGuest?> GetByPropertyAndGuestTypeAsync(string propertyId, int guestTypeId)
+        {
+            return await _dbContext.PropertyGuests
+               .Include(x => x.GuestType)
+               .Where(x => x.PropertyId == propertyId && x.GuestTypeId == guestTypeId)
+               .FirstOrDefaultAsync();
+        }
+
+        public void Create(PropertyGuest entity)
+        {
+            _dbContext.Add(entity);
+        }
+
+        public void Update(PropertyGuest entity)
+        {
+            _dbContext.Update(entity);
+        }
+        public void Delete(PropertyGuest entity)
+        {
+            _dbContext.Remove(entity);
         }
     }
 }
