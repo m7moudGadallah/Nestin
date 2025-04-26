@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.PropertyPhotos;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 
 namespace Nestin.Api.Controllers
 {
@@ -22,9 +24,39 @@ namespace Nestin.Api.Controllers
         [Consumes("multipart/form-data")]
         [EndpointSummary("Upload property photos.")]
         [ProducesResponseType(typeof(List<PropertyPhotoDto>), StatusCodes.Status201Created)]
-        public Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload([FromForm] PropertyPhotosUploadDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var userId = CurrentUser.Id;
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(dto.PropertyId);
+
+            if (property is null)
+            {
+                return NotFoundResponse("Property not found");
+            }
+
+            if (property is not null && !(CurrentUser.IsInRole("Admin") ||
+                property.OwnerId == userId))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden,
+           new List<string> { "You don't have permission to upload photos for this property" });
+            }
+
+            for (int i = 0; i < dto.Photos.Count; ++i)
+            {
+                var fileUpload = await _serviceFactory.FileUploadManagementService.UploadAsync(dto.Photos[i]);
+                _unitOfWork.PropertyPhotoRepository.Create(new PropertyPhoto
+                {
+                    PhotoId = fileUpload.Id,
+                    PropertyId = property.Id,
+                    TouchedAt = DateTime.UtcNow.AddSeconds(i)
+                });
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var propertyPhotos = await _unitOfWork.PropertyPhotoRepository.GetAllByPropertyIdASync(property.Id);
+
+            return Ok(propertyPhotos.Select(x => x.ToDto()).ToList());
         }
 
         [HttpPost("reorder")]
