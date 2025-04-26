@@ -5,9 +5,9 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertyGuestMappingExtensionts
     {
-        public static PropertyGuestsDto ToDo(this PropertyGuest propertyGuest)
+        public static PropertyGuestDto ToDto(this PropertyGuest propertyGuest)
         {
-            return new PropertyGuestsDto
+            return new PropertyGuestDto
             {
                 PropertyId = propertyGuest.PropertyId,
                 GuestType = propertyGuest.GuestType.ToDto(),
