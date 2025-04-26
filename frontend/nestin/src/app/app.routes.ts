@@ -4,6 +4,7 @@ import { PropertyInfoComponent } from './pages/property-info-page/property-info.
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { authGuard } from './guards/auth.guard';
+import { BookingHistoryComponent } from './pages/booking-history-page/booking-history.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'property/:id', component: PropertyInfoComponent },
+      {path:'bookingHistory',component:BookingHistoryComponent},
     ],
   },
   {

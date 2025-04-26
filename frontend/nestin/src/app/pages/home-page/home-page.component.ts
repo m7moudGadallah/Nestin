@@ -8,6 +8,8 @@ import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-ty
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HostListener } from '@angular/core';
 import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
+import { Heart, LucideAngularModule } from 'lucide-angular';
+
 import {
   faHouse,
   faBed,
@@ -27,15 +29,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
-
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, LucideAngularModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent {
+  icon = {
+    heart: Heart,
+  };
+
   searchMode: 'simple' | 'advanced' = 'simple';
   guestMenuVisible: boolean = false;
   showFilters: boolean = false;
@@ -103,6 +108,11 @@ export class HomePageComponent {
 
   toggleGuestMenu(): void {
     this.guestMenuVisible = !this.guestMenuVisible;
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    this.scrollY = window.scrollY;
   }
 
   toggleFilters(): void {
@@ -217,10 +227,11 @@ export class HomePageComponent {
     }
   }
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.scrollY = window.scrollY;
-  }
+  // @HostListener('window:scroll', [])
+  // onWindowScroll() {
+  //   this.scrollY = window.scrollY;
+  // }
+
   onFocus() {
     this.isFocused = true;
   }
@@ -237,4 +248,6 @@ export class HomePageComponent {
     this.currentPage = pageNumber;
     this.updatePageData();
   }
+
+  // Add these methods to your component
 }

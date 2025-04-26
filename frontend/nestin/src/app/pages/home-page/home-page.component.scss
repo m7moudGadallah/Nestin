@@ -5,50 +5,97 @@ $focus-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
 $breakpoint-xl: 1200px;
 $breakpoint-lg: 992px;
 $breakpoint-sm: 576px;
-
-// Search Container
-.ai-search-container {
-  max-width: $search-container-max-width;
-  margin: 0 auto;
-
-  // Search Bar
-  .ai-search-bar {
-    transition: all 0.3s ease;
-
-    // Input styles
-    input {
-      outline: none;
-      box-shadow: none;
-      min-height: $search-bar-height;
-    }
-
-    // Focus state
-    &:focus-within {
-      box-shadow: $focus-shadow;
-    }
-  }
+.transition-all {
+  transition: all 0.5s ease;
 }
 
-// Search Bars Container
-.search-bars-container {
-  top: 10vh;
-  background-color: white;
+.search-bars-container.minimized {
+  margin-top: 0;
+  padding: 1rem !important;
+  top: 0vh;
+  width: 59vw;
+  transform: translate(-200px, 0);
 
-  // Responsive adjustments
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  //   @media (max-width: $breakpoint-sm) {
+  //     .Advanced {
+  //       font-size: 0.2rem !important;
+  //       right: 10px;
+  //     }
+  //     .disapear {
+  //       display: none;
+  //     }
 
-  @media (max-width: $breakpoint-xl) {
-    top: 4.5vh;
-    z-index: 1;
-  }
+  //     padding: 0;
+  //     margin: 0;
+  //     top: 1vh;
+  //     width: 70vw;
+  //     height: 20vh;
+  //     transform: translate(100px, 0);
+  //     // background-color: black;
+  //   }
 
-  @media (max-width: $breakpoint-lg) {
-    top: 5vh;
-    z-index: 1;
-  }
+  //   @media (max-width: $breakpoint-lg) {
+  //     top: 1vh;
+  //     transform: translate(50px, 0);
+  //     width: 60vw;
+  //     // padding: 0;
+  //     .disapear {
+  //       display: none;
+  //     }
+  //   }
 
-  @media (max-width: $breakpoint-sm) {
-    top: 7vh;
-  }
+  //   @media (max-width: $breakpoint-xl) {
+  //     top: 1vh;
+  //     width: 30vh;
+  //     transform: translate(1000px, 0);
+
+  //     .disapear {
+  //       display: none;
+  //     }
+  //   }
+  // }
+  // // Search Container
+  // .ai-search-container {
+  //   max-width: $search-container-max-width;
+  //   margin: 0 auto;
+
+  //   // Search Bar
+  //   .ai-search-bar {
+  //     transition: all 0.3s ease;
+
+  //     // Input styles
+  //     input {
+  //       outline: none;
+  //       box-shadow: none;
+  //       min-height: $search-bar-height;
+  //     }
+
+  //     // Focus state
+  //     &:focus-within {
+  //       box-shadow: $focus-shadow;
+  //     }
+  //   }
+  // }
+
+  // // Search Bars Container
+  // .search-bars-container {
+  //   top: 10vh;
+  //   // background-color: white;
+
+  //   // Responsive adjustments
+
+  //   @media (max-width: $breakpoint-xl) {
+  //     top: 4.5vh;
+  //   }
+
+  //   @media (max-width: $breakpoint-lg) {
+  //     top: 5vh;
+  //   }
+
+  //   @media (max-width: $breakpoint-sm) {
+  //     top: 4vh;
+  //   }
 }
 
 .btn-outline-primary {
@@ -69,5 +116,72 @@ $breakpoint-sm: 576px;
 }
 
 .scrolled {
-  background-color: rgba(255, 255, 255, 0.5); 
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+// cursoul
+/* Style for the arrows to move them to the sides and vertically center */
+/* Ensure that the images are contained without overflow */
+.carousel,
+.carousel-inner,
+.carousel-item {
+  height: 300px; /* or any fixed height */
+}
+
+.carousel-item img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+/* Show arrows on hover */
+.carousel:hover .carousel-control-prev,
+.carousel:hover .carousel-control-next {
+  opacity: 1 !important;
+}
+.carousel-control-next,
+.carousel-control-prev {
+  width: 12%;
+  height: 12%;
+  position: absolute;
+  top: 45%;
+  border-radius: 15px;
+  padding: 5px;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0); /* background behind the arrow */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* optional soft shadow */
+
+  background-size: 40% 40%;
+  border-radius: 50%;
+  padding: 10px;
+  filter: invert(100%); /* changes white arrow to black */
+}
+
+.carousel-indicators li {
+  list-style-type: none; /* Remove any list-style (numbers or dots) */
+}
+.carousel-indicators li {
+  width: 8px; /* Adjust width */
+  height: 8px; /* Adjust height */
+  border-radius: 50%; /* Make them circular */
+  background-color: black; /* Change color if needed */
+}
+
+.carousel-indicators li.active {
+  background-color: white; /* Active dot color */
+}
+.carousel-indicators {
+  position: absolute;
+  bottom: -20px;
+  left: 35%;
+  transform: translateX(-50%);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.carousel:hover .carousel-indicators {
+  opacity: 1;
 }
