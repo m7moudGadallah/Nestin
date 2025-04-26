@@ -102,9 +102,34 @@ namespace Nestin.Api.Controllers
 
         [HttpDelete("{propertyId}/{guestTypeId}")]
         [EndpointSummary("delete an existing Property Guest.")]
-        public Task<IActionResult> Delete([FromRoute] string propertyId, [FromRoute] string guestTypeId)
+        public async Task<IActionResult> Delete([FromRoute] string propertyId, [FromRoute] int guestTypeId)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            // Get property and verify ownership/access
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(propertyId);
+            if (property == null)
+            {
+                return NotFoundResponse("Property not found");
+            }
+
+            // Authorization check
+            if (!CurrentUser.IsInRole("Admin") && property.OwnerId != CurrentUser.Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden,
+                    new List<string> { "You don't have permission to update guests for this property" });
+            }
+
+            // Get existing guest configuration
+            var existingGuest = await _unitOfWork.PropertyGuestRepository
+                .GetByPropertyAndGuestTypeAsync(propertyId, guestTypeId);
+
+            if (existingGuest == null)
+            {
+                return NotFoundResponse("Guest configuration not found for this property");
+            }
+
+            _unitOfWork.PropertyGuestRepository.Delete(existingGuest);
+            await _unitOfWork.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
