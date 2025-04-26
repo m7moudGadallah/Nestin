@@ -14,7 +14,7 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyGuestRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertyGuestsDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto)
+        public async Task<PaginatedResult<PropertyGuestDto>> GetByPropertyIdAsync(string propertyId, GetAllQueryDto dto)
         {
             var query = _dbContext.PropertyGuests
                 .Include(x => x.GuestType)
@@ -26,10 +26,10 @@ namespace Nestin.Infrastructure.Repositories
             var items = await query
                     .Skip(dto.CalcSkippedItems())
                     .Take(dto.PageSize)
-                    .Select(x => x.ToDo())
+                    .Select(x => x.ToDto())
                     .ToListAsync();
 
-            return new PaginatedResult<PropertyGuestsDto>
+            return new PaginatedResult<PropertyGuestDto>
             {
                 Items = items,
                 MetaData = new PaginationMetaData
