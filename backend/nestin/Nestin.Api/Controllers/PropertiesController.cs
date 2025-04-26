@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.Properties;
 using Nestin.Core.Dtos.PropertyAmenities;
 using Nestin.Core.Dtos.PropertyAvailabilities;
 using Nestin.Core.Dtos.PropertyFees;
 using Nestin.Core.Dtos.PropertyGuests;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 using Nestin.Core.Shared;
 
 namespace Nestin.Api.Controllers
@@ -140,6 +143,39 @@ namespace Nestin.Api.Controllers
             var result = await _unitOfWork.PropertySpaceRepository.GetByPropertyIdAsync(id, dto);
 
             return Ok(result);
+        }
+
+        [Authorize(Roles = "Host")]
+        [HttpPost]
+        [EndpointSummary("Create new property.")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PropertyHostViewDto), StatusCodes.Status201Created)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> Create([FromBody] PropertyCreateDto dto)
+        {
+            var userId = CurrentUser.Id;
+
+            var property = new Property
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                OwnerId = userId,
+                PropertyTypeId = dto.PropertyTypeId,
+                LocationId = dto.LocationId,
+                PricePerNight = dto.PricePerNight,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude,
+                SafteyInfo = dto.SafteyInfo,
+                HouseRules = dto.HouseRules,
+                CancellationPolicy = dto.CancellationPolicy,
+                IsActive = false,
+                IsDeleted = false
+            };
+
+            _unitOfWork.PropertyRepository.Create(property);
+            await _unitOfWork.SaveChangesAsync();
+            return new ObjectResult(property.ToHostViewDto()) { StatusCode = 201 };
         }
     }
 }
