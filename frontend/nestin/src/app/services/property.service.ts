@@ -26,6 +26,14 @@ export class PropertyService {
       withCredentials: true,
     });
   }
+  searchProperty(params: any): Observable<HttpResponse<any>> {
+    return this.http.get<any>(`${ApiConstant.PropertiesApi.getAll}`, {
+      params: params,
+      observe: 'response',
+      withCredentials: true,
+    });
+  }
+  
   getPropertyById(id: string): Observable<HttpResponse<any>> {
     const url = ApiConstant.PropertiesApi.getById.replace('{id}', id);
     return this.http.get<any>(url, {
