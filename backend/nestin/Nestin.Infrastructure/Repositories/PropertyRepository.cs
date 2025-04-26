@@ -27,6 +27,7 @@ namespace Nestin.Infrastructure.Repositories
                     .Include(x => x.PropertyPhotos)
                     .ThenInclude(x => x.FileUpload)
                     .Include(x => x.Bookings)
+                    .ThenInclude(x => x.Review)
                     .AsQueryable();
 
             if (isAdmin)
@@ -124,6 +125,32 @@ namespace Nestin.Infrastructure.Repositories
 
             if (queryDto.RegionId.HasValue)
                 query = query.Where(x => x.Location.Country.RegionId == queryDto.RegionId.Value);
+
+            // Add average rating filtering
+            if (queryDto.MinAvgRating.HasValue || queryDto.MaxAvgRating.HasValue)
+            {
+                query = query.Where(x => x.Bookings
+                    .Where(b => b.Review != null)
+                    .Any()); // Ensure property has at least one review
+
+                if (queryDto.MinAvgRating.HasValue)
+                {
+                    query = query.Where(x => x.Bookings
+                        .Where(b => b.Review != null)
+                        .Average(b => (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
+                                     b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
+                        >= queryDto.MinAvgRating.Value);
+                }
+
+                if (queryDto.MaxAvgRating.HasValue)
+                {
+                    query = query.Where(x => x.Bookings
+                        .Where(b => b.Review != null)
+                        .Average(b => (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
+                                     b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
+                        <= queryDto.MaxAvgRating.Value);
+                }
+            }
 
             query = queryDto.Sort switch
             {
