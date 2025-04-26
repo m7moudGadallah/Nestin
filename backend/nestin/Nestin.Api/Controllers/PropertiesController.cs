@@ -177,5 +177,40 @@ namespace Nestin.Api.Controllers
             await _unitOfWork.SaveChangesAsync();
             return new ObjectResult(property.ToHostViewDto()) { StatusCode = 201 };
         }
+
+        [Authorize(Roles = "Host,Admin")]
+        [HttpPatch("{id}")]
+        [EndpointSummary("Update existing property.")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PropertyHostViewDto), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PropertyUpdateDto dto)
+        {
+            var userId = CurrentUser.Id;
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(id);
+
+            if (property == null || (CurrentUser.IsInRole("Host") && property.OwnerId != userId))
+            {
+                return NotFoundResponse();
+            }
+
+            // Update only non-null properties from DTO
+            property.Title = dto.Title ?? property.Title;
+            property.Description = dto.Description ?? property.Description;
+            property.PropertyTypeId = dto.PropertyTypeId ?? property.PropertyTypeId;
+            property.LocationId = dto.LocationId ?? property.LocationId;
+            property.PricePerNight = dto.PricePerNight ?? property.PricePerNight;
+            property.Latitude = dto.Latitude ?? property.Latitude;
+            property.Longitude = dto.Longitude ?? property.Longitude;
+            property.SafteyInfo = dto.SafteyInfo ?? property.SafteyInfo;
+            property.HouseRules = dto.HouseRules ?? property.HouseRules;
+            property.CancellationPolicy = dto.CancellationPolicy ?? property.CancellationPolicy;
+            property.IsActive = (dto.IsActive.HasValue) ? dto.IsActive.Value : property.IsActive;
+
+            _unitOfWork.PropertyRepository.Update(property);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(CurrentUser.IsInRole("Admin") ? property.ToAdminView() : property.ToHostViewDto());
+        }
     }
 }
