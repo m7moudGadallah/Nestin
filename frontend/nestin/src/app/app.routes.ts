@@ -14,7 +14,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'property/:id', component: PropertyInfoComponent },
-      {path:'bookingHistory',component:BookingHistoryComponent},
+      { path: 'bookingHistory', component: BookingHistoryComponent },
     ],
   },
   {
