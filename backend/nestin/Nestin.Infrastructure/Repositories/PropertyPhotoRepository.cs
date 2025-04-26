@@ -18,6 +18,7 @@ namespace Nestin.Infrastructure.Repositories
         public async Task<IReadOnlyCollection<PropertyPhoto>> GetAllByPropertyIdASync(string propertyId)
         {
             var query = _dbContext.PropertyPhotos
+                .Include(x => x.FileUpload)
                 .OrderBy(x => x.TouchedAt)
                 .Where(x => x.PropertyId == propertyId)
                 .AsQueryable();
