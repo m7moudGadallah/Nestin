@@ -24,6 +24,8 @@ namespace Nestin.Infrastructure.Repositories
                     .ThenInclude(x => x.FileUpload)
                     .Include(x => x.Bookings)
                     .ThenInclude(x => x.Review)
+                    .Where(x => !x.IsDeleted)
+                    .Where(x => x.IsActive)
                     .AsQueryable();
 
             // Fitlers
