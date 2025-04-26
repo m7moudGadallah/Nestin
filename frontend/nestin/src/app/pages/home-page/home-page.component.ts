@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home-page',
   standalone: true,
@@ -55,6 +56,14 @@ export class HomePageComponent {
   userLon: number = 31.233334;
   scrollY = 0;
   isFocused = false;
+  LocationName: string = '';
+  checkInDate: string = '';
+  checkOutDate: string = '';
+  guestsCount: number = 0;
+  minPrice: number = 0;
+  maxPrice: number = 500;
+  propertyRating: number = 0;
+  propertyTypeId: number = -1;
   //pagination variables-----------------------------------
   currentPage: number = 1;
   itemsPerPage: number = 0;
@@ -95,7 +104,7 @@ export class HomePageComponent {
     city: faCity,
   };
 
-  constructor(private propertyService: PropertyService) {}
+  constructor(private propertyService: PropertyService,private route:Router) {}
 
   ngOnInit(): void {
     this.getPropertyTypes();
@@ -248,6 +257,82 @@ export class HomePageComponent {
     this.currentPage = pageNumber;
     this.updatePageData();
   }
+  navigateToProperty(propertyId: string): void {
+    this.route.navigate(['/property', propertyId]);
+  }
 
+  searchProperties(): void {
+    const queryParams: any = {};
+
+    // Add location if it's available
+    if (this.LocationName) {
+      queryParams.LocationName = this.LocationName;
+    }
+    
+    // Add checkInDate if it's available
+    if (this.checkInDate) {
+      queryParams.CheckIn = this.checkInDate;
+    }
+    
+    // Add checkOutDate if it's available
+    if (this.checkOutDate) {
+      queryParams.CheckOut = this.checkOutDate;
+    }
+    
+    // Add guestsCount if it's greater than 0
+    if (this.guestsCount > 0) {
+      queryParams.guests = this.guestsCount;
+    }
+    
+    // Add minPrice if it's greater than or equal to 0
+    // if (this.minPrice >= 0) {
+    //   queryParams.minPrice = this.minPrice;
+    // }
+    
+    // Add maxPrice if it's greater than 0
+    // if (this.maxPrice > 0) {
+    //   queryParams.maxPrice = this.maxPrice;
+    // }
+    
+    // Add propertyRating if it's greater than 0
+    if (this.selectedRating > 0) {
+      queryParams.Sort = 'rating';
+    }
+    
+    // Add propertyTypeId if it's greater than 0
+    if (this.selectedPropertyType) {
+      queryParams.PropertyTypeId
+      = this.selectedPropertyType;
+    }
+    
+   
+     console.log('Query Params:', queryParams);
+    console.log('Iam in search properties');
+    this.propertyService.searchProperty(queryParams).subscribe({
+      next: (response: HttpResponse<IpropertyRes>) => {
+        if (response.status === 200 && response.body) {
+          console.log(response.body.items);
+          this.property = response.body.items.map(prop => ({
+            ...prop,
+            distanceFromMe: this.getDistanceFromLatLonInKm(
+              this.userLat,
+              this.userLon,
+              prop.latitude,
+              prop.longitude
+            ).toFixed(1),
+          }));
+          this.totalItems = response.body.metaData.total;
+          this.itemsPerPage = response.body.metaData.pageSize;
+          this.currentPage = response.body.metaData.page;
+        } else {
+          this.handlePropertyerror('Invalid search result');
+        }
+      },
+      error: error => {
+        console.error('Search error:', error);
+        this.handlePropertyerror('Failed to search properties');
+      },
+    });
+  }
   // Add these methods to your component
 }
