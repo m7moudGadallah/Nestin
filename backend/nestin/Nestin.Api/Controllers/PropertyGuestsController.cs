@@ -19,7 +19,7 @@ namespace Nestin.Api.Controllers
         [HttpPost]
         [EndpointSummary("Create Property Guest.")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(PropertyGuestsDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertyGuestCreateDto dto)
         {
             // Get property and verify ownership/access
@@ -60,16 +60,44 @@ namespace Nestin.Api.Controllers
             var createdGuest = await _unitOfWork.PropertyGuestRepository
                 .GetByPropertyAndGuestTypeAsync(dto.PropertyId, dto.GuestTypeId);
 
-            return new ObjectResult(createdGuest?.ToDo()) { StatusCode = 201 };
+            return new ObjectResult(createdGuest?.ToDto()) { StatusCode = 201 };
         }
 
         [HttpPatch]
         [EndpointSummary("Update Property Guest.")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(PropertyGuestsDto), StatusCodes.Status200OK)]
-        public Task<IActionResult> Update([FromBody] PropertGuestUpdateDto dto)
+        [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Update([FromBody] PropertGuestUpdateDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            // Get property and verify ownership/access
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(dto.PropertyId);
+            if (property == null)
+            {
+                return NotFoundResponse("Property not found");
+            }
+
+            // Authorization check
+            if (!CurrentUser.IsInRole("Admin") && property.OwnerId != CurrentUser.Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden,
+                    new List<string> { "You don't have permission to update guests for this property" });
+            }
+
+            // Get existing guest configuration
+            var existingGuest = await _unitOfWork.PropertyGuestRepository
+                .GetByPropertyAndGuestTypeAsync(dto.PropertyId, dto.GuestTypeId);
+
+            if (existingGuest == null)
+            {
+                return NotFoundResponse("Guest configuration not found for this property");
+            }
+
+            existingGuest.GuestCount = dto.GuestCount;
+
+            _unitOfWork.PropertyGuestRepository.Update(existingGuest);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(existingGuest.ToDto());
         }
 
         [HttpDelete("{propertyId}/{guestTypeId}")]

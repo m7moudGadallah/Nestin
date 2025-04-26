@@ -112,7 +112,7 @@ namespace Nestin.Api.Controllers
         [HttpGet("{id}/Guests")]
         [EndpointSummary("Fetch property guests by id.")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<PropertyGuestsDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyGuestDto>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetGuestsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
