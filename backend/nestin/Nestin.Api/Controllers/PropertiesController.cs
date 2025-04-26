@@ -44,7 +44,7 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(PaginatedResult<PropertyListItemDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] FilterPropertyQueryParamsDto dto)
         {
-            return Ok(await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto));
+            return Ok(await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto, CurrentUser));
         }
 
         [HttpPost("search")]
@@ -56,7 +56,7 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> Search([FromBody] string query)
         {
             var dto = await _serviceFactory.PropertyFilterExtractorService.ExtractFiltersAsync(query);
-            var propertiesResult = await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto);
+            var propertiesResult = await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto, CurrentUser);
 
             var result = new PropertySearchResultDto
             {
@@ -75,7 +75,19 @@ namespace Nestin.Api.Controllers
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
-            var result = await _unitOfWork.PropertyRepository.GetPropertyDetailsAsync(id);
+            string? role = null;
+
+            if (CurrentUser is not null)
+            {
+                if (CurrentUser.IsInRole("Admin"))
+                    role = "Admin";
+                else if (CurrentUser.IsInRole("Host"))
+                    role = "Host";
+                else
+                    role = "Guest";
+            }
+
+            var result = await _unitOfWork.PropertyRepository.GetPropertyDetailsAsync(id, CurrentUser);
 
             if (result is null)
             {
@@ -150,7 +162,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Create new property.")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PropertyHostViewDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status201Created)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> Create([FromBody] PropertyCreateDto dto)
         {
@@ -175,7 +187,7 @@ namespace Nestin.Api.Controllers
 
             _unitOfWork.PropertyRepository.Create(property);
             await _unitOfWork.SaveChangesAsync();
-            return new ObjectResult(property.ToHostViewDto()) { StatusCode = 201 };
+            return new ObjectResult(property.ToDto()) { StatusCode = 201 };
         }
 
         [Authorize(Roles = "Host,Admin")]
@@ -183,7 +195,7 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Update existing property.")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PropertyHostViewDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PropertyDto), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PropertyUpdateDto dto)
         {
@@ -210,7 +222,7 @@ namespace Nestin.Api.Controllers
 
             _unitOfWork.PropertyRepository.Update(property);
             await _unitOfWork.SaveChangesAsync();
-            return Ok(CurrentUser.IsInRole("Admin") ? property.ToAdminView() : property.ToHostViewDto());
+            return Ok(property.ToDto());
         }
     }
 }

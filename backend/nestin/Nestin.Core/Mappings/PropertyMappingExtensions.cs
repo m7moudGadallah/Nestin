@@ -7,28 +7,9 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertyMappingExtensions
     {
-        public static PropertyHostViewDto ToHostViewDto(this Property entity)
+        public static PropertyDto ToDto(this Property entity)
         {
-            return new PropertyHostViewDto
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                OwnerId = entity.OwnerId,
-                PropertyTypeId = entity.PropertyTypeId,
-                LocationId = entity.LocationId,
-                PricePerNight = entity.PricePerNight,
-                Latitude = entity.Latitude,
-                Longitude = entity.Longitude,
-                SafteyInfo = entity.SafteyInfo,
-                HouseRules = entity.HouseRules,
-                CancellationPolicy = entity.CancellationPolicy,
-                IsActive = entity.IsActive
-            };
-        }
-
-        public static PropertyAdminViewDto ToAdminView(this Property entity)
-        {
-            return new PropertyAdminViewDto
+            return new PropertyDto
             {
                 Id = entity.Id,
                 Title = entity.Title,
@@ -62,7 +43,9 @@ namespace Nestin.Core.Mappings
                 PropertyType = property.PropertyType.ToDto(),
                 Photos = property.PropertyPhotos.OrderBy(x => x.TouchedAt).Select(photo => photo.ToDto()).ToList(),
                 AverageRating = averageRating,
-                ReviewCount = reviewCount
+                ReviewCount = reviewCount,
+                IsActive = property.IsActive,
+                IsDeleted = property.IsDeleted
             };
         }
 
@@ -89,7 +72,9 @@ namespace Nestin.Core.Mappings
                 ReviewCount = reviewCount,
                 MaxGuestCount = MapMaxGuestCount(property),
                 SpaceSummaries = MapSpaceSummaries(property),
-                SpaceItemSummaries = MapSpaceItemSummaries(property)
+                SpaceItemSummaries = MapSpaceItemSummaries(property),
+                IsActive = property.IsActive,
+                IsDeleted = property.IsDeleted
             };
         }
 

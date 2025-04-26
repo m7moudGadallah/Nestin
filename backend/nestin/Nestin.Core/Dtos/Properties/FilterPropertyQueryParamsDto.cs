@@ -13,6 +13,9 @@
         public int? CountryId { get; set; }
         public string? CountryName { get; set; }
         public int? RegionId { get; set; }
+        public string? OwnerId { get; set; }
+        public bool? IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
         public string? Sort { get; set; }
     }
 }

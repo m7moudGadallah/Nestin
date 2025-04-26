@@ -1,6 +1,6 @@
 ﻿namespace Nestin.Core.Dtos.Properties
 {
-    public class PropertyBaseViewDto
+    public class PropertyDto
     {
         public string Id { get; set; }
         public string Title { get; set; }
@@ -14,5 +14,7 @@
         public string? SafteyInfo { get; set; }
         public string? HouseRules { get; set; }
         public string? CancellationPolicy { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
