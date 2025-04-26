@@ -35,6 +35,8 @@ namespace Nestin.Infrastructure.Services
             if (fileUplaod == null) return;
 
             await _fileStorageService.DeleteFileAsync(fileUplaod.Path);
+            _unitOfWork.FileUploadRepository.Delete(fileUplaod);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
