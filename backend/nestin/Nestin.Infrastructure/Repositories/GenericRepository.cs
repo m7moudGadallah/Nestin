@@ -18,6 +18,11 @@ namespace Nestin.Infrastructure.Repositories
             _dbContext.Add(entity);
         }
 
+        public virtual void Delete(TEntity entity)
+        {
+            _dbContext.Remove(entity);
+        }
+
         public virtual async Task DeleteAsync(TKey id)
         {
             var entity = await GetByIdAsync(id);

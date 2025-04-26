@@ -13,6 +13,7 @@ namespace Nestin.Core.Interfaces
         public Task<TEntity?> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes);
         public void Create(TEntity entity);
         public void Update(TEntity entity);
+        public void Delete(TEntity entity);
         public Task DeleteAsync(TKey id);
     }
 }
