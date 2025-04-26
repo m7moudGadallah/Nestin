@@ -7,6 +7,45 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertyMappingExtensions
     {
+        public static PropertyHostViewDto ToHostViewDto(this Property entity)
+        {
+            return new PropertyHostViewDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                OwnerId = entity.OwnerId,
+                PropertyTypeId = entity.PropertyTypeId,
+                LocationId = entity.LocationId,
+                PricePerNight = entity.PricePerNight,
+                Latitude = entity.Latitude,
+                Longitude = entity.Longitude,
+                SafteyInfo = entity.SafteyInfo,
+                HouseRules = entity.HouseRules,
+                CancellationPolicy = entity.CancellationPolicy,
+                IsActive = entity.IsActive
+            };
+        }
+
+        public static PropertyAdminViewDto ToAdminView(this Property entity)
+        {
+            return new PropertyAdminViewDto
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                OwnerId = entity.OwnerId,
+                PropertyTypeId = entity.PropertyTypeId,
+                LocationId = entity.LocationId,
+                PricePerNight = entity.PricePerNight,
+                Latitude = entity.Latitude,
+                Longitude = entity.Longitude,
+                SafteyInfo = entity.SafteyInfo,
+                HouseRules = entity.HouseRules,
+                CancellationPolicy = entity.CancellationPolicy,
+                IsActive = entity.IsActive,
+                IsDeleted = entity.IsDeleted
+            };
+        }
+
         public static PropertyListItemDto ToPropertyListItemDto(this Property property)
         {
             var (averageRating, reviewCount) = CalculateRatingStats(property);
