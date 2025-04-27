@@ -60,6 +60,7 @@ namespace Nestin.Infrastructure.Shared
         public IPropertyPhotoRepository PropertyPhotoRepository => _propertyPhotoRepository ??= new PropertyPhotoRepository(_dbContext);
         public IPaymentRepository PaymentRepository =>
             _paymentRepository ??= new PaymentRepository(_dbContext);
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
