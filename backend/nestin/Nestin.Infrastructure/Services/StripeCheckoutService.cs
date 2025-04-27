@@ -63,6 +63,21 @@ namespace Nestin.Infrastructure.Services
 
             var session = await sessionService.CreateAsync(sessionOptions);
 
+            var newPayment = new Payment
+            {
+                BookingId = options.BookingId,
+                StripeSessionId = session.Id,
+                StripePaymentIntentId = session.PaymentIntentId,
+                Amount = session.AmountTotal.Value / 100m, // Convert from cents to dollars
+                Currency = session.Currency,
+                Status = PaymentStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _unitOfWork.PaymentRepository.Create(newPayment);
+            await _unitOfWork.SaveChangesAsync();
+
             return new CreateCheckoutResult
             {
                 SessionId = session.Id,
@@ -84,6 +99,10 @@ namespace Nestin.Infrastructure.Services
                         await HandleCheckoutSessionCompleted(stripeEvent);
                         break;
 
+                    case EventTypes.CheckoutSessionExpired:
+                        await HandleCheckoutSessionExpired(stripeEvent);
+                        break;
+
                     case EventTypes.CheckoutSessionAsyncPaymentFailed:
                         await HandleCheckoutSessionFailed(stripeEvent);
                         break;
@@ -103,26 +122,63 @@ namespace Nestin.Infrastructure.Services
         private async Task HandleCheckoutSessionCompleted(Stripe.Event stripeEvent)
         {
             var session = stripeEvent.Data.Object as Session;
+            var sessionId = session.Id;
             var bookingId = session.ClientReferenceId;
             var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+            var payment = await _unitOfWork.PaymentRepository.GetPaymentBySessionIdAsync(sessionId);
+
+            if (payment is null)
+            {
+                throw new NotFoundException($"Payment with session id[{sessionId}] is not found");
+            }
+
+
 
             if (booking is null)
             {
                 throw new NotFoundException($"Booking with id [{bookingId}] is not found.");
             }
 
-            booking.Status = BookingStatus.Confirmed;
 
+            payment.Status = PaymentStatus.Failed;
+            _unitOfWork.PaymentRepository.Update(payment);
+
+            booking.Status = BookingStatus.Confirmed;
             _unitOfWork.BookingRepository.Update(booking);
+
             await _unitOfWork.SaveChangesAsync();
         }
 
-        private Task HandleCheckoutSessionFailed(Stripe.Event stripeEvent)
+        private async Task HandleCheckoutSessionExpired(Stripe.Event stripeEvent)
         {
             var session = stripeEvent.Data.Object as Session;
-            var bookingId = session.ClientReferenceId;
-            _logger.LogError($"Checkout for this booking {bookingId} is failed!");
-            throw new NotImplementedException();
+            var sessionId = session.Id;
+            var payment = await _unitOfWork.PaymentRepository.GetPaymentBySessionIdAsync(sessionId);
+
+            if (payment is null)
+            {
+                throw new NotFoundException($"Payment with session id[{sessionId}] is not found");
+            }
+
+            payment.Status = PaymentStatus.Expired;
+            _unitOfWork.PaymentRepository.Update(payment);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        private async Task HandleCheckoutSessionFailed(Stripe.Event stripeEvent)
+        {
+            var session = stripeEvent.Data.Object as Session;
+            var sessionId = session.Id;
+            var payment = await _unitOfWork.PaymentRepository.GetPaymentBySessionIdAsync(sessionId);
+
+            if (payment is null)
+            {
+                throw new NotFoundException($"Payment with session id[{sessionId}] is not found");
+            }
+
+            payment.Status = PaymentStatus.Failed;
+            _unitOfWork.PaymentRepository.Update(payment);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
