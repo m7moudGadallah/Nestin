@@ -32,7 +32,7 @@
               <div class="guest-type-description">Ages 13 or above</div>
             </div>
             <div class="guest-counter">
-              <button (click)="decrementGuestCount('adults', 1)">−</button>
+              <button (click)="decrementGuestCount('adults', 0)">−</button>
               <span>{{ guestCounts.adults }}</span>
               <button (click)="guestCounts.adults = guestCounts.adults + 1">+</button>
             </div>
@@ -44,7 +44,7 @@
               <div class="guest-type-description">Ages 2-12</div>
             </div>
             <div class="guest-counter">
-              <button (click)="decrementGuestCount('children', 1)">−</button>
+              <button (click)="decrementGuestCount('children', 0)">−</button>
               <span>{{ guestCounts.children }}</span>
               <button (click)="guestCounts.children = guestCounts.children + 1">+</button>
             </div>
@@ -56,7 +56,7 @@
               <div class="guest-type-description">Under 2</div>
             </div>
             <div class="guest-counter">
-              <button (click)="decrementGuestCount('infants', 1)">−</button>
+              <button (click)="decrementGuestCount('infants', 0)">−</button>
               <span>{{ guestCounts.infants }}</span>
               <button (click)="guestCounts.infants = guestCounts.infants + 1">+</button>
             </div>
@@ -68,7 +68,7 @@
               <div class="guest-type-description">Bringing a service animal?</div>
             </div>
             <div class="guest-counter">
-              <button (click)="decrementGuestCount('pets', 1)">−</button>
+              <button (click)="decrementGuestCount('pets', 0)">−</button>
               <span>{{ guestCounts.pets }}</span>
               <button (click)="guestCounts.pets = guestCounts.pets + 1">+</button>
             </div>
