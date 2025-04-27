@@ -25,6 +25,7 @@ export class ApiConstant {
   public static FavoritePropertiesApi = {
     getAll: `${ApiConstant.baseUrl}/FavoriteProperties`,
     delete: `${ApiConstant.baseUrl}/FavoriteProperties`,
+    add: `${ApiConstant.baseUrl}/FavoriteProperties`,
   };
   public static booking = {
     getAllBookings: `${ApiConstant.baseUrl}/Bookings`,

@@ -9,6 +9,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HostListener } from '@angular/core';
 import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
 import { Heart, LucideAngularModule } from 'lucide-angular';
+import { ToastContainerComponent } from '../../components/toast-container/toast-container.component';
+import { ToastService } from '../../services/toast.service'; // Adjust the path as needed
 
 import {
   faHouse,
@@ -30,14 +32,16 @@ import {
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
 import { Router } from '@angular/router';
+import { FavoritePropertiesService } from '../../services/favorite-properties.service';
 import { ISmartSearchReq } from '../../models/api/request/ismartSearch-req';
 import { ISmartSearchRes } from '../../models/api/response/ismartSearch-res';
+
 @Component({
   selector: 'app-home-page',
   standalone: true,
   imports: [CommonModule, FormsModule, FontAwesomeModule, LucideAngularModule],
   templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.scss',
+  styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent {
   icon = {
@@ -66,8 +70,8 @@ export class HomePageComponent {
   maxPrice: number = -1;
   propertyRating: number = 0;
   propertyTypeId: number = -1;
-  stringAiSearch: string | null = null; 
-  //pagination variables-----------------------------------
+  stringAiSearch: string | null = null;
+  // pagination variables-----------------------------------
   currentPage: number = 1;
   itemsPerPage: number = 0;
   totalItems: number = 0;
@@ -107,7 +111,12 @@ export class HomePageComponent {
     city: faCity,
   };
 
-  constructor(private propertyService: PropertyService,private route:Router) {}
+  constructor(
+    private propertyService: PropertyService,
+    private route: Router,
+    private favouriteService: FavoritePropertiesService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.getPropertyTypes();
@@ -170,6 +179,7 @@ export class HomePageComponent {
       },
     });
   }
+
   getAllProperty(): void {
     this.propertyService.getAllProperty().subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
@@ -186,7 +196,6 @@ export class HomePageComponent {
           this.totalItems = response.body.metaData.total;
           this.itemsPerPage = response.body.metaData.pageSize;
           this.currentPage = response.body.metaData.page;
-          console.log(this.property);
         } else {
           this.handlePropertyerror('Invalid Loading Property');
         }
@@ -197,7 +206,6 @@ export class HomePageComponent {
       },
     });
   }
- 
 
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
@@ -207,6 +215,7 @@ export class HomePageComponent {
   getPropertyIcon(iconName: string): any {
     return this.icons[iconName] || this.icons['house']; // Default to house icon if not found
   }
+
   getDistanceFromLatLonInKm(
     lat1: number,
     lon1: number,
@@ -230,6 +239,7 @@ export class HomePageComponent {
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
+
   getMarginTop() {
     if (this.searchMode === 'advanced' && this.showFilters) {
       return 250; // 250px if Advanced and showFilters is visible
@@ -240,11 +250,6 @@ export class HomePageComponent {
     }
   }
 
-  // @HostListener('window:scroll', [])
-  // onWindowScroll() {
-  //   this.scrollY = window.scrollY;
-  // }
-
   onFocus() {
     this.isFocused = true;
   }
@@ -252,15 +257,18 @@ export class HomePageComponent {
   onBlur() {
     this.isFocused = false;
   }
+
   updatePageData(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.allProperties = this.property.slice(startIndex, endIndex);
   }
+
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
     this.updatePageData();
   }
+
   navigateToProperty(propertyId: string): void {
     this.route.navigate(['/property', propertyId]);
   }
@@ -272,45 +280,43 @@ export class HomePageComponent {
     if (this.LocationName) {
       queryParams.LocationName = this.LocationName;
     }
-    
+
     // Add checkInDate if it's available
     if (this.checkInDate) {
       queryParams.CheckIn = this.checkInDate;
     }
-    
+
     // Add checkOutDate if it's available
     if (this.checkOutDate) {
       queryParams.CheckOut = this.checkOutDate;
     }
-    
+
     // Add guestsCount if it's greater than 0
-    if (this.guestsCount !=null) {
+    if (this.guestsCount != null) {
       queryParams.GuestCount = this.guestsCount;
     }
-    
-   
+
+    // Add price range
     if (this.minPrice >= 0) {
       queryParams.PriceMin = this.minPrice;
     }
-    
+
     // Add maxPrice if it's greater than 0
     if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
       queryParams.PriceMax = this.maxPrice;
     }
-    
+
     // Add propertyRating if it's greater than 0
     if (this.selectedRating > 0) {
       queryParams.MinAvgRating = this.selectedRating;
     }
-    
+
     // Add propertyTypeId if it's greater than 0
     if (this.selectedPropertyType) {
-      queryParams.PropertyTypeId
-      = this.selectedPropertyType;
+      queryParams.PropertyTypeId = this.selectedPropertyType;
     }
-    
-   
-     console.log('Query Params:', queryParams);
+
+    console.log('Query Params:', queryParams);
     console.log('Iam in search properties');
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
@@ -338,38 +344,62 @@ export class HomePageComponent {
       },
     });
   }
+
   SmartSearch(): void {
     if (this.stringAiSearch) {
       console.log('Smart Search:', this.stringAiSearch);
-      this.propertyService.smartSearch(this.stringAiSearch).subscribe({
-        next: (response: HttpResponse<ISmartSearchRes>) => {
-          if (response.status === 200 && response.body) {
-            this.property = response.body.items.map(prop => ({
-              ...prop,
-              distanceFromMe: this.getDistanceFromLatLonInKm(
-                this.userLat,
-                this.userLon,
-                prop.latitude,
-                prop.longitude
-              ).toFixed(1),
-            }));
-            this.totalItems = response.body.metaData.total;
-            this.itemsPerPage = response.body.metaData.pageSize;
-            this.currentPage = response.body.metaData.page;
-          } else {
-            this.handlePropertyerror('Invalid search result');
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          console.error('SmartSearch error:', error);
-          this.handlePropertyerror('Failed to smart search properties');
-        },
-      });
-    } else {
-      console.log('No search term, loading all properties...');
-      this.getAllProperty(); 
+      this.propertyService
+        .smartSearch(
+          this.stringAiSearch,
+        )
+        .subscribe({
+          next: (response: HttpResponse<ISmartSearchRes>) => {
+            if (response.status === 200 && response.body) {
+              console.log(response.body.items);
+              this.property = response.body.items.map(prop => ({
+                ...prop,
+                distanceFromMe: this.getDistanceFromLatLonInKm(
+                  this.userLat,
+                  this.userLon,
+                  prop.latitude,
+                  prop.longitude
+                ).toFixed(1),
+              }));
+            } else {
+              this.handlePropertyerror('Invalid Smart Search result');
+            }
+          },
+          error: error => {
+            console.error('Error during Smart Search:', error);
+            this.handlePropertyerror('Failed to search properties');
+          },
+        });
     }
   }
   
-  // Add these methods to your component
+  
+
+  addToFav(propertyId: string): void {
+    this.favouriteService.addToFavorites(propertyId).subscribe({
+      next: (response) => {
+        this.toastService.showSuccess(
+          'Property added to favorites.'
+        );
+      },
+      error: (error) => {
+        if (error.status === 409) {
+          // If the property has already been added to favorites
+          this.toastService.showError(
+          'You already added this property to your favorites before.'
+         
+          );
+        } else {
+          console.error('Failed to add to favorites:', error);
+          this.toastService.showError(
+            'Failed to add to favorites. Please try again.'
+          );
+        }
+      }
+    });
+  }
 }
