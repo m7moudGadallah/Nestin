@@ -6,8 +6,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
-
-import L, { latLng, tileLayer, marker, icon } from 'leaflet';
 import { Icon } from 'leaflet';
 import { Lightbox } from 'ngx-lightbox';
 import { CommonModule, JsonPipe } from '@angular/common';
@@ -60,7 +58,7 @@ import { PropertyAvailabilityComponent } from '../../components/PropertyDetails/
     PropertyAvailabilityComponent,
   ],
   templateUrl: './property-info.component.html',
-  styleUrls: ['./property-info.component.css'],
+  styleUrls: ['./property-info.component.scss'],
 })
 export class PropertyInfoComponent implements OnInit {
   @Input() property!: IPropertyInfo;
@@ -87,7 +85,6 @@ export class PropertyInfoComponent implements OnInit {
     this.fixLeafletAssets();
     this.route.paramMap.subscribe(params => {
       const propertyId = params.get('id');
-      console.log('🚀 Route param ID:', propertyId);
 
       if (propertyId) {
         this.loadProperty(propertyId);
@@ -110,12 +107,9 @@ export class PropertyInfoComponent implements OnInit {
   loadProperty(id: string): void {
     this.loading = true;
     this.error = false;
-    console.log('Starting load for ID:', id);
 
     this.propertyService.getPropertyById(id).subscribe({
       next: response => {
-        console.log('Full response:', response);
-
         if (!response?.body) {
           console.error('Invalid response structure - missing propertyData');
           this.error = true;
@@ -125,13 +119,12 @@ export class PropertyInfoComponent implements OnInit {
 
         this.property = response.body;
 
-        this.propertyImages = response.body.photos.map((photo: IImage): IImage => ({
-          id: photo.id,
-          photoUrl: photo.photoUrl,
-        }));
-        console.log('Loaded property:', this.property);
-        console.log('Loaded images:', this.propertyImages);
-        console.log(`firstName ${this.property?.owner?.userId}`);
+        this.propertyImages = response.body.photos.map(
+          (photo: IImage): IImage => ({
+            id: photo.id,
+            photoUrl: photo.photoUrl,
+          })
+        );
 
         if (this.propertyImages.length > 0) {
           this.prepareLightboxImages();
@@ -237,6 +230,5 @@ export class PropertyInfoComponent implements OnInit {
   onFavoriteToggle(isFavorite: boolean) {
     this.isFavorite = isFavorite;
     // Remember    Here you would typically call a service to update favorites in your backend
-    console.log('Favorite status:', isFavorite);
   }
 }

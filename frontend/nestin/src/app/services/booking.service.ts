@@ -12,11 +12,9 @@ export class BookingService {
   constructor(private http: HttpClient) {}
 
   createBooking(bookingData: IBookingSendingRequest): Observable<any> {
-    return this.http.post(`${ApiConstant.booking.createBooking}`,bookingData, 
-      {
-        observe: 'response',
-        withCredentials: true,
-      });
-    ;
+    return this.http.post(`${ApiConstant.booking.createBooking}`, bookingData, {
+      observe: 'response',
+      withCredentials: true,
+    });
   }
 }

@@ -37,18 +37,20 @@ export class PropertyService {
   }
 
   smartSearch(query: string): Observable<HttpResponse<any>> {
-    return this.http.post(`${ApiConstant.PropertiesApi.smartSearch}`, JSON.stringify(query), {
-      observe: 'response',
-      withCredentials: true,
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json', // <- stay as application/json
-        Accept: 'application/json',
-      }),
-    });
+    return this.http.post(
+      `${ApiConstant.PropertiesApi.smartSearch}`,
+      JSON.stringify(query),
+      {
+        observe: 'response',
+        withCredentials: true,
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json', // <- stay as application/json
+          Accept: 'application/json',
+        }),
+      }
+    );
   }
-  
 
-  
   getPropertyById(id: string): Observable<HttpResponse<any>> {
     const url = ApiConstant.PropertiesApi.getById.replace('{id}', id);
     return this.http.get<any>(url, {

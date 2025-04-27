@@ -1,4 +1,3 @@
 export interface ISmartSearchReq {
-
-    searchText: string | null;
+  searchText: string | null;
 }

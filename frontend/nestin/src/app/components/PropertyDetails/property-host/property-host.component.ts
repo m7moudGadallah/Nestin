@@ -59,8 +59,7 @@ export class PropertyHostComponent implements OnInit {
           firstName: property.body.owner.firstName || 'Host',
           photo: {
             id: 'default',
-            photoUrl:
-              property.body.owner.photo?.photoUrl || 'favicon.ico',
+            photoUrl: property.body.owner.photo?.photoUrl || 'favicon.ico',
           },
           email: '',
           lastName: property.body.owner.lastName,

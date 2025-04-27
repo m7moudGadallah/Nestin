@@ -35,7 +35,7 @@ export class BookingCardComponent implements OnInit {
     propertyId: '',
     checkIn: '',
     checkOut: '',
-    guests: []
+    guests: [],
   };
   get today(): string {
     return new Date().toISOString().split('T')[0];
@@ -173,10 +173,10 @@ export class BookingCardComponent implements OnInit {
 
   handleBookNow(): void {
     if (!this.checkInDate || !this.checkOutDate) return;
-  
+
     this.isBooking = true;
     this.bookingError = null;
-  
+
     this.bookingData = {
       propertyId: this.property.id,
       checkIn: this.checkInDate,
@@ -188,26 +188,26 @@ export class BookingCardComponent implements OnInit {
         { guestTypeId: 4, guestCount: this.guestCounts.pets },
       ].filter(guest => guest.guestCount > 0),
     };
-  
+
     console.log('Booking data:', this.bookingData);
-  
+
     this.bookingService.createBooking(this.bookingData).subscribe({
       next: (response: any) => {
         this.isBooking = false;
         console.log('Booking successful:', response);
-  
+
         const statusCode = response.status;
-  
+
         if (statusCode === 201) {
           alert('Booking created!');
         }
       },
       error: error => {
         this.isBooking = false;
-  
+
         const statusCode = error.status;
         console.error('Booking failed:', error);
-  
+
         if (statusCode === 409) {
           alert(error.error);
         } else if (statusCode === 401) {
@@ -218,5 +218,4 @@ export class BookingCardComponent implements OnInit {
       },
     });
   }
-  
 }

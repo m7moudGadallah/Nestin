@@ -348,50 +348,41 @@ export class HomePageComponent {
   SmartSearch(): void {
     if (this.stringAiSearch) {
       console.log('Smart Search:', this.stringAiSearch);
-      this.propertyService
-        .smartSearch(
-          this.stringAiSearch,
-        )
-        .subscribe({
-          next: (response: HttpResponse<ISmartSearchRes>) => {
-            if (response.status === 200 && response.body) {
-              console.log(response.body.items);
-              this.property = response.body.items.map(prop => ({
-                ...prop,
-                distanceFromMe: this.getDistanceFromLatLonInKm(
-                  this.userLat,
-                  this.userLon,
-                  prop.latitude,
-                  prop.longitude
-                ).toFixed(1),
-              }));
-            } else {
-              this.handlePropertyerror('Invalid Smart Search result');
-            }
-          },
-          error: error => {
-            console.error('Error during Smart Search:', error);
-            this.handlePropertyerror('Failed to search properties');
-          },
-        });
+      this.propertyService.smartSearch(this.stringAiSearch).subscribe({
+        next: (response: HttpResponse<ISmartSearchRes>) => {
+          if (response.status === 200 && response.body) {
+            console.log(response.body.items);
+            this.property = response.body.items.map(prop => ({
+              ...prop,
+              distanceFromMe: this.getDistanceFromLatLonInKm(
+                this.userLat,
+                this.userLon,
+                prop.latitude,
+                prop.longitude
+              ).toFixed(1),
+            }));
+          } else {
+            this.handlePropertyerror('Invalid Smart Search result');
+          }
+        },
+        error: error => {
+          console.error('Error during Smart Search:', error);
+          this.handlePropertyerror('Failed to search properties');
+        },
+      });
     }
   }
-  
-  
 
   addToFav(propertyId: string): void {
     this.favouriteService.addToFavorites(propertyId).subscribe({
-      next: (response) => {
-        this.toastService.showSuccess(
-          'Property added to favorites.'
-        );
+      next: response => {
+        this.toastService.showSuccess('Property added to favorites.');
       },
-      error: (error) => {
+      error: error => {
         if (error.status === 409) {
           // If the property has already been added to favorites
           this.toastService.showError(
-          'You already added this property to your favorites before.'
-         
+            'You already added this property to your favorites before.'
           );
         } else {
           console.error('Failed to add to favorites:', error);
@@ -399,7 +390,7 @@ export class HomePageComponent {
             'Failed to add to favorites. Please try again.'
           );
         }
-      }
+      },
     });
   }
 }

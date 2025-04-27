@@ -1,4 +1,4 @@
-import { IProperty } from "../../domain/iproperty"; 
+import { IProperty } from '../../domain/iproperty';
 
 export interface ISmartSearchRes {
   searchParams: {
@@ -22,7 +22,7 @@ export interface ISmartSearchRes {
     page: number;
     pageSize: number;
   };
-  
+
   items: IProperty[];
 
   metaData: {

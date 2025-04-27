@@ -9,11 +9,11 @@ import { ToastService } from '../../../services/toast.service'; // <-- import To
   standalone: true,
   imports: [LucideAngularModule],
   templateUrl: './favorite-button.component.html',
-  styleUrl: './favorite-button.component.css',
+  styleUrl: './favorite-button.component.scss',
 })
 export class FavoriteButtonComponent implements OnInit {
   @Input() isFavorite: boolean = false;
-  @Input() size: number = 24;
+  @Input() size: number = 50;
   @Input() color: string = '#ffffff';
   @Input() filledColor: string = '#ff385c';
   @Input() property!: IPropertyInfo; // <== ADD THIS
@@ -25,7 +25,7 @@ export class FavoriteButtonComponent implements OnInit {
 
   constructor(
     private favouriteService: FavoritePropertiesService,
-    private toastService: ToastService 
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +44,12 @@ export class FavoriteButtonComponent implements OnInit {
           this.toastService.showSuccess('Property added to favorites.');
           console.log('Property added to favorites.');
         },
-        error: (error) => {
+        error: error => {
           console.error('Failed to add to favorites:', error);
-          this.toastService.showError('Failed to add to favorites. Please try again.');
-        }
+          this.toastService.showError(
+            'Failed to add to favorites. Please try again.'
+          );
+        },
       });
     } else {
       // Show a message that the property is already in favorites
