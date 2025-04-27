@@ -20,6 +20,9 @@ namespace Nestin.Infrastructure
     {
         public static IServiceCollection ConfigureInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            // Logging service
+            services.AddLogging();
+
             services.AddDbContext<AppDbContext>(options
                     => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
