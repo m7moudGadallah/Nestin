@@ -36,13 +36,25 @@ namespace Nestin.Api.Controllers
             return new ObjectResult(newPropertyAvailability.ToDto()) { StatusCode = 201 };
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         [EndpointSummary("Update Property Availability.")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status200OK)]
-        public Task<IActionResult> Update([FromBody] PropertyAvailabilityUpdateDto dto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PropertyAvailabilityUpdateDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var existingPropertyAvailability = await _unitOfWork.PropertyAvailabilityRepository.GetByIdAsync(id);
+
+            if (existingPropertyAvailability is null)
+            {
+                return NotFoundResponse();
+            }
+
+            existingPropertyAvailability.StartDate = dto.StartDate.HasValue ? dto.StartDate.Value : existingPropertyAvailability.StartDate;
+            existingPropertyAvailability.EndDate = dto.EndDate.HasValue ? dto.EndDate.Value : existingPropertyAvailability.EndDate;
+
+            _unitOfWork.PropertyAvailabilityRepository.Update(existingPropertyAvailability);
+            await _unitOfWork.SaveChangesAsync();
+            return Ok(existingPropertyAvailability.ToDto());
         }
 
         [HttpDelete("{id}")]
