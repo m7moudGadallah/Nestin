@@ -16,7 +16,11 @@ namespace Nestin.Api.Controllers
         public PropertySpaceItemsController(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpPost]
+        [EndpointSummary("Create Property Space Itme.")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(PropertySpaceItemDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertySpaceItemCreateDto dto)
         {
             var newSpaceItem = new PropertySpaceItem
@@ -31,7 +35,11 @@ namespace Nestin.Api.Controllers
             return new ObjectResult(newSpaceItem.ToDto()) { StatusCode = 201 };
         }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpPatch("{id}")]
+        [EndpointSummary("Update exiting Property Space Itme by id.")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(PropertySpaceItemDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PropertySpaceItemUpdateDto dto)
         {
             var exitingItem = await _unitOfWork.PropertySpaceItemRepository.GetByIdAsync(id);
@@ -51,7 +59,10 @@ namespace Nestin.Api.Controllers
             return Ok(exitingItem.ToDto());
         }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpDelete("{id}")]
+        [EndpointSummary("Update exiting Property Space Itme by id.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var item = await _unitOfWork.PropertySpaceItemRepository.GetByIdAsync(id);
