@@ -100,7 +100,7 @@ namespace Nestin.Api.Controllers
         [HttpGet("{id}/Amenities")]
         [EndpointSummary("Fetch property amenities by id.")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<PropertySpaceDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyAmenityDto>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetAmenitiesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
@@ -148,7 +148,7 @@ namespace Nestin.Api.Controllers
         [HttpGet("{id}/Spaces")]
         [EndpointSummary("Fetch property spaces by id.")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(PaginatedResult<PropertySpaceDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<PropertyAmenityDto>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(List<string>))]
         public async Task<IActionResult> GetSpacesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {

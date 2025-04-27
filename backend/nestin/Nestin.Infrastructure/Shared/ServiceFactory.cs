@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nestin.Core.Interfaces;
 using Nestin.Infrastructure.Services;
 using OpenAI.Chat;
@@ -35,6 +36,8 @@ namespace Nestin.Infrastructure.Shared
         public ICheckoutManagementService CheckoutManagementService =>
             _checkoutManagementService ??= new StripeCheckoutService(
                 _provider.GetRequiredService<StripeClient>(),
+                _provider.GetRequiredService<IUnitOfWork>(),
+                _provider.GetRequiredService<ILogger<StripeCheckoutService>>(),
                 _config);
     }
 }

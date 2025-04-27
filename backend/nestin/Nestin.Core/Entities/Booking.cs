@@ -22,6 +22,7 @@
         public virtual AppUser User { get; set; }
         public virtual ICollection<BookingGuest> BookingGuests { get; set; } = new HashSet<BookingGuest>();
         public virtual Review? Review { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
 
         // Computed property
         public decimal TotalAmount =>

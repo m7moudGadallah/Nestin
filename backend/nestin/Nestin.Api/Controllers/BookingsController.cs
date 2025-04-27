@@ -62,22 +62,22 @@ namespace Nestin.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost("checkout")]
+        [HttpPost("{bookingId}/checkout")]
         [EndpointSummary("Request for checkout session.")]
         [Consumes("application/json")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(PaginatedResult<CreateCheckoutResult>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Checkout([FromBody] BookingCheckoutDto dto)
+        public async Task<IActionResult> Checkout([FromRoute] string bookingId)
         {
             var userId = CurrentUser.Id;
 
-            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(dto.BookingId);
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
 
             if (booking is null || booking.UserId != userId)
             {
-                return NotFoundResponse($"Booking with id [{dto.BookingId}] is not found!");
+                return NotFoundResponse($"Booking with id [{bookingId}] is not found!");
             }
 
             var property = await _unitOfWork.PropertyRepository.GetPropertyDetailsAsync(booking.PropertyId);
@@ -86,7 +86,7 @@ namespace Nestin.Api.Controllers
 
             CheckoutOptions options = new CheckoutOptions
             {
-                BookingId = dto.BookingId,
+                BookingId = bookingId,
                 Guest = new UserInfo
                 {
                     Id = userId,

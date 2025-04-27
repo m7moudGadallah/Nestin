@@ -24,6 +24,7 @@
         public IBookingRepository BookingRepository { get; }
         public IHostUpgradeRequestRepository HostUpgradeRequestRepository { get; }
         public IPropertyPhotoRepository PropertyPhotoRepository { get; }
+        public IPaymentRepository PaymentRepository { get; }
         public Task SaveChangesAsync();
     }
 }
