@@ -132,15 +132,14 @@ namespace Nestin.Infrastructure.Services
                 throw new NotFoundException($"Payment with session id[{sessionId}] is not found");
             }
 
-
-
             if (booking is null)
             {
                 throw new NotFoundException($"Booking with id [{bookingId}] is not found.");
             }
 
 
-            payment.Status = PaymentStatus.Failed;
+            payment.Status = PaymentStatus.Successed;
+            payment.StripePaymentIntentId = session.PaymentIntentId;
             _unitOfWork.PaymentRepository.Update(payment);
 
             booking.Status = BookingStatus.Confirmed;
@@ -177,6 +176,7 @@ namespace Nestin.Infrastructure.Services
             }
 
             payment.Status = PaymentStatus.Failed;
+            payment.StripePaymentIntentId = session.PaymentIntentId;
             _unitOfWork.PaymentRepository.Update(payment);
             await _unitOfWork.SaveChangesAsync();
         }

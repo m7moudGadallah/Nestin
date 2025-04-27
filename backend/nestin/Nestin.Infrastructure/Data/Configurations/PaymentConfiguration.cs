@@ -25,7 +25,8 @@ namespace Nestin.Infrastructure.Data.Configurations
                 .HasMaxLength(255);
 
             builder.Property(x => x.StripePaymentIntentId)
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .IsRequired(false);
 
             // Amount configuration
             builder.Property(x => x.Amount)

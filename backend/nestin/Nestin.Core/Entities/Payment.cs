@@ -14,7 +14,7 @@
     {
         public string BookingId { get; set; }
         public string StripeSessionId { get; set; }
-        public string StripePaymentIntentId { get; set; }
+        public string? StripePaymentIntentId { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public PaymentStatus Status { get; set; }
