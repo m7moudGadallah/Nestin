@@ -35,9 +35,9 @@ export class PropertyAvailabilityComponent implements OnInit, OnChanges {
     },
     events: [],
     eventDisplay: 'block',
-    eventBackgroundColor: '#ffebee',
-    eventColor: '#ff385c',
-    eventTextColor: '#ff385c',
+    eventBackgroundColor: '#EF7768',
+    eventColor: '#EF7768',
+    eventTextColor: '#EF7768',
     eventDidMount: function (info) {
       console.log('Event rendered:', info.event);
     },
@@ -94,7 +94,7 @@ export class PropertyAvailabilityComponent implements OnInit, OnChanges {
       title: 'Available',
       start: booking.startDate,
       end: booking.endDate,
-      color: '#ff385c',
+      color: '#EF7768',
       textColor: '#ffffff',
       display: 'auto',
     }));

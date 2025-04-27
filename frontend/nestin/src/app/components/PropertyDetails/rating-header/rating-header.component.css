@@ -1,6 +1,7 @@
-
 .ratings-header {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
   padding: 24px 0;
   border-bottom: 1px solid #ebebeb;
   margin-bottom: 24px;
@@ -34,23 +35,25 @@
 
       .star {
         &.filled {
-          color: #FF385C;
+          /* color: #FF385C; */
+          color: #f18b7f;
         }
         &.half {
           position: relative;
-          color: #DDDDDD;
-          
+          color: #dddddd;
+
           &::before {
             content: '★';
             position: absolute;
             left: 0;
             width: 50%;
             overflow: hidden;
-            color: #FF385C;
+            /* color: #ff385c; */
+            color: #f18b7f;
           }
         }
         &.empty {
-          color: #DDDDDD;
+          color: #dddddd;
         }
       }
     }

@@ -1,117 +1,119 @@
 .host-section {
-    margin: 2rem 0;
-    padding: 1.8rem;
-    border-top: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    width: 100%;
-    box-sizing: border-box;
-    /* margin-left: 1rem; */
-    margin-top: 50px;
-  }
-  
-  .host-profile {
-    padding: 10px ;
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .host-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .host-details {
-    flex: 1;
-  }
-  
-  .host-details h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.3rem;
-    font-weight: 600;
-  }
-  
-  .host-meta {
-    margin: 0.5rem 0;
-  }
-  
-  .host-meta p {
-    margin: 0.3rem 0;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.95rem;
-  }
-  
-  .host-meta .material-icons {
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .host-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background-color: #ff385c;
-    color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    margin-top: 0.8rem;
-    font-weight: 500;
-  }
-  
-  .host-badge .material-icons {
-    font-size: 1rem;
-  }
-  
-  .host-contact {
-    margin-top: 1.5rem;
-  }
-  
+  margin: 2rem 0;
+  padding: 1.8rem;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  box-sizing: border-box;
+  /* margin-left: 1rem; */
+  margin-top: 50px;
+}
+
+.host-profile {
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.host-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.host-details {
+  flex: 1;
+}
+
+.host-details h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.host-meta {
+  margin: 0.5rem 0;
+}
+
+.host-meta p {
+  margin: 0.3rem 0;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.95rem;
+}
+
+.host-meta .material-icons {
+  font-size: 1rem;
+  color: #666;
+}
+
+.host-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #ef7768;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-top: 0.8rem;
+  font-weight: 500;
+}
+
+.host-badge .material-icons {
+  font-size: 1rem;
+}
+
+.host-contact {
+  margin-top: 1.5rem;
+}
+
 .host-contact button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: #ff385c;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.6rem 1.2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* background-color: #ff385c; */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .host-contact button:hover {
-    background-color: #e03150;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* background-color: #e03150; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .host-contact button:active {
-    background-color: #c12745;
+  /* background-color: #c12745; */
 }
 
-  lucide-icon {
-    vertical-align: middle;
-    margin-right: 6px;
-    color: #555;
-  }
-  
-  .host-badge lucide-icon {
-    color: white;
-    margin-right: 4px;
-  }
-  
-  .contact-button lucide-icon {
-    margin-right: 8px;
-    color:white;
-  }
+lucide-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+  color: #555;
+}
+
+.host-badge lucide-icon {
+  color: white;
+  margin-right: 4px;
+}
+
+.contact-button lucide-icon {
+  margin-right: 8px;
+  color: white;
+}
