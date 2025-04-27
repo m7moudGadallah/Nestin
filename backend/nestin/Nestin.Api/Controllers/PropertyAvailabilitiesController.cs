@@ -5,6 +5,7 @@ using Nestin.Core.Dtos.PropertyGuests;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
+using Nestin.Core.Shared;
 
 namespace Nestin.Api.Controllers
 {
@@ -23,6 +24,7 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertyAvailabilityCreateDto dto)
         {
+            await CheckPropertyAuthority(dto.PropertyId);
             var newPropertyAvailability = new PropertyAvailability
             {
                 PropertyId = dto.PropertyId,
@@ -42,19 +44,21 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PropertyAvailabilityUpdateDto dto)
         {
-            var existingPropertyAvailability = await _unitOfWork.PropertyAvailabilityRepository.GetByIdAsync(id);
+            var existingAvailability = await _unitOfWork.PropertyAvailabilityRepository.GetByIdAsync(id);
 
-            if (existingPropertyAvailability is null)
+            if (existingAvailability is null)
             {
                 return NotFoundResponse();
             }
 
-            existingPropertyAvailability.StartDate = dto.StartDate.HasValue ? dto.StartDate.Value : existingPropertyAvailability.StartDate;
-            existingPropertyAvailability.EndDate = dto.EndDate.HasValue ? dto.EndDate.Value : existingPropertyAvailability.EndDate;
+            await CheckPropertyAuthority(existingAvailability.PropertyId);
 
-            _unitOfWork.PropertyAvailabilityRepository.Update(existingPropertyAvailability);
+            existingAvailability.StartDate = dto.StartDate.HasValue ? dto.StartDate.Value : existingAvailability.StartDate;
+            existingAvailability.EndDate = dto.EndDate.HasValue ? dto.EndDate.Value : existingAvailability.EndDate;
+
+            _unitOfWork.PropertyAvailabilityRepository.Update(existingAvailability);
             await _unitOfWork.SaveChangesAsync();
-            return Ok(existingPropertyAvailability.ToDto());
+            return Ok(existingAvailability.ToDto());
         }
 
         [HttpDelete("{id}")]
@@ -63,9 +67,34 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _unitOfWork.PropertyAvailabilityRepository.DeleteAsync(id);
+            var existingAvailability = await _unitOfWork.PropertyAvailabilityRepository.GetByIdAsync(id);
+
+            if (existingAvailability is null)
+            {
+                return NotFoundResponse();
+            }
+
+
+            await CheckPropertyAuthority(existingAvailability.PropertyId);
+            _unitOfWork.PropertyAvailabilityRepository.Delete(existingAvailability);
             await _unitOfWork.SaveChangesAsync();
             return NoContent();
+        }
+
+        private async Task CheckPropertyAuthority(string propertyId)
+        {
+            // Get property and verify ownership/access
+            var property = await _unitOfWork.PropertyRepository.GetByIdAsync(propertyId);
+            if (property == null)
+            {
+                throw new NotFoundException("Property not found");
+            }
+
+            // Authorization check
+            if (!CurrentUser.IsInRole("Admin") && property.OwnerId != CurrentUser.Id)
+            {
+                throw new ForbiddenException("You don't have permission to add guests to this property");
+            }
         }
     }
 }
