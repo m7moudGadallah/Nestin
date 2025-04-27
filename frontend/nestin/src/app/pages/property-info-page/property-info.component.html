@@ -1,15 +1,22 @@
-<div
-  class="max-w-6xl mx-auto py-0 px-3 space-y-8 md:space-y-10"
-  *ngIf="!loading && !error">
-  <h1 class="ps-5">{{ property?.title }}</h1>
+<div *ngIf="!loading && !error">
+  <div class="d-flex flex-wrap justify-content-between">
+    <h1>{{ property?.title }}</h1>
+    <!-- favorite button  -->
+    <div class="favorite-button-container">
+      <app-favorite-button
+        [isFavorite]="isFavorite"
+        (toggle)="onFavoriteToggle($event)"
+        [size]="24"></app-favorite-button>
+    </div>
+  </div>
   <!-- Image Gallery -->
   <ng-container *ngIf="!loading">
-    <div *ngIf="!error" class="property-container">
+    <div *ngIf="!error">
       <!-- Main Gallery -->
       <div class="gallery">
         <button
           (click)="prevImage()"
-          class="nav-button2"
+          class="carousel-control--next"
           [class.disabled]="activeImageIndex === 0">
           ❯
         </button>
@@ -30,7 +37,7 @@
 
         <button
           (click)="nextImage()"
-          class="nav-button1"
+          class="carousel-control--prev"
           [class.disabled]="activeImageIndex === propertyImages.length - 1">
           ❮
         </button>
@@ -42,7 +49,7 @@
 
         <!-- Fullscreen Toggle -->
         <button
-          class="fullscreen-button btn btn-light"
+          class="fullscreen-btn btn btn-dark"
           (click)="toggleFullscreen()">
           <i class="fas fa-expand"></i>
         </button>
@@ -65,16 +72,8 @@
     </div>
   </ng-container>
 
-  <!-- favorite button  -->
-  <div class="favorite-button-container">
-    <app-favorite-button
-      [isFavorite]="isFavorite"
-      (toggle)="onFavoriteToggle($event)"
-      [size]="24"></app-favorite-button>
-  </div>
-
   <div class="row">
-    <div class="col-12 col-md-7">
+    <div class="col-12 col-md-8">
       <app-property-header [property]="property"></app-property-header>
       <app-rating-header [property]="property"></app-rating-header>
       <app-property-availability
@@ -84,12 +83,11 @@
       <app-sleeping-arrangement
         [property]="property"></app-sleeping-arrangement>
 
-      <!-- <app-property-aminities [property]="property"></app-property-aminities> -->
       <app-property-aminities
         [propertyId]="propertyId"></app-property-aminities>
       <app-things-to-know [property]="property"></app-things-to-know>
     </div>
-    <div class="col-12 col-md-5 mb-4">
+    <div class="col-12 col-md-4 mb-3">
       <app-booking-card [property]="property"></app-booking-card>
     </div>
   </div>
