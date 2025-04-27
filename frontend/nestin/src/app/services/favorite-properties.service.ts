@@ -34,6 +34,16 @@ export class FavoritePropertiesService {
     );
   }
 
+  addToFavorites(propertyId: string): Observable<void> {
+    return this.http.post<void>(
+      ApiConstant.FavoritePropertiesApi.add,
+      { propertyId },
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
   removeFromFavorites(propertyId: string): Observable<void> {
     return this.http.delete<void>(
       `${ApiConstant.FavoritePropertiesApi.delete}/${propertyId}`,

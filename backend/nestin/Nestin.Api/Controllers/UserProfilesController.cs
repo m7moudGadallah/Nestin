@@ -16,7 +16,7 @@ namespace Nestin.Api.Controllers
         }
 
 
-        [HttpGet("/me")]
+        [HttpGet("me")]
         [EndpointSummary("Get my profile Info.")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status401Unauthorized)]
@@ -30,7 +30,7 @@ namespace Nestin.Api.Controllers
         }
 
 
-        [HttpPatch("/me")]
+        [HttpPatch("me")]
         [EndpointSummary("Update my profile Info.")]
         [Consumes("multipart/form-data")]
         [Produces("application/json")]

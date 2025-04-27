@@ -27,6 +27,8 @@ namespace Nestin.Infrastructure.Shared
         private IUserProfileRepository? _userProfileRepository;
         private IFileUploadRepository? _fileUploadRepository;
         private IBookingRepository? _bookingRepository;
+        private IHostUpgradeRequestRepository? _hostUpgradeRequestRepository;
+        private IPropertyPhotoRepository? _propertyPhotoRepository;
 
         public UnitOfWork(AppDbContext dbContext)
         {
@@ -53,6 +55,8 @@ namespace Nestin.Infrastructure.Shared
         public IUserProfileRepository UserProfileRepository => _userProfileRepository ??= new UserProfileRepository(_dbContext);
         public IFileUploadRepository FileUploadRepository => _fileUploadRepository ??= new FileUploadRepository(_dbContext);
         public IBookingRepository BookingRepository => _bookingRepository ??= new BookingRepository(_dbContext);
+        public IHostUpgradeRequestRepository HostUpgradeRequestRepository => _hostUpgradeRequestRepository ??= new HostUpgradeRequestRepository(_dbContext);
+        public IPropertyPhotoRepository PropertyPhotoRepository => _propertyPhotoRepository ??= new PropertyPhotoRepository(_dbContext);
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();

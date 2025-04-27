@@ -52,6 +52,14 @@ namespace Nestin.Infrastructure.Data.Configurations
             builder.Property(x => x.CancellationPolicy)
                 .IsRequired(false);
 
+            builder.Property(x => x.IsActive)
+                .IsRequired()
+                .HasDefaultValue(true);
+
+            builder.Property(x => x.IsDeleted)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             builder.HasOne(x => x.Owner)
                 .WithMany(x => x.Properties)
                 .HasForeignKey(x => x.OwnerId);

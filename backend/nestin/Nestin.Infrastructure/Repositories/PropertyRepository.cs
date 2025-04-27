@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nestin.Core.Dtos.Accounts;
 using Nestin.Core.Dtos.Properties;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
@@ -13,8 +14,11 @@ namespace Nestin.Infrastructure.Repositories
         public PropertyRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<PaginatedResult<PropertyListItemDto>> GetFilteredPropertiesAsync(FilterPropertyQueryParamsDto queryDto)
+        public async Task<PaginatedResult<PropertyListItemDto>> GetFilteredPropertiesAsync(FilterPropertyQueryParamsDto queryDto, LoggedInUser? currUser)
         {
+            var isAdmin = currUser?.IsInRole("Admin") ?? false;
+            var isHost = currUser?.IsInRole("Host") ?? false;
+
             var query = _dbContext.Properties
                     .Include(x => x.Owner)
                     .Include(x => x.Location)
@@ -26,7 +30,34 @@ namespace Nestin.Infrastructure.Repositories
                     .ThenInclude(x => x.Review)
                     .AsQueryable();
 
+            if (isAdmin)
+            {
+                if (queryDto.IsActive.HasValue)
+                    query = query.Where(x => x.IsActive == queryDto.IsActive);
+
+                if (queryDto.IsDeleted.HasValue)
+                    query = query.Where(x => x.IsDeleted == queryDto.IsDeleted);
+            }
+            else if (isHost)
+            {
+                query = query.Where(x => !x.IsDeleted && (x.IsActive || (!x.IsActive && x.OwnerId == currUser.Id)));
+
+                if (queryDto.IsActive.HasValue && queryDto.IsActive == false)
+                {
+                    query = query.Where(x => x.OwnerId == currUser.Id && !x.IsActive);
+                }
+            }
+            else
+            {
+                query = query.Where(x => x.IsActive && !x.IsDeleted);
+            }
+
             // Fitlers
+            if (!string.IsNullOrEmpty(queryDto.OwnerId))
+            {
+                query = query.Where(x => x.OwnerId == queryDto.OwnerId);
+            }
+
             if (queryDto.LocationId.HasValue)
             {
                 query = query.Where(x => x.LocationId == queryDto.LocationId.Value);
@@ -95,6 +126,32 @@ namespace Nestin.Infrastructure.Repositories
             if (queryDto.RegionId.HasValue)
                 query = query.Where(x => x.Location.Country.RegionId == queryDto.RegionId.Value);
 
+            // Add average rating filtering
+            if (queryDto.MinAvgRating.HasValue || queryDto.MaxAvgRating.HasValue)
+            {
+                query = query.Where(x => x.Bookings
+                    .Where(b => b.Review != null)
+                    .Any()); // Ensure property has at least one review
+
+                if (queryDto.MinAvgRating.HasValue)
+                {
+                    query = query.Where(x => x.Bookings
+                        .Where(b => b.Review != null)
+                        .Average(b => (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
+                                     b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
+                        >= queryDto.MinAvgRating.Value);
+                }
+
+                if (queryDto.MaxAvgRating.HasValue)
+                {
+                    query = query.Where(x => x.Bookings
+                        .Where(b => b.Review != null)
+                        .Average(b => (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
+                                     b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
+                        <= queryDto.MaxAvgRating.Value);
+                }
+            }
+
             query = queryDto.Sort switch
             {
                 "price_asc" => query.OrderByDescending(x => x.PricePerNight),
@@ -125,9 +182,12 @@ namespace Nestin.Infrastructure.Repositories
             };
         }
 
-        public async Task<PropertyDetailsDto?> GetPropertyDetailsAsync(string id)
+        public async Task<PropertyDetailsDto?> GetPropertyDetailsAsync(string id, LoggedInUser? currUser)
         {
-            var property = await _dbContext.Properties
+            var isAdmin = currUser?.IsInRole("Admin") ?? false;
+            var isHost = currUser?.IsInRole("Host") ?? false;
+
+            var query = _dbContext.Properties
                 .Include(x => x.Owner)
                 .Include(x => x.Location)
                 .Include(x => x.PropertyType)
@@ -142,7 +202,21 @@ namespace Nestin.Infrastructure.Repositories
                 .ThenInclude(x => x.PropertySpaceItems)
                 .ThenInclude(x => x.PropertySpaceItemType)
                 .Where(x => x.Id == id)
-                .Select(p => p.ToPropertyDetailsDto()).FirstOrDefaultAsync();
+                .AsQueryable();
+
+            if (isHost)
+            {
+                query = query.Where(x => !x.IsDeleted);
+            }
+            else if (!isAdmin)
+            {
+                query = query.Where(x => x.IsActive && !x.IsDeleted);
+            }
+
+
+            var property = await query.Select(p =>
+                p.ToPropertyDetailsDto()
+            ).FirstOrDefaultAsync();
 
             return property;
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Nestin.Core.Dtos;
+using Nestin.Core.Entities;
 
 namespace Nestin.Core.Mappings
 {
@@ -30,6 +32,15 @@ namespace Nestin.Core.Mappings
                 return string.Empty;
 
             return $"{baseUrl}/{relativePath.TrimStart('/')}";
+        }
+
+        public static PhotoDto ToDto(this FileUpload entity)
+        {
+            return new PhotoDto
+            {
+                Id = entity.Id,
+                PhotoUrl = entity.Path.ToFullUrl()
+            };
         }
     }
 }

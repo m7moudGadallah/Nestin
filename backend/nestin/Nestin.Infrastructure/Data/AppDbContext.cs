@@ -38,5 +38,6 @@ namespace Nestin.Infrastructure.Data
         public virtual DbSet<BookingGuest> BookingGuests { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
+        public virtual DbSet<HostUpgradeRequest> HostUpgradeRequests { get; set; }
     }
 }

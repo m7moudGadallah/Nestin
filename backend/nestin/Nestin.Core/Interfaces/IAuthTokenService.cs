@@ -7,6 +7,6 @@ namespace Nestin.Core.Interfaces
     {
         public void SetAccessTokenCookie(HttpContext ctx, string token);
         public void UnsetAccessTokenCookie(HttpContext ctx);
-        public Task<string> CreateTokenAsync(AppUser user);
+        public string CreateToken(AppUser user);
     }
 }

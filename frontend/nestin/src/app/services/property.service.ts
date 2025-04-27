@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
 import { IPropertyTypeRes } from '../models/api/response/i-property-type-res';
 import { IpropertyTypeApiResponse } from '../models/api/response/iproperty-type-api-res';
+import { ISmartSearchReq } from '../models/api/request/ismartSearch-req';
+import { ISmartSearchRes } from '../models/api/response/ismartSearch-res';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +35,19 @@ export class PropertyService {
       withCredentials: true,
     });
   }
+
+  smartSearch(query: string): Observable<HttpResponse<any>> {
+    return this.http.post(`${ApiConstant.PropertiesApi.smartSearch}`, JSON.stringify(query), {
+      observe: 'response',
+      withCredentials: true,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json', // <- stay as application/json
+        Accept: 'application/json',
+      }),
+    });
+  }
+  
+
   
   getPropertyById(id: string): Observable<HttpResponse<any>> {
     const url = ApiConstant.PropertiesApi.getById.replace('{id}', id);

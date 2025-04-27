@@ -11,6 +11,7 @@ export class ApiConstant {
   public static PropertiesApi = {
     getAll: `${ApiConstant.baseUrl}/Properties`,
     getById: `${ApiConstant.baseUrl}/Properties/{id}`,
+    smartSearch: `${ApiConstant.baseUrl}/Properties/search`,
     getAllPropertyTypes: `${ApiConstant.baseUrl}/PropertyTypes`,
     getPropertyAmenities: `${ApiConstant.baseUrl}/Properties/{id}/Amenities`,
     getPropertyAvailability: `${ApiConstant.baseUrl}/Properties/{id}/Availabilities`,
@@ -24,6 +25,7 @@ export class ApiConstant {
   public static FavoritePropertiesApi = {
     getAll: `${ApiConstant.baseUrl}/FavoriteProperties`,
     delete: `${ApiConstant.baseUrl}/FavoriteProperties`,
+    add: `${ApiConstant.baseUrl}/FavoriteProperties`,
   };
   public static booking = {
     getAllBookings: `${ApiConstant.baseUrl}/Bookings`,

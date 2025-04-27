@@ -24,7 +24,7 @@ namespace Nestin.Infrastructure.Shared
             _config = config;
         }
 
-        public IAuthTokenService AuthTokenService => _authTokenService ??= new AuthTokenService(_config, _provider.GetRequiredService<IIdentityFactory>());
+        public IAuthTokenService AuthTokenService => _authTokenService ??= new AuthTokenService(_config);
         public IFileUploadManagementService FileUploadManagementService => _fileUploadManagementService ??= new FileUploadManagementService(_provider.GetRequiredService<IUnitOfWork>(), _provider.GetRequiredService<IFileStorageService>());
         public IBookingManagementService BookingManagementService =>
             _bookingManagementService ??= new BookingManagementService(_provider.GetRequiredService<IUnitOfWork>());

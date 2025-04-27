@@ -7,6 +7,7 @@ import { IBookingResponse } from '../../../models/api/response/ibooking-response
 import { IBookingRequest } from '../../../models/api/request/ibooking-req';
 import { IPropertyFees } from '../../../models/domain/iproperty-fees';
 import { BookingService } from '../../../services/booking.service';
+import { IBookingSendingRequest } from '../../../models/api/request/ibooking-sending-req';
 
 @Component({
   selector: 'app-booking-card',
@@ -30,7 +31,12 @@ export class BookingCardComponent implements OnInit {
   checkOutDate: string = '';
   guests: number = 1;
   selectedGuestType: number = 1;
-
+  bookingData: IBookingSendingRequest = {
+    propertyId: '',
+    checkIn: '',
+    checkOut: '',
+    guests: []
+  };
   get today(): string {
     return new Date().toISOString().split('T')[0];
   }
@@ -165,40 +171,52 @@ export class BookingCardComponent implements OnInit {
   isBooking: boolean = false;
   bookingError: string | null = null;
 
-  handleBookNow() {
+  handleBookNow(): void {
     if (!this.checkInDate || !this.checkOutDate) return;
-
+  
     this.isBooking = true;
     this.bookingError = null;
-
-    const bookingData: IBookingRequest = {
+  
+    this.bookingData = {
       propertyId: this.property.id,
       checkIn: this.checkInDate,
       checkOut: this.checkOutDate,
-      pricePerNight: this.property.pricePerNight,
-      totalFees:
-        this.cleaningFee + this.serviceFee + this.extraGuestFee + this.petFee,
-      totalAmount: this.total,
-      bookingGuests: [
+      guests: [
         { guestTypeId: 1, guestCount: this.guestCounts.adults },
         { guestTypeId: 2, guestCount: this.guestCounts.children },
         { guestTypeId: 3, guestCount: this.guestCounts.infants },
         { guestTypeId: 4, guestCount: this.guestCounts.pets },
       ].filter(guest => guest.guestCount > 0),
     };
-
-    this.bookingService.createBooking(bookingData).subscribe({
-      next: (response: IBookingResponse) => {
+  
+    console.log('Booking data:', this.bookingData);
+  
+    this.bookingService.createBooking(this.bookingData).subscribe({
+      next: (response: any) => {
         this.isBooking = false;
         console.log('Booking successful:', response);
-        alert('Booking successful!');
+  
+        const statusCode = response.status;
+  
+        if (statusCode === 201) {
+          alert('Booking created!');
+        }
       },
       error: error => {
         this.isBooking = false;
-        this.bookingError = error.message || 'Unknown error occurred';
+  
+        const statusCode = error.status;
         console.error('Booking failed:', error);
-        alert('Booking failed. Please try again.');
+  
+        if (statusCode === 409) {
+          alert(error.error);
+        } else if (statusCode === 401) {
+          alert('Unauthorized. Please login.');
+        } else {
+          alert('Booking failed. Please try again.');
+        }
       },
     });
   }
+  
 }

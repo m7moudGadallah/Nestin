@@ -215,7 +215,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Amenities", (string)null);
+                    b.ToTable("Amenities");
 
                     b.HasData(
                         new
@@ -718,7 +718,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AmenityCategories", (string)null);
+                    b.ToTable("AmenityCategories");
 
                     b.HasData(
                         new
@@ -956,7 +956,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
 
                     b.HasData(
                         new
@@ -1097,7 +1097,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("GuestTypeId");
 
-                    b.ToTable("BookingGuests", (string)null);
+                    b.ToTable("BookingGuests");
 
                     b.HasData(
                         new
@@ -1176,7 +1176,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("RegionId");
 
-                    b.ToTable("Countries", (string)null);
+                    b.ToTable("Countries");
 
                     b.HasData(
                         new
@@ -2651,7 +2651,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FavoriteProperties", (string)null);
+                    b.ToTable("FavoriteProperties");
 
                     b.HasData(
                         new
@@ -2710,7 +2710,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileUploads", (string)null);
+                    b.ToTable("FileUploads");
 
                     b.HasData(
                         new
@@ -2850,7 +2850,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GuestTypes", (string)null);
+                    b.ToTable("GuestTypes");
 
                     b.HasData(
                         new
@@ -2875,6 +2875,76 @@ namespace Nestin.Infrastructure.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Nestin.Core.Entities.HostUpgradeRequest", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BackPhotoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("DocumentNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("FrontPhotoId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedBy");
+
+                    b.HasIndex("BackPhotoId")
+                        .IsUnique();
+
+                    b.HasIndex("FrontPhotoId")
+                        .IsUnique();
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("HostUpgradeRequests");
+                });
+
             modelBuilder.Entity("Nestin.Core.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -2895,7 +2965,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
 
                     b.HasData(
                         new
@@ -2964,6 +3034,16 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.Property<string>("HouseRules")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(9,6)");
 
@@ -2999,7 +3079,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyTypeId");
 
-                    b.ToTable("Properties", (string)null);
+                    b.ToTable("Properties");
 
                     b.HasData(
                         new
@@ -3008,6 +3088,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before May 28 , Cancel before check-in on Jun 2 for a partial refund.",
                             Description = "Enjoy your stay with Panoramic View of the giza pyramids and sphinx .Yes! view and pictures are all 100% real...",
                             HouseRules = "Check-in after 2:00 PM , Checkout before 11:00 AM , 2 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 29.98333m,
                             LocationId = 1,
                             Longitude = 31.13333m,
@@ -3023,6 +3105,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before May 17 , Cancel before check-in on May 18 for a partial refund.",
                             Description = "Elegant apartment inside the famous castle in Nolo, a royal choice right in the center of Milan...",
                             HouseRules = "Check-in: 3:00 PM - 11:00PM ,Checkout before 11:00 AM ,4 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 45.46427m,
                             LocationId = 2,
                             Longitude = 9.18951m,
@@ -3038,6 +3122,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before May 17 , Cancel before check-in on May 18 for a partial refund.",
                             Description = "Relax with this listing Small 2-room 7-bed apartment near Alharam Al Makkah with a maximum of 10 to 12 minutes' walk away...",
                             HouseRules = "Check-in after 3:00 PM , Checkout before 12:00 PM , 7 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 21.4266m,
                             LocationId = 3,
                             Longitude = 39.8256m,
@@ -3053,6 +3139,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before May 17 , Cancel before check-in on May 18 for a partial refund.",
                             Description = "Updated pool and spa! Sitting on 100 acres, Hawkeye House, featured on the cover of the May 2019 issue of Dwell Magazine...",
                             HouseRules = "Check-in after 3:00 PM , Checkout before 12:00 PM , 7 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 34.114174m,
                             LocationId = 4,
                             Longitude = -116.432236m,
@@ -3068,6 +3156,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before Oct 22 , Cancel before check-in on Oct 23 for a partial refund.",
                             Description = "Romantic Loft with mezzanine and large balcony in front of the sea, double bed and 1 single bed, tv, wi-fi, fan...",
                             HouseRules = "3 guests maximum , Pets allowed",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = -12.9711m,
                             LocationId = 5,
                             Longitude = -38.5108m,
@@ -3083,6 +3173,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before Jun 3. Cancel before check-in on Jun 4 for a partial refund",
                             Description = "Set in an architectural prize-winning building, this modern Barcelona apartment beauty has impressive detail...",
                             HouseRules = "Check-in: 3:00 PM - 5:00 PM ,Checkout before 10:00 AM ,2 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 41.3888m,
                             LocationId = 6,
                             Longitude = 2.159m,
@@ -3098,6 +3190,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before Jun 3. Cancel before check-in on Jun 4 for a partial refund",
                             Description = "To give you the best experience of the authentic Bedouin life style, we will gather around the fire...",
                             HouseRules = "Check-in: 3:00 PM - 5:00 PM ,Checkout before 10:00 AM ,2 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 29.5726m,
                             LocationId = 7,
                             Longitude = 35.4186m,
@@ -3113,6 +3207,8 @@ namespace Nestin.Infrastructure.Data.Migrations
                             CancellationPolicy = "Free cancellation before Jun 3. Cancel before check-in on Jun 4 for a partial refund",
                             Description = "Interior designer's own guesthouse, this unique place has a style all its own...",
                             HouseRules = "Check-in: 3:00 PM - 5:00 PM ,Checkout before 10:00 AM ,2 guests maximum",
+                            IsActive = true,
+                            IsDeleted = false,
                             Latitude = 43.5914m,
                             LocationId = 8,
                             Longitude = 6.8761m,
@@ -3136,7 +3232,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("AmenityId");
 
-                    b.ToTable("PropertyAmenities", (string)null);
+                    b.ToTable("PropertyAmenities");
 
                     b.HasData(
                         new
@@ -3288,7 +3384,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyAvailabilities", (string)null);
+                    b.ToTable("PropertyAvailabilities");
 
                     b.HasData(
                         new
@@ -3497,7 +3593,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("GuestTypeId");
 
-                    b.ToTable("PropertyGuests", (string)null);
+                    b.ToTable("PropertyGuests");
 
                     b.HasData(
                         new
@@ -3566,7 +3662,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("PropertyPhotos", (string)null);
+                    b.ToTable("PropertyPhotos");
 
                     b.HasData(
                         new
@@ -3745,7 +3841,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceTypeId");
 
-                    b.ToTable("PropertySpaces", (string)null);
+                    b.ToTable("PropertySpaces");
 
                     b.HasData(
                         new
@@ -3902,7 +3998,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceItemTypeId");
 
-                    b.ToTable("PropertySpaceItems", (string)null);
+                    b.ToTable("PropertySpaceItems");
 
                     b.HasData(
                         new
@@ -4039,7 +4135,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("PropertySpaceTypeId");
 
-                    b.ToTable("PropertySpaceItemTypes", (string)null);
+                    b.ToTable("PropertySpaceItemTypes");
 
                     b.HasData(
                         new
@@ -4311,7 +4407,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertySpaceTypes", (string)null);
+                    b.ToTable("PropertySpaceTypes");
 
                     b.HasData(
                         new
@@ -4414,7 +4510,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyTypes", (string)null);
+                    b.ToTable("PropertyTypes");
 
                     b.HasData(
                         new
@@ -4458,7 +4554,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Regions", (string)null);
+                    b.ToTable("Regions");
 
                     b.HasData(
                         new
@@ -4538,7 +4634,7 @@ namespace Nestin.Infrastructure.Data.Migrations
 
                     b.HasIndex("CreatedAt");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
 
                     b.HasData(
                         new
@@ -4688,7 +4784,7 @@ namespace Nestin.Infrastructure.Data.Migrations
                         .IsUnique()
                         .HasFilter("[PhotoId] IS NOT NULL");
 
-                    b.ToTable("UserProfiles", (string)null);
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -4817,6 +4913,40 @@ namespace Nestin.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Property");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Nestin.Core.Entities.HostUpgradeRequest", b =>
+                {
+                    b.HasOne("Nestin.Core.Entities.AppUser", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApprovedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Nestin.Core.Entities.FileUpload", "BackPhoto")
+                        .WithOne()
+                        .HasForeignKey("Nestin.Core.Entities.HostUpgradeRequest", "BackPhotoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Nestin.Core.Entities.FileUpload", "FrontPhoto")
+                        .WithOne()
+                        .HasForeignKey("Nestin.Core.Entities.HostUpgradeRequest", "FrontPhotoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Nestin.Core.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("BackPhoto");
+
+                    b.Navigation("FrontPhoto");
 
                     b.Navigation("User");
                 });

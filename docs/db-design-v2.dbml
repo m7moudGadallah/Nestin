@@ -95,6 +95,8 @@ Table property {
   safety_info text [not null]
   house_rules text [not null]
   cancellation_policy text [not null]
+  is_active bool [default: true]
+  is_deleted bool [default: false]
 }
 
 Table property_photo {

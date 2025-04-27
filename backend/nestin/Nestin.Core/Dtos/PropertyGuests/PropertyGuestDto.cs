@@ -2,7 +2,7 @@
 
 namespace Nestin.Core.Dtos.PropertyGuests
 {
-    public class PropertyGuestsDto
+    public class PropertyGuestDto
     {
         public string PropertyId { get; set; }
         public GuestTypesDto GuestType { get; set; }

@@ -44,13 +44,18 @@ namespace Nestin.Api.Controllers
 
                 if (roleResult.Succeeded)
                 {
-                    var token = await _serviceFactory.AuthTokenService.CreateTokenAsync(appUser);
+                    var user = await _identityFactory.UserManager.Users.Include(x => x.Roles)
+                        .FirstAsync(x => x.Id == appUser.Id);
+                    var token = _serviceFactory.AuthTokenService.CreateToken(user);
                     _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
+
+                    var roles = await _identityFactory.UserManager.GetRolesAsync(appUser);
 
                     return StatusCode(201, new NewUserDto
                     {
                         Id = appUser.Id,
                         UserName = appUser.UserName,
+                        Roles = roles.ToList(),
                         Token = token,
                     });
                 }
@@ -73,7 +78,9 @@ namespace Nestin.Api.Controllers
         {
             var userName = ExtractUsernameFromEmail(dto.Email);
 
-            var user = await _identityFactory.UserManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            var user = await _identityFactory.UserManager.Users
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync(x => x.UserName == userName);
 
             if (user is not null)
             {
@@ -81,14 +88,17 @@ namespace Nestin.Api.Controllers
 
                 if (passCheckResult.Succeeded)
                 {
-                    var token = await _serviceFactory.AuthTokenService.CreateTokenAsync(user);
+                    var token = _serviceFactory.AuthTokenService.CreateToken(user);
                     // Set secure HTTP-only cookie
                     _serviceFactory.AuthTokenService.SetAccessTokenCookie(HttpContext, token);
+
+                    var roles = await _identityFactory.UserManager.GetRolesAsync(user);
 
                     return Ok(new NewUserDto
                     {
                         Id = user.Id,
                         UserName = user.UserName,
+                        Roles = roles.ToList(),
                         Token = token
                     });
                 }

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ApiConstant } from '../utils/api-constant.util';
 import { IBookingResponse } from '../models/api/response/ibooking-response';
-import { IBookingRequest } from '../models/api/request/ibooking-req';
+import { IBookingSendingRequest } from '../models/api/request/ibooking-sending-req';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +11,12 @@ import { IBookingRequest } from '../models/api/request/ibooking-req';
 export class BookingService {
   constructor(private http: HttpClient) {}
 
-  createBooking(bookingData: IBookingRequest): Observable<IBookingResponse> {
-    return this.http.post<IBookingResponse>(
-      `${ApiConstant.booking.createBooking}`,
-      bookingData
-    );
+  createBooking(bookingData: IBookingSendingRequest): Observable<any> {
+    return this.http.post(`${ApiConstant.booking.createBooking}`,bookingData, 
+      {
+        observe: 'response',
+        withCredentials: true,
+      });
+    ;
   }
 }

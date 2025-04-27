@@ -12,6 +12,7 @@ namespace Nestin.Core.Mappings
                 UserId = userProfile.UserId,
                 UserName = userProfile.AppUser.UserName,
                 Email = userProfile.AppUser.Email,
+                Roles = userProfile.AppUser.Roles.Select(x => x.Name).ToList(),
                 FirstName = userProfile.FirstName,
                 LastName = userProfile.LastName,
                 PhoneNumber = userProfile.AppUser.PhoneNumber,
