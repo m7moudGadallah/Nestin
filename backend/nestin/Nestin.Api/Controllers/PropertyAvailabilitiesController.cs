@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.PropertyAvailabilities;
 using Nestin.Core.Dtos.PropertyGuests;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Mappings;
 
 namespace Nestin.Api.Controllers
 {
@@ -19,9 +21,19 @@ namespace Nestin.Api.Controllers
         [EndpointSummary("Create Property Availability.")]
         [Consumes("application/json")]
         [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status201Created)]
-        public Task<IActionResult> Create([FromBody] PropertyAvailabilityCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] PropertyAvailabilityCreateDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var newPropertyAvailability = new PropertyAvailability
+            {
+                PropertyId = dto.PropertyId,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                IsAvailable = true
+            };
+
+            _unitOfWork.PropertyAvailabilityRepository.Create(newPropertyAvailability);
+            await _unitOfWork.SaveChangesAsync();
+            return new ObjectResult(newPropertyAvailability.ToDto()) { StatusCode = 201 };
         }
 
         [HttpPatch]
