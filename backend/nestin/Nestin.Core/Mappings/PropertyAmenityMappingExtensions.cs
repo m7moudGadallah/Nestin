@@ -5,9 +5,9 @@ namespace Nestin.Core.Mappings
 {
     public static class PropertyAmenityMappingExtensions
     {
-        public static PropertySpaceDto ToDto(this PropertyAmenity propertyAmenity)
+        public static PropertyAmenityDto ToDto(this PropertyAmenity propertyAmenity)
         {
-            return new PropertySpaceDto
+            return new PropertyAmenityDto
             {
                 PropertyId = propertyAmenity.PropertyId,
                 Amenity = propertyAmenity.Amenity.ToDto()
