@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.PropertyAmenities;
-using Nestin.Core.Dtos.PropertyGuests;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
@@ -21,7 +20,7 @@ namespace Nestin.Api.Controllers
         [HttpPost]
         [EndpointSummary("Create Property Amenity.")]
         [Consumes("application/json")]
-        [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PropertyAmenityDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertyAmenityCreateDto dto)
         {
             CheckPropertyAuthority(dto.PropertyId);
@@ -41,7 +40,7 @@ namespace Nestin.Api.Controllers
 
         [HttpDelete("{propertyId}/{amenityId}")]
         [EndpointSummary("Delete existing Property Amenity.")]
-        [ProducesResponseType(typeof(PropertyGuestDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PropertyAmenityDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete([FromRoute] string propertyId, int amenityId)
         {
             await CheckPropertyAuthority(propertyId);

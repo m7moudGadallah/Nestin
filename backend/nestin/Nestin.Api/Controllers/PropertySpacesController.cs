@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos;
 using Nestin.Core.Dtos.PropertySpaceItems;
 using Nestin.Core.Dtos.PropertySpaces;
@@ -26,7 +27,11 @@ namespace Nestin.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpPost]
+        [EndpointSummary("Create Property Space.")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(PropertySpaceDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertySpaceCreateDto dto)
         {
             await CheckPropertyAuthority(dto.PropertyId);
@@ -44,16 +49,51 @@ namespace Nestin.Api.Controllers
             return new ObjectResult(newSpace.ToDto()) { StatusCode = 201 };
         }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpPatch("{id}")]
-        public Task<IActionResult> Update([FromRoute] string id, [FromBody] PropertySpaceUpdateDto dto)
+        [EndpointSummary("Update exiting Property Space.")]
+        [Consumes("application/json")]
+        [ProducesResponseType(typeof(PropertySpaceDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] PropertySpaceUpdateDto dto)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var existingSpace = await _unitOfWork.PropertySpaceRepository.GetByIdAsync(id);
+
+            if (existingSpace is null)
+            {
+                return NotFoundResponse();
+            }
+
+            await CheckPropertyAuthority(existingSpace.PropertyId);
+
+            existingSpace.Name = !string.IsNullOrEmpty(dto.Name) ? dto.Name : existingSpace.Name;
+            existingSpace.PropertySpaceTypeId = dto.PropertySpaceTypeId.HasValue ? dto.PropertySpaceTypeId.Value : existingSpace.PropertySpaceTypeId;
+            existingSpace.IsShared = dto.IsShared.HasValue ? dto.IsShared.Value : existingSpace.IsShared;
+
+            _unitOfWork.PropertySpaceRepository.Update(existingSpace);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(existingSpace.ToDto());
         }
 
+        [Authorize(Roles = "Admin,Host")]
         [HttpDelete("{id}")]
-        public Task<IActionResult> Delete([FromRoute] string id)
+        [EndpointSummary("Delete Property Space.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Delete([FromRoute] string id)
         {
-            return Task.FromResult<IActionResult>(NotImplementedResponse());
+            var existingSpace = await _unitOfWork.PropertySpaceRepository.GetByIdAsync(id);
+
+            if (existingSpace is null)
+            {
+                return NotFoundResponse();
+            }
+
+            await CheckPropertyAuthority(existingSpace.PropertyId);
+
+            _unitOfWork.PropertySpaceRepository.Delete(existingSpace);
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
         }
 
         private async Task CheckPropertyAuthority(string propertyId)
