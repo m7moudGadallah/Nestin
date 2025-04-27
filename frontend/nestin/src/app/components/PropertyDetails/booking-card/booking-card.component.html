@@ -1,20 +1,35 @@
-<div class="booking-card mt-2">
-  <div class="price-section">
-    <span class="price">${{ property.pricePerNight | number }}</span>
-    <span class="price-label"> night</span>
+<div class="card shadow-sm p-4 mb-4 rounded-3">
+  <!-- Price Section -->
+  <div class="d-flex align-items-end mb-4">
+    <span class="fw-semibold display-6"
+      >${{ property.pricePerNight | number }}</span
+    >
+    <span class="h5 text-muted ms-1">/night</span>
   </div>
 
-  <div class="date-picker">
-    <div class="date-input" [class.active]="checkInDate">
-      <label>CHECK-IN</label>
-      <input type="date" [(ngModel)]="checkInDate" [min]="today" />
+  <!-- Date Picker -->
+  <div class="row g-2 mb-3">
+    <div class="col-md-6">
+      <div class="form-floating">
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="checkInDate"
+          [min]="today"
+          id="checkInDate" />
+        <label for="checkInDate">Check-in</label>
+      </div>
     </div>
-    <div class="date-input" [class.active]="checkOutDate">
-      <label>CHECKOUT</label>
-      <input
-        type="date"
-        [(ngModel)]="checkOutDate"
-        [min]="checkInDate || today" />
+    <div class="col-md-6">
+      <div class="form-floating">
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="checkOutDate"
+          [min]="checkInDate || today"
+          id="checkOutDate" />
+        <label for="checkOutDate">Checkout</label>
+      </div>
     </div>
   </div>
 
@@ -83,43 +98,28 @@
         </div>
       </div>
 
-      <button class="close-guest-modal" (click)="showGuestModal = false">
-        Close
-      </button>
+      <div class="container mt-5">
+        <button
+          class="btn w-100 btn-primary fw-semibold"
+          (click)="showGuestModal = false">
+          Close
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- <button class="book-button"
-            (click)="handleBookNow()"
-            [disabled]="!checkInDate || !checkOutDate">
-      Reserve
-    </button> -->
-
   <button
-    class="book-button btn btn-primary"
+    class="btn btn-primary fw-semibold"
     (click)="handleBookNow()"
     [disabled]="!checkInDate || !checkOutDate || isBooking">
     {{ isBooking ? 'Booking...' : 'Reserve' }}
   </button>
-
-  <!-- <div *ngIf="bookingError" class="error-message">
-    Booking failed: {{ bookingError }}
-  </div> -->
 
   <div class="price-summary" *ngIf="nights > 0">
     <div class="price-line">
       <span>${{ property.pricePerNight | number }} × {{ nights }} nights</span>
       <span>${{ subtotal | number }}</span>
     </div>
-    <!-- <div class="price-line">
-        <span>Cleaning fee</span>
-        <span>${{ cleaningFee | number }}</span>
-      </div>
-      <div class="price-line">
-        <span>Service fee</span>
-        <span>${{ serviceFee | number:'1.2-2' }}</span>
-      </div> -->
-
     <div class="price-line">
       <span>Cleaning fee</span>
       <span>${{ cleaningFee | number: '1.2-2' }}</span>

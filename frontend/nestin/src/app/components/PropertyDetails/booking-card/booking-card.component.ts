@@ -14,7 +14,7 @@ import { IBookingSendingRequest } from '../../../models/api/request/ibooking-sen
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './booking-card.component.html',
-  styleUrls: ['./booking-card.component.css'],
+  styleUrls: ['./booking-card.component.scss'],
 })
 export class BookingCardComponent implements OnInit {
   @Input({ required: true }) property!: IPropertyInfo;
