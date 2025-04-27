@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
+using Nestin.Core.Shared;
 using Stripe;
 using Stripe.Checkout;
 
@@ -8,11 +11,17 @@ namespace Nestin.Infrastructure.Services
     class StripeCheckoutService : ICheckoutManagementService
     {
         private readonly StripeClient _stripeClient;
+        private IUnitOfWork _unitOfWork;
+        private ILogger<StripeCheckoutService> _logger;
+        private readonly string _stripeWebHookSecretKey;
         private readonly string _successUrl;
         private readonly string _cancelurl;
-        public StripeCheckoutService(StripeClient stripeClient, IConfiguration config)
+        public StripeCheckoutService(StripeClient stripeClient, IUnitOfWork unitOfWork, ILogger<StripeCheckoutService> logger, IConfiguration config)
         {
             _stripeClient = stripeClient;
+            _unitOfWork = unitOfWork;
+            _logger = logger;
+            _stripeWebHookSecretKey = config["Stripe:WebHookSecretKey"];
             _successUrl = config["Stripe:SuccessUrl"];
             _cancelurl = config["Stripe:CancelUrl"];
         }
@@ -62,8 +71,57 @@ namespace Nestin.Infrastructure.Services
             };
         }
 
-        public Task HandlePaymentWebhookAsync(string json, string signature)
+        public async Task HandlePaymentWebhookAsync(string json, string signature)
         {
+            var stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeWebHookSecretKey);
+
+            try
+            {
+
+                switch (stripeEvent.Type)
+                {
+                    case EventTypes.CheckoutSessionCompleted:
+                        await HandleCheckoutSessionCompleted(stripeEvent);
+                        break;
+
+                    case EventTypes.CheckoutSessionAsyncPaymentFailed:
+                        await HandleCheckoutSessionFailed(stripeEvent);
+                        break;
+
+                    default:
+                        _logger.LogInformation("Unhandled Stripe event type: {EventType}", stripeEvent.Type);
+                        break;
+                }
+            }
+            catch (StripeException ex)
+            {
+                _logger.LogError(ex, "Stripe webhook processing error");
+                throw;
+            }
+        }
+
+        private async Task HandleCheckoutSessionCompleted(Stripe.Event stripeEvent)
+        {
+            var session = stripeEvent.Data.Object as Session;
+            var bookingId = session.ClientReferenceId;
+            var booking = await _unitOfWork.BookingRepository.GetByIdAsync(bookingId);
+
+            if (booking is null)
+            {
+                throw new NotFoundException($"Booking with id [{bookingId}] is not found.");
+            }
+
+            booking.Status = BookingStatus.Confirmed;
+
+            _unitOfWork.BookingRepository.Update(booking);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        private Task HandleCheckoutSessionFailed(Stripe.Event stripeEvent)
+        {
+            var session = stripeEvent.Data.Object as Session;
+            var bookingId = session.ClientReferenceId;
+            _logger.LogError($"Checkout for this booking {bookingId} is failed!");
             throw new NotImplementedException();
         }
     }
