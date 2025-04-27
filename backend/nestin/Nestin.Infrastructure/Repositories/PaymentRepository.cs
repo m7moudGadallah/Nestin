@@ -10,7 +10,7 @@ namespace Nestin.Infrastructure.Repositories
         public PaymentRepository(AppDbContext dbContext) : base(dbContext)
         { }
 
-        public async Task<Payment?> GetPaymentBySessionId(string sessionId)
+        public async Task<Payment?> GetPaymentBySessionIdAsync(string sessionId)
         {
             return await _dbContext.Payments.Where(x => x.StripeSessionId == sessionId).FirstOrDefaultAsync();
         }
