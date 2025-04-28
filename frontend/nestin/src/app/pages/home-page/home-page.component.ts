@@ -525,7 +525,7 @@ export class HomePageComponent implements OnInit {
     if (paymentStatus.toLowerCase() === 'success') {
       this.toastService.showSuccess('Payment successful');
     } else if (paymentStatus.toLowerCase() === 'canceled') {
-      this.toastService.showError('PAyment canceled, please try again');
+      this.toastService.showError('Payment canceled, please try again');
     }
   }
 }
