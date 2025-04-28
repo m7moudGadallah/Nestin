@@ -30,6 +30,31 @@ namespace Nestin.Api.Controllers
             return Ok(result);
         }
 
+        [Authorize]
+        [HttpGet("{id}")]
+        [EndpointSummary("Get booking by Id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(BookingDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([FromRoute] string id)
+        {
+            var bookingDto = await _unitOfWork.BookingRepository.GetBookingDetailsByIdAsync(id);
+
+            if (bookingDto is null)
+            {
+                return NotFoundResponse($"Can't find booking with this Id [{id}].");
+            }
+
+            if (!CurrentUser.IsInRole("Admin") && bookingDto.UserId != CurrentUser.Id)
+            {
+                throw new ForbiddenException("You don't have permission to access this booking.");
+            }
+
+            return Ok(bookingDto);
+        }
+
         [Authorize(Roles = "Guest,Host")]
         [HttpPost]
         [EndpointSummary("Create new booking.")]
