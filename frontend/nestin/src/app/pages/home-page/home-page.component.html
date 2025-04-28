@@ -1,5 +1,5 @@
 <div
-  class="container-fluid search-bars-container mb-5 fixed-top p-5 transition-all"
+  class="container-fluid search-bars-container fixed-top p-5 transition-all"
   [class.minimized]="scrollY > 50"
   tabindex="0"
   (focus)="onFocus()"
@@ -46,11 +46,10 @@
             [(ngModel)]="stringAiSearch" />
         </div>
         <button
-          class="btn btn-primary ms-2 rounded-pill d-flex align-items-center text-white fw-semibold justify-content-center px-4 flex-shrink-0 transition-all"
-          [style.height]="scrollY > 50 ? '40px' : '48px'"   (click)="SmartSearch()"
-          >
-   
-          <fa-icon [icon]="icons['search']" class="text-white me-2"></fa-icon>
+          class="btn btn-primary ms-2 rounded-pill d-flex align-items-center fw-semibold justify-content-center px-4 flex-shrink-0 transition-all"
+          [style.height]="scrollY > 50 ? '40px' : '48px'"
+          (click)="SmartSearch()">
+          <fa-icon [icon]="icons['search']" class="me-2"></fa-icon>
           <span [class.d-none]="scrollY > 50">Find Stays</span>
         </button>
       </div>
@@ -126,20 +125,18 @@
                   type="text"
                   class="form-control border-0 p-0 bg-transparent transition-all"
                   [style.font-size]="scrollY > 50 ? '0.8rem' : '1rem'"
-                  placeholder="Guest Numbers" 
-                  [(ngModel)]="guestsCount"/>
+                  placeholder="Guest Numbers"
+                  [(ngModel)]="guestsCount" />
               </h6>
             </button>
 
             <!-- Search button -->
             <button
               type="button"
-              class="btn btn-primary rounded-pill ms-2 d-flex align-items-center justify-content-center px-4 transition-all"
+              class="btn btn-primary rounded-pill ms-2 d-flex align-items-center justify-content-center px-4 fw-semibold transition-all"
               [style.height]="scrollY > 50 ? '40px' : '48px'"
               (click)="searchProperties()">
-              <fa-icon
-                [icon]="icons['search']"
-                class="text-white me-2"></fa-icon>
+              <fa-icon [icon]="icons['search']" class="me-2"></fa-icon>
               <span [class.d-none]="scrollY > 50">Search</span>
             </button>
           </div>
@@ -202,8 +199,8 @@
                   class="form-range"
                   min="0"
                   max="1000"
-                  step="10" 
-                  [(ngModel)]="maxPrice"/>
+                  step="10"
+                  [(ngModel)]="maxPrice" />
               </div>
 
               <div class="d-flex justify-content-between">
@@ -244,26 +241,28 @@
   </div>
 </div>
 <div
-  class="container py-8"
+  class="container py-6"
   id="cards"
   [ngStyle]="{ 'margin-top': getMarginTop() + 'px' }">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+  <div
+    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gx-4 gy-5">
     <div class="col" *ngFor="let prop of property">
       <div
-        class="card h-100 border-0 shadow-sm rounded-2 overflow-hidden position-relative"
+        class="card h-100 border-0 rounded-2 overflow-hidden position-relative bg-transparent"
         style="
           transition:
             transform 0.2s ease,
             box-shadow 0.2s ease;
         ">
         <button
-          class="btn p-0 position-absolute top-0 end-0 me-2 mt-2 my-icon bg-transparent border-0 z-2" (click)="addToFav(prop.id)">
-          <lucide-icon [name]="icon.heart"></lucide-icon>
+          class="btn p-0 position-absolute top-0 end-0 me-2 mt-2 my-icon bg-transparent border-0 z-2 favorite"
+          (click)="addToFav(prop.id)">
+          <lucide-icon [name]="icon.heart" class="text-light"></lucide-icon>
         </button>
         <div
           [id]="'carousel-' + prop.id"
           class="carousel slide"
-          style="height: 200px; overflow: hidden"
+          style="height: 250px; overflow: hidden"
           data-bs-ride="carousel">
           <div class="carousel-inner h-100">
             <div
@@ -272,7 +271,7 @@
               [class.active]="i === 0">
               <img
                 [src]="photo.photoUrl"
-                class="d-block w-100 h-100 object-fit-cover"
+                class="d-block w-100 h-100 object-fit-cover rounded-4"
                 [alt]="'Property ' + prop.id + ' photo ' + (i + 1)" />
             </div>
           </div>
@@ -318,7 +317,6 @@
           <div class="mb-2">
             <h6
               class="card-title fw-semibold mb-2 text-truncate"
-              style="font-size: 1rem; cursor: pointer"
               (click)="navigateToProperty(prop.id)">
               {{ prop.title }}
               <div class="d-flex align-items-center mt-1">
@@ -333,8 +331,6 @@
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
-                  fill="#cccc08"
-                  stroke="#cccc08"
                   stroke-width="1.5"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -352,9 +348,12 @@
           </div>
 
           <!-- Price -->
-          <h6 class="fw-bold text-dark mb-0" style="font-size: 0.95rem">
-            {{ prop.pricePerNight }} ج.م / night
-          </h6>
+          <div class="d-flex align-items-end mb-4">
+            <span class="fw-semibold h5"
+              >${{ prop.pricePerNight | number }}</span
+            >
+            <span class="h6 text-muted ms-1"> per night</span>
+          </div>
         </div>
       </div>
     </div>

@@ -9,106 +9,25 @@ $breakpoint-sm: 576px;
   transition: all 0.5s ease;
 }
 
+.search-bars-container {
+  top: 6vh;
+}
+
 .search-bars-container.minimized {
   margin-top: 0;
   padding: 1rem !important;
   top: 1vh;
   width: 59vw;
   transform: translate(-200px, 0);
-
-  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  //   @media (max-width: $breakpoint-sm) {
-  //     .Advanced {
-  //       font-size: 0.2rem !important;
-  //       right: 10px;
-  //     }
-  //     .disapear {
-  //       display: none;
-  //     }
-
-  //     padding: 0;
-  //     margin: 0;
-  //     top: 1vh;
-  //     width: 70vw;
-  //     height: 20vh;
-  //     transform: translate(100px, 0);
-  //     // background-color: black;
-  //   }
-
-  //   @media (max-width: $breakpoint-lg) {
-  //     top: 1vh;
-  //     transform: translate(50px, 0);
-  //     width: 60vw;
-  //     // padding: 0;
-  //     .disapear {
-  //       display: none;
-  //     }
-  //   }
-
-  //   @media (max-width: $breakpoint-xl) {
-  //     top: 1vh;
-  //     width: 30vh;
-  //     transform: translate(1000px, 0);
-
-  //     .disapear {
-  //       display: none;
-  //     }
-  //   }
-  // }
-  // // Search Container
-  // .ai-search-container {
-  //   max-width: $search-container-max-width;
-  //   margin: 0 auto;
-
-  //   // Search Bar
-  //   .ai-search-bar {
-  //     transition: all 0.3s ease;
-
-  //     // Input styles
-  //     input {
-  //       outline: none;
-  //       box-shadow: none;
-  //       min-height: $search-bar-height;
-  //     }
-
-  //     // Focus state
-  //     &:focus-within {
-  //       box-shadow: $focus-shadow;
-  //     }
-  //   }
-  // }
-
-  // // Search Bars Container
-  // .search-bars-container {
-  //   top: 10vh;
-  //   // background-color: white;
-
-  //   // Responsive adjustments
-
-  //   @media (max-width: $breakpoint-xl) {
-  //     top: 4.5vh;
-  //   }
-
-  //   @media (max-width: $breakpoint-lg) {
-  //     top: 5vh;
-  //   }
-
-  //   @media (max-width: $breakpoint-sm) {
-  //     top: 4vh;
-  //   }
 }
 
 .btn-outline-primary {
   &.active,
   &:hover {
-    color: var(--bs-white);
     font-weight: 600;
   }
 }
 
-.btn-primary {
-  color: var(--bs-white);
-}
 .frosted-glass {
   backdrop-filter: blur(10px);
   transition: background-color 0.3s ease;
@@ -119,69 +38,115 @@ $breakpoint-sm: 576px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-// cursoul
-/* Style for the arrows to move them to the sides and vertically center */
-/* Ensure that the images are contained without overflow */
+/* Carousel Base */
 .carousel,
 .carousel-inner,
 .carousel-item {
-  height: 300px; /* or any fixed height */
+  height: 300px; /* or your preferred fixed height */
 }
 
 .carousel-item img {
   object-fit: cover;
   height: 100%;
   width: 100%;
+  border-radius: 1rem; /* Smooth rounding */
 }
-/* Show arrows on hover */
+
+/* Arrows visibility on hover */
 .carousel:hover .carousel-control-prev,
 .carousel:hover .carousel-control-next {
   opacity: 1 !important;
 }
+
+/* Arrows - Better Styling */
 .carousel-control-next,
 .carousel-control-prev {
-  width: 12%;
-  height: 12%;
   position: absolute;
-  top: 45%;
-  border-radius: 15px;
-  padding: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background: var(--bs-light); /* semi-transparent dark background */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    background 0.3s ease;
+  z-index: 2;
+  border: 2px solid #ffffff; /* bold white border */
 }
+
+$carousel-control-margin: 6px;
+
+.carousel-control-next {
+  margin-right: $carousel-control-margin;
+}
+
+.carousel-control-prev {
+  margin-left: $carousel-control-margin;
+}
+
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  width: 30px;
-  height: 30px;
-  background-color: rgba(0, 0, 0); /* background behind the arrow */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* optional soft shadow */
-
-  background-size: 40% 40%;
-  border-radius: 50%;
-  padding: 10px;
-  filter: invert(100%); /* changes white arrow to black */
+  background-color: transparent; /* transparent since we already have a button bg */
+  background-size: 60% 60%;
+  filter: invert(100%) brightness(200%); /* pure white arrows */
+  width: 20px;
+  height: 20px;
 }
 
-.carousel-indicators li {
-  list-style-type: none; /* Remove any list-style (numbers or dots) */
-}
-.carousel-indicators li {
-  width: 8px; /* Adjust width */
-  height: 8px; /* Adjust height */
-  border-radius: 50%; /* Make them circular */
-  background-color: black; /* Change color if needed */
+/* Hover effect on buttons */
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  background: var(--bs-light); /* lighter background on hover */
 }
 
-.carousel-indicators li.active {
-  background-color: white; /* Active dot color */
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  filter: invert(0%) brightness(0%); /* black arrows on hover */
 }
+
+/* Indicators (dots) */
 .carousel-indicators {
   position: absolute;
   bottom: -20px;
-  left: 35%;
+  left: 50%;
   transform: translateX(-50%);
-  z-index: 10;
+  z-index: 3;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .carousel:hover .carousel-indicators {
   opacity: 1;
+}
+
+.carousel-indicators li {
+  list-style: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: black;
+  margin: 0 4px;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-indicators li.active {
+  background-color: var(--bs-light);
+}
+
+// Favorite Heart
+.favorite {
+  ::ng-deep svg {
+    fill: var(--bs-gray-700);
+  }
+
+  &.active {
+    ::ng-deep svg {
+      fill: var(--bs-primary);
+    }
+  }
 }

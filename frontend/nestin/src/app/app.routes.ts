@@ -19,11 +19,9 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [authGuard],
     component: MainLayoutComponent,
+    canActivate: [authGuard], // Applies to all child routes
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomePageComponent },
       {
         path: 'favorites',
         loadComponent: () =>
