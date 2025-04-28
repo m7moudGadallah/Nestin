@@ -8,6 +8,8 @@ import { forkJoin } from 'rxjs';
 import { IPropertyAmenityRes } from '../../../models/api/response/iproperty-amenity-res';
 import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule, Sparkles, icons } from 'lucide-angular';
+import { EventEmitter, Output } from '@angular/core';
+
 
 import {
   LucideWifi,
@@ -24,81 +26,7 @@ import {
   styleUrl: './property-aminities.component.css',
 })
 export class PropertyAminitiesComponent implements OnInit {
-  //
-
-  // @Input() property!: IPropertyInfo;
-  // isModalOpen = false;
-  // amenities: IPropertyAmenity[] = [];
-  // isLoading = true;
-
-  // ngOnInit() {
-  //   this.loadAmenity();
-  // }
-
-  // loadAmenity() {
-  //   if (this.property?.amenities) {
-  //     this.amenities = this.property.amenities.map(item => item.amenity);
-  //     this.isLoading=true;
-  //   } else {
-  //     this.amenities = [];
-  //     this.isLoading = false;
-  //   }
-
-  // }
-
-  // getTopAmenities(): IPropertyAmenity[] {
-  //   return this.amenities.slice(0, 6) || [];
-  // }
-
-  // getGroupedAmenities(): { name: string, amenities: IPropertyAmenity[] }[] {
-  //   if (!this.property.amenities) return [];
-
-  //   // Group amenities by their categoryId
-  //   const amenitiesByCategory = this.property.amenities.reduce((acc, amenity) => {
-  //     const categoryKey = `category_${amenity.categoryId}`;
-  //     if (!acc[categoryKey]) {
-  //       acc[categoryKey] = [];
-  //     }
-  //     acc[categoryKey].push(amenity);
-  //     return acc;
-  //   }, {} as Record<string, IPropertyAmenity[]>);
-
-  //   // Convert to array format
-  //   return Object.entries(amenitiesByCategory).map(([categoryKey, amenities]) => ({
-  //     name: `Category ${categoryKey.split('_')[1]}`, // Default category name
-  //     amenities
-  //   }));
-  // }
-
-  // getGroupedAmenities(): { name: string, amenities: IPropertyAmenity[] }[] {
-  //   if (!this.amenities || this.amenities.length === 0) return [];
-
-  //   // Group amenities by their categoryId
-  //   const amenitiesByCategory = this.amenities.reduce((acc, amenity) => {
-  //     const categoryKey = `category_${amenity.categoryId}`;
-  //     if (!acc[categoryKey]) {
-  //       acc[categoryKey] = [];
-  //     }
-  //     acc[categoryKey].push(amenity);
-  //     return acc;
-  //   }, {} as Record<string, IPropertyAmenity[]>);
-
-  //   // Convert to array format
-  //   return Object.entries(amenitiesByCategory).map(([categoryKey, amenities]) => ({
-  //     name: `Category ${categoryKey.split('_')[1]}`,
-  //     amenities
-  //   }));
-  // }
-
-  // openModal() {
-  //   this.isModalOpen = true;
-  //   document.body.style.overflow = 'hidden';
-  // }
-
-  // closeModal() {
-  //   this.isModalOpen = false;
-  //   document.body.style.overflow = '';
-  // }
+  
   icons = {
     sparkles: Sparkles,
   };
@@ -112,6 +40,7 @@ export class PropertyAminitiesComponent implements OnInit {
   // };
 
   @Input() propertyId!: string;
+
 
   // State variables
   isModalOpen = false;
@@ -131,7 +60,7 @@ export class PropertyAminitiesComponent implements OnInit {
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('id') || '';
-    console.log('Property ID:', this.propertyId);
+  
     this.loadAmenitiesData();
   }
 
@@ -182,7 +111,7 @@ export class PropertyAminitiesComponent implements OnInit {
   //   });
   // }
 
-  loadAmenitiesData() {
+    loadAmenitiesData() {
     this.isLoading = true;
     this.error = false;
 
@@ -195,49 +124,45 @@ export class PropertyAminitiesComponent implements OnInit {
     }).subscribe({
       next: ({ propertyAmenities, allAmenities, categories }) => {
         try {
-          console.log('Raw API Responses:', {
-            propertyAmenities,
-            allAmenities,
-            categories,
-          });
+          // console.log('Raw API Responses:', {
+          //   propertyAmenities,
+          //   allAmenities,
+          //   categories,
+          // });
 
           this.categories =
             this.extractItemsArray<IAminityCategory>(categories);
           console.log('Processed categories:', this.categories);
 
           const propertyAmenitiesArray =
-            this.extractItemsArray<IPropertyAmenityRes>(propertyAmenities);
-          console.log('Property amenities:', propertyAmenitiesArray);
+          propertyAmenities.body.items.map((am: IPropertyAmenity) => am.amenity.name);
+         // console.log('Property amenities:', propertyAmenitiesArray);
 
           const allAmenitiesArray =
-            this.extractItemsArray<IPropertyAmenity>(allAmenities);
-          console.log('All amenities:', allAmenitiesArray);
+           propertyAmenities.body.items.map((am: IPropertyAmenity) => am.amenity.name);
+          console.log('All amenities:From PropertyAmenties', allAmenitiesArray);
+          this.amenities =allAmenitiesArray
 
-          const allAmenitiesMap = new Map<string, IPropertyAmenity>();
-          allAmenitiesArray.forEach(amenity => {
-            if (amenity?.amenity.id) {
-              allAmenitiesMap.set(amenity.amenity.id.toString(), amenity);
-            }
-          });
+          // const allAmenitiesMap = new Map<string, IPropertyAmenity>();
+          //   allAmenitiesArray.forEach((amenity: IPropertyAmenity) => {
+          //   if (amenity?.amenity.id) {
+          //     allAmenitiesMap.set(amenity.amenity.id.toString(), amenity);
+          //   }
+          //   });
 
-          const propertyAmenityIds = new Set(
-            propertyAmenitiesArray
-              .flatMap(pa =>
-                pa.items.map(amenity => amenity.amenity.id.toString())
-              )
-              .filter(Boolean)
-          );
-          console.log('Property amenity IDs:', propertyAmenityIds);
+        //     const propertyAmenityNames: string[] = propertyAmenitiesArray
+            
 
-          this.amenities = Array.from(propertyAmenityIds)
-            .map(id => allAmenitiesMap.get(id))
-            .filter((amenity): amenity is IPropertyAmenity => !!amenity);
+        // console.log(propertyAmenityNames,'NAMESSSSSSSSSSSSSSSSS'); // This will log the array of amenity names
+        //  // console.log('Property amenity IDs:', propertyAmenityIds);
 
-          console.log('Final amenities list:', this.amenities);
+         
+
+         console.log('Final amenities list:', this.amenities);
 
           this.isLoading = false;
         } catch (error) {
-          console.error('Error processing amenities data:', error);
+          //console.error('Error processing amenities data:', error);
           this.error = true;
           this.isLoading = false;
         }

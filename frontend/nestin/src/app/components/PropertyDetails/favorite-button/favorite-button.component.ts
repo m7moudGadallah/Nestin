@@ -3,6 +3,8 @@ import { Heart, LucideAngularModule } from 'lucide-angular';
 import { FavoritePropertiesService } from '../../../services/favorite-properties.service';
 import { IPropertyInfo } from '../../../models/domain/iproperty-info'; // <-- import IPropertyInfo
 import { ToastService } from '../../../services/toast.service'; // <-- import ToastService
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-favorite-button',
@@ -18,6 +20,8 @@ export class FavoriteButtonComponent implements OnInit {
   @Input() filledColor: string = '#ff385c';
   @Input() property!: IPropertyInfo; // <== ADD THIS
   @Output() toggle = new EventEmitter<boolean>();
+  propertyId!: string;
+
 
   icon = {
     heart: Heart,
@@ -25,11 +29,15 @@ export class FavoriteButtonComponent implements OnInit {
 
   constructor(
     private favouriteService: FavoritePropertiesService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    console.log('FavoriteButton loaded with property id:', this.property.id);
+    console.log('FavoriteButton loaded with property id:', this.property);
+    this.propertyId = this.route.snapshot.paramMap.get('id')!;
+    console.log('Property ID from URL:', this.propertyId);
+
   }
 
   onClick(event: Event) {
@@ -37,7 +45,7 @@ export class FavoriteButtonComponent implements OnInit {
 
     if (!this.isFavorite) {
       // Add property to favorites
-      this.favouriteService.addToFavorites(this.property.id).subscribe({
+      this.favouriteService.addToFavorites(this.propertyId).subscribe({
         next: () => {
           this.isFavorite = true;
           this.toggle.emit(this.isFavorite);
@@ -47,7 +55,7 @@ export class FavoriteButtonComponent implements OnInit {
         error: error => {
           console.error('Failed to add to favorites:', error);
           this.toastService.showError(
-            'Failed to add to favorites. Please try again.'
+            'Property is already added to your Favourites.'
           );
         },
       });

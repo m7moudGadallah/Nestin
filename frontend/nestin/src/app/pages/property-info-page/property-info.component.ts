@@ -17,6 +17,7 @@ import { IPropertyImage } from '../../models/domain/iproperty-image';
 import { PropertyService } from '../../services/property.service';
 import { IUserProfile } from '../../models/domain/iuser-profile';
 import { IPropertyAmenity } from '../../models/domain/iproperty-amenity';
+import { IAminityCategory } from '../../models/domain/IAminity-category'; // Ensure this path is correct
 import { IReview } from '../../models/domain/ireview';
 import { IPropertyInfo } from '../../models/domain/iproperty-info';
 import { IImage } from '../../models/domain/iimage';
@@ -32,6 +33,7 @@ import { PropertyAminitiesComponent } from '../../components/PropertyDetails/pro
 import { ThingsToKnowComponent } from '../../components/PropertyDetails/things-to-know/things-to-know.component';
 import { FavoriteButtonComponent } from '../../components/PropertyDetails/favorite-button/favorite-button.component';
 import { PropertyAvailabilityComponent } from '../../components/PropertyDetails/property-availability/property-availability.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-property-info',
@@ -69,6 +71,7 @@ export class PropertyInfoComponent implements OnInit {
   loading = true;
   error = false;
   lightboxImages: any[] = [];
+  categories: IAminityCategory[] = [];
 
   activeImageIndex = 0;
 
@@ -88,6 +91,7 @@ export class PropertyInfoComponent implements OnInit {
 
       if (propertyId) {
         this.loadProperty(propertyId);
+        this.loadAmenitiesDataForPropertyInfo(propertyId);
       } else {
         this.error = true;
         this.loading = false;
@@ -118,6 +122,7 @@ export class PropertyInfoComponent implements OnInit {
         }
 
         this.property = response.body;
+        this.host = response.body.owner.userName;
 
         this.propertyImages = response.body.photos.map(
           (photo: IImage): IImage => ({
@@ -231,4 +236,46 @@ export class PropertyInfoComponent implements OnInit {
     this.isFavorite = isFavorite;
     // Remember    Here you would typically call a service to update favorites in your backend
   }
+
+
+ 
+private extractItemsArray<T>(response: any): T[] {
+  if (response?.items && Array.isArray(response.items)) {
+    return response.items;
+  }
+  return [];
+}
+
+loadAmenitiesDataForPropertyInfo(propertyId: string) {
+
+
+  forkJoin({
+    propertyAmenities: this.propertyService.getPropertyAmenitiesById(propertyId),
+    allAmenities: this.propertyService.getAllAmenities(),
+    categories: this.propertyService.getAmenitiesCategories(),
+  }).subscribe({
+    next: ({ propertyAmenities, allAmenities, categories }) => {
+      try {
+        // console.log('Raw API Responses (InfoComponent):', {
+        //   propertyAmenities,
+        //   allAmenities,
+        //   categories,
+        // });
+        this.aminaties = propertyAmenities.body.items.map((am: IPropertyAmenity) => am.amenity.name);
+        
+
+        // console.log('Final amenities list (InfoComponent):', this.aminaties);
+
+      } catch (error) {
+        // console.error('Error processing amenities data in InfoComponent:', error);
+        this.error = true;
+      }
+    },
+    error: err => {
+      // console.error('Error loading amenities in InfoComponent:', err);
+      this.error = true;
+    }
+  });
+}
+
 }

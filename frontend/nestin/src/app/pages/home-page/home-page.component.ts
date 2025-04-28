@@ -377,8 +377,7 @@ export class HomePageComponent implements OnInit {
       queryParams.PropertyTypeId = this.selectedPropertyType;
     }
 
-    console.log('Query Params:', queryParams);
-    console.log('Iam in search properties');
+   
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
         this.isLoadingProperties = false;
@@ -410,7 +409,7 @@ export class HomePageComponent implements OnInit {
   SmartSearch(): void {
     if (this.stringAiSearch) {
       this.isLoadingProperties = true;
-      console.log('Smart Search:', this.stringAiSearch);
+      
       this.propertyService.smartSearch(this.stringAiSearch).subscribe({
         next: (response: HttpResponse<ISmartSearchRes>) => {
           this.isLoadingProperties = false;
