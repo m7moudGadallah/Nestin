@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Bookings, GetBookingsResponse } from '../../models/api/request/iget-bookings';
 import { CheckOutBookingService } from '../../services/check-out-booking.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ToastService } from '../../services/toast.service';
 import { IRole } from '../../models/domain/iuser-role';
 
 @Component({
@@ -19,8 +20,8 @@ export class BookingHistoryComponent implements OnInit{
   searchQuery: string = '';
   filteredBookingsSearch : Bookings[] = [];
   userRole: string | undefined;
+  constructor(private checkOutService: CheckOutBookingService, private toastService: ToastService) {}
 
-  constructor(private checkOutService:CheckOutBookingService){}
   ngOnInit(): void {
     this.loadBookings();
     this.loadUserProfile();
@@ -162,6 +163,21 @@ calculateTotal(pricePerNight: number | undefined, checkIn: string | undefined, c
   }
   const totalPrice = pricePerNight * numberOfNights;
   return totalPrice + totalFees; 
+}
+cancelBooking(booking: Bookings) {
+  
+  if (booking.status.toLowerCase() === 'pending') {
+    this.checkOutService.cancelBookings(booking.id).subscribe({
+      next: (response) => {
+        this.toastService.showSuccess('Booking cancelled successfully!');
+      },
+      error: (error) => {
+        this.toastService.showError('Failed to cancel booking!');
+      }
+    });
+  } else {
+    this.toastService.showWarning('Only pending bookings can be cancelled.');
+  }
 }
 //filteration based on userId 
 

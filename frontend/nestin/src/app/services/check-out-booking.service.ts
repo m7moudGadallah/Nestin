@@ -32,5 +32,9 @@ export class CheckOutBookingService {
   getUserRole():Observable<HttpResponse<any>>{
     return this.http.get<any>('https://localhost:7026/api/v1/UserProfiles/me',{ observe:'response', withCredentials: true});
   }
+  cancelBookings(id: string):Observable<any>{
+    const url2 = ApiConstant.booking.cancelBooking.replace('{id}', id);
+    return this.http.post<any>(url2,{},{withCredentials: true})
+  }
   
 }
