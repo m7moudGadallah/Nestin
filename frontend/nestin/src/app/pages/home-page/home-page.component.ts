@@ -31,7 +31,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FavoritePropertiesService } from '../../services/favorite-properties.service';
 import { ISmartSearchReq } from '../../models/api/request/ismartSearch-req';
 import { ISmartSearchRes } from '../../models/api/response/ismartSearch-res';
@@ -84,6 +84,7 @@ export class HomePageComponent implements OnInit {
   totalItems: number = 0;
   Math = Math;
 
+
   guests = {
     adults: 2,
     children: 0,
@@ -127,13 +128,15 @@ export class HomePageComponent implements OnInit {
     private route: Router,
     private favouriteService: FavoritePropertiesService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private activeroute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.getPropertyTypes();
     this.getAllProperty();
     this.loadFavorites();
+    this.checkPaymentStatus();
   }
 
   setSearchMode(mode: 'simple' | 'advanced'): void {
@@ -511,5 +514,18 @@ export class HomePageComponent implements OnInit {
         this.toastService.showError('Failed to remove from favorites');
       },
     });
+  }
+  checkPaymentStatus(): void {
+    const paymentStatus = this.activeroute.snapshot.queryParamMap.get('paymentStatus');
+
+    if (!paymentStatus) {
+      return;
+    }
+
+    if (paymentStatus.toLowerCase() === 'success') {
+      this.toastService.showSuccess('Payment successful');
+    } else if (paymentStatus.toLowerCase() === 'canceled') {
+      this.toastService.showError('PAyment canceled, please try again');
+    }
   }
 }
