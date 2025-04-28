@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
@@ -31,19 +31,26 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FavoritePropertiesService } from '../../services/favorite-properties.service';
 import { ISmartSearchReq } from '../../models/api/request/ismartSearch-req';
 import { ISmartSearchRes } from '../../models/api/response/ismartSearch-res';
+import { IFavoriteProperty } from '../../models/domain/ifaviorate-property';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, LucideAngularModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FontAwesomeModule,
+    LucideAngularModule,
+    RouterModule,
+  ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   icon = {
     heart: Heart,
   };
@@ -73,7 +80,7 @@ export class HomePageComponent {
   stringAiSearch: string | null = null;
   // pagination variables-----------------------------------
   currentPage: number = 1;
-  itemsPerPage: number = 0;
+  itemsPerPage: number = 8;
   totalItems: number = 0;
   Math = Math;
 
@@ -111,16 +118,22 @@ export class HomePageComponent {
     city: faCity,
   };
 
+  private favoritePropertyIds: string[] = [];
+  private isFetchingFavorites = false;
+  isLoadingProperties: boolean = true;
+
   constructor(
     private propertyService: PropertyService,
     private route: Router,
     private favouriteService: FavoritePropertiesService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getPropertyTypes();
     this.getAllProperty();
+    this.loadFavorites();
   }
 
   setSearchMode(mode: 'simple' | 'advanced'): void {
@@ -181,30 +194,37 @@ export class HomePageComponent {
   }
 
   getAllProperty(): void {
-    this.propertyService.getAllProperty().subscribe({
-      next: (response: HttpResponse<IpropertyRes>) => {
-        if (response.status === 200 && response.body) {
-          this.property = response.body.items.map(prop => ({
-            ...prop,
-            distanceFromMe: this.getDistanceFromLatLonInKm(
-              this.userLat,
-              this.userLon,
-              prop.latitude,
-              prop.longitude
-            ).toFixed(1),
-          }));
-          this.totalItems = response.body.metaData.total;
-          this.itemsPerPage = response.body.metaData.pageSize;
-          this.currentPage = response.body.metaData.page;
-        } else {
-          this.handlePropertyerror('Invalid Loading Property');
-        }
-      },
-      error: error => {
-        console.error('Error fetching property:', error);
-        this.handlePropertyerror('Failed to load property');
-      },
-    });
+    this.isLoadingProperties = true;
+    this.propertyService
+      .getAllProperty({
+        page: this.currentPage,
+        pageSize: this.itemsPerPage,
+      })
+      .subscribe({
+        next: (response: HttpResponse<IpropertyRes>) => {
+          this.isLoadingProperties = false;
+          if (response.status === 200 && response.body) {
+            this.property = response.body.items.map(prop => ({
+              ...prop,
+              distanceFromMe: this.getDistanceFromLatLonInKm(
+                this.userLat,
+                this.userLon,
+                prop.latitude,
+                prop.longitude
+              ).toFixed(1),
+            }));
+            this.totalItems = response.body.metaData.total;
+            this.currentPage = response.body.metaData.page;
+          } else {
+            this.handlePropertyerror('Invalid Loading Property');
+          }
+        },
+        error: error => {
+          this.isLoadingProperties = false;
+          console.error('Error fetching property:', error);
+          this.handlePropertyerror('Failed to load property');
+        },
+      });
   }
 
   handlePropertyerror(message: string): void {
@@ -264,9 +284,46 @@ export class HomePageComponent {
     this.allProperties = this.property.slice(startIndex, endIndex);
   }
 
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  getPages(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show max 5 page numbers at a time
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+
+    let startPage = Math.max(1, this.currentPage - halfVisible);
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > this.totalPages) {
+      endPage = this.totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
   onPageChange(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) return;
+
     this.currentPage = pageNumber;
-    this.updatePageData();
+
+    // Fetch new data for the page (server-side pagination)
+    this.getAllProperty();
+
+    // Scroll to top of results
+    this.scrollToResults();
+  }
+  private scrollToResults(): void {
+    const cardsElement = document.getElementById('cards');
+    if (cardsElement) {
+      cardsElement.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   navigateToProperty(propertyId: string): void {
@@ -274,7 +331,11 @@ export class HomePageComponent {
   }
 
   searchProperties(): void {
-    const queryParams: any = {};
+    this.isLoadingProperties = true;
+    const queryParams: any = {
+      page: this.currentPage,
+      pageSize: this.itemsPerPage,
+    };
 
     // Add location if it's available
     if (this.LocationName) {
@@ -320,6 +381,7 @@ export class HomePageComponent {
     console.log('Iam in search properties');
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
+        this.isLoadingProperties = false;
         if (response.status === 200 && response.body) {
           console.log(response.body.items);
           this.property = response.body.items.map(prop => ({
@@ -332,13 +394,13 @@ export class HomePageComponent {
             ).toFixed(1),
           }));
           this.totalItems = response.body.metaData.total;
-          this.itemsPerPage = response.body.metaData.pageSize;
           this.currentPage = response.body.metaData.page;
         } else {
           this.handlePropertyerror('Invalid search result');
         }
       },
       error: error => {
+        this.isLoadingProperties = false;
         console.error('Search error:', error);
         this.handlePropertyerror('Failed to search properties');
       },
@@ -347,9 +409,11 @@ export class HomePageComponent {
 
   SmartSearch(): void {
     if (this.stringAiSearch) {
+      this.isLoadingProperties = true;
       console.log('Smart Search:', this.stringAiSearch);
       this.propertyService.smartSearch(this.stringAiSearch).subscribe({
         next: (response: HttpResponse<ISmartSearchRes>) => {
+          this.isLoadingProperties = false;
           if (response.status === 200 && response.body) {
             console.log(response.body.items);
             this.property = response.body.items.map(prop => ({
@@ -361,11 +425,14 @@ export class HomePageComponent {
                 prop.longitude
               ).toFixed(1),
             }));
+            this.totalItems = response.body.metaData.total;
+            this.currentPage = response.body.metaData.page;
           } else {
             this.handlePropertyerror('Invalid Smart Search result');
           }
         },
         error: error => {
+          this.isLoadingProperties = false;
           console.error('Error during Smart Search:', error);
           this.handlePropertyerror('Failed to search properties');
         },
@@ -373,23 +440,76 @@ export class HomePageComponent {
     }
   }
 
-  addToFav(propertyId: string): void {
-    this.favouriteService.addToFavorites(propertyId).subscribe({
+  private loadFavorites(
+    page = 1,
+    accumulatedFavorites: IFavoriteProperty[] = []
+  ): void {
+    if (this.isFetchingFavorites) return;
+
+    this.isFetchingFavorites = true;
+    const pageSize = 100; // Adjust based on your API's max page size
+
+    this.favouriteService.getAll({ page, pageSize }).subscribe({
       next: response => {
-        this.toastService.showSuccess('Property added to favorites.');
+        this.isFetchingFavorites = false;
+
+        if (response?.items) {
+          const allFavorites = [...accumulatedFavorites, ...response.items];
+
+          // If we got a full page, there might be more favorites
+          if (response.items.length === pageSize) {
+            this.loadFavorites(page + 1, allFavorites);
+          } else {
+            // We've fetched all favorites
+            this.favoritePropertyIds = allFavorites.map(fav => fav.propertyId);
+          }
+        }
       },
       error: error => {
-        if (error.status === 409) {
-          // If the property has already been added to favorites
-          this.toastService.showError(
-            'You already added this property to your favorites before.'
-          );
-        } else {
-          console.error('Failed to add to favorites:', error);
-          this.toastService.showError(
-            'Failed to add to favorites. Please try again.'
-          );
-        }
+        this.isFetchingFavorites = false;
+        console.error('Error loading favorites:', error);
+      },
+    });
+  }
+
+  isFavorite(propertyId: string): boolean {
+    return this.favoritePropertyIds.includes(propertyId);
+  }
+
+  toggleFavorite(event: Event, propertyId: string): void {
+    event.stopPropagation();
+
+    if (this.isFavorite(propertyId)) {
+      this.removeFromFavorites(propertyId);
+    } else {
+      this.addToFavorites(propertyId);
+    }
+  }
+
+  addToFavorites(propertyId: string): void {
+    this.favouriteService.addToFavorites(propertyId).subscribe({
+      next: () => {
+        this.favoritePropertyIds.push(propertyId);
+        this.toastService.showSuccess('Added to favorites');
+      },
+      error: error => {
+        console.error('Error adding favorite:', error);
+        this.toastService.showError('Failed to add to favorites');
+      },
+    });
+  }
+
+  removeFromFavorites(propertyId: string): void {
+    this.favouriteService.removeFromFavorites(propertyId).subscribe({
+      next: () => {
+        this.favoritePropertyIds = this.favoritePropertyIds.filter(
+          id => id !== propertyId
+        );
+        this.toastService.showSuccess('Removed from favorites');
+      },
+      error: error => {
+        console.error('Error removing favorite:', error);
+        this.toastService.showError('Failed to remove from favorites');
       },
     });
   }

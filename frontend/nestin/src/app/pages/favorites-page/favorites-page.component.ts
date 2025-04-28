@@ -4,7 +4,7 @@ import { IFavoriteProperty } from '../../models/domain/ifaviorate-property';
 import { FavoritePropertiesService } from '../../services/favorite-properties.service';
 import { IGetFavoritePropertiesRes } from '../../models/api/response/iget-favorite-properties-res';
 import { IGetFavoritePropertiesReq } from '../../models/api/request/iget-favorite-properties-req';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -22,12 +22,15 @@ export class FavoritesPageComponent {
 
   properties: IFavoriteProperty[] = [];
   currentPage = 1;
-  itemsPerPage = 6;
+  itemsPerPage = 8;
   totalItems = 0;
   totalPages = 0;
   isLoading = true;
 
-  constructor(private favoritesService: FavoritePropertiesService) {}
+  constructor(
+    private favoritesService: FavoritePropertiesService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
