@@ -15,8 +15,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'property/:id', component: PropertyInfoComponent },
-      { path: 'bookingHistory', component: BookingHistoryComponent },
-      { path:'booking',component:BookingPageComponent},
+    
       
     ],
   },
@@ -30,6 +29,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/favorites-page/favorites-page.component').then(
             m => m.FavoritesPageComponent
+          ),
+      },
+      {
+        path: 'bookingHistory',
+        loadComponent: () =>
+          import('./pages/booking-history/booking-history.component').then(
+            m => m.BookingHistoryComponent
+          ),
+      },
+      {
+        path: 'booking',
+        loadComponent: () =>
+          import('./pages/booking-page/booking-page.component').then(
+            m => m.BookingPageComponent
           ),
       },
     ],
