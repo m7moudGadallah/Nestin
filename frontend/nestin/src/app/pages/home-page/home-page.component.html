@@ -255,9 +255,9 @@
             box-shadow 0.2s ease;
         ">
         <button
-          class="btn p-0 position-absolute top-0 end-0 me-2 mt-2 my-icon bg-transparent border-0 z-2 favorite"
+          class="btn p-0 position-absolute top-0 end-0 me-2 mt-2 favorite-btn bg-transparent border-0 z-2"
           (click)="addToFav(prop.id)">
-          <lucide-icon [name]="icon.heart" class="text-light"></lucide-icon>
+          <lucide-icon [name]="icon.heart"></lucide-icon>
         </button>
         <div
           [id]="'carousel-' + prop.id"
@@ -271,7 +271,7 @@
               [class.active]="i === 0">
               <img
                 [src]="photo.photoUrl"
-                class="d-block w-100 h-100 object-fit-cover rounded-4"
+                class="d-block w-100 h-100 object-fit-cover"
                 [alt]="'Property ' + prop.id + ' photo ' + (i + 1)" />
             </div>
           </div>

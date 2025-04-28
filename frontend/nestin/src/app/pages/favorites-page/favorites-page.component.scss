@@ -17,13 +17,19 @@
   object-fit: cover;
 }
 
-.my-icon {
+.favorite-btn  {
   z-index: 2;
 
-  color: var(--bs-primary);
+  color: var(--bs-light);
 
   ::ng-deep svg {
-    fill: currentColor;
+    fill: var(--bs-gray-600);
+  }
+
+  &.active {
+    ::ng-deep svg {
+      fill: var(--bs-primary);
+    }
   }
 
   transition: all 0.2s ease;

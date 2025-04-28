@@ -113,8 +113,6 @@ $carousel-control-margin: 6px;
 .carousel-indicators {
   position: absolute;
   bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 3;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -139,14 +137,24 @@ $carousel-control-margin: 6px;
 }
 
 // Favorite Heart
-.favorite {
+.favorite-btn {
+  z-index: 2;
+
+  color: var(--bs-light);
+
   ::ng-deep svg {
-    fill: var(--bs-gray-700);
+    fill: var(--bs-gray-600);
   }
 
   &.active {
     ::ng-deep svg {
       fill: var(--bs-primary);
     }
+  }
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.25);
   }
 }
