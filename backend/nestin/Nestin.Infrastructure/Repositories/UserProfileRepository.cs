@@ -3,6 +3,7 @@ using Nestin.Core.Dtos.UserProfilesDto;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
+using Nestin.Core.Shared;
 using Nestin.Infrastructure.Data;
 
 namespace Nestin.Infrastructure.Repositories
@@ -64,6 +65,57 @@ namespace Nestin.Infrastructure.Repositories
         public void Update(UserProfile userProfile)
         {
             _dbContext.Update(userProfile);
+        }
+
+        public async Task<PaginatedResult<UserProfileDto>> GetFilteredProfilesAsync(UserProfileQueryParamsDto queryDto)
+        {
+            var query = _dbContext.UserProfiles
+                .Include(u => u.AppUser)
+                    .ThenInclude(u => u.Roles)
+                .Include(u => u.Country)
+                .Include(u => u.Photo)
+                .AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(queryDto.UserId))
+            {
+                query = query.Where(x => x.UserId == queryDto.UserId);
+            }
+            else if (!string.IsNullOrEmpty(queryDto.Email))
+            {
+                query = query.Where(x => x.AppUser.Email == queryDto.Email);
+            }
+            else if (!string.IsNullOrEmpty(queryDto.UserName))
+            {
+                query = query.Where(x => x.AppUser.UserName == queryDto.UserName);
+            }
+
+            if (!string.IsNullOrEmpty(queryDto.Role))
+            {
+                query = query.Where(x => x.AppUser.Roles.Any(r => r.Name == queryDto.Role));
+            }
+
+
+            var total = await query.CountAsync();
+
+            query = query
+                .Skip(queryDto.CalcSkippedItems())
+                .Take(queryDto.PageSize);
+
+            var items = await query
+                .Select(x => x.ToDto())
+                .ToListAsync();
+
+            return new PaginatedResult<UserProfileDto>
+            {
+                Items = items,
+                MetaData = new PaginationMetaData
+                {
+                    Page = queryDto.Page,
+                    PageSize = queryDto.PageSize,
+                    Total = total
+                }
+            };
         }
     }
 }

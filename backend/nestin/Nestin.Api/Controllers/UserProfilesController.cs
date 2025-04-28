@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nestin.Core.Dtos.UserProfilesDto;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
+using Nestin.Core.Shared;
 
 namespace Nestin.Api.Controllers
 {
@@ -15,6 +16,18 @@ namespace Nestin.Api.Controllers
             _serviceFactory = serviceFactory;
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [EndpointSummary("Get all user profiles (For Admins only).")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<UserProfileDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAll([FromQuery] UserProfileQueryParamsDto dto)
+        {
+            var result = await _unitOfWork.UserProfileRepository.GetFilteredProfilesAsync(dto);
+
+            return Ok(result);
+        }
 
         [HttpGet("me")]
         [EndpointSummary("Get my profile Info.")]
@@ -28,7 +41,6 @@ namespace Nestin.Api.Controllers
             return Ok(userProfile);
 
         }
-
 
         [HttpPatch("me")]
         [EndpointSummary("Update my profile Info.")]
