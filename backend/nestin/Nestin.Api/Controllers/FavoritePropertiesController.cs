@@ -29,7 +29,7 @@ namespace Nestin.Api.Controllers
         }
 
 
-        [HttpDelete("{propertyId:guid}")]
+        [HttpDelete("{propertyId}")]
         [EndpointSummary("Delete exiting property favirate.")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
