@@ -11,9 +11,11 @@ namespace Nestin.Api.Controllers
     public class HostUpgradeRequestsController : BaseController
     {
         private IServiceFactory _serviceFactory;
-        public HostUpgradeRequestsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory) : base(unitOfWork)
+        private IIdentityFactory _identityFactory;
+        public HostUpgradeRequestsController(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IIdentityFactory identityFactory) : base(unitOfWork)
         {
             _serviceFactory = serviceFactory;
+            _identityFactory = identityFactory;
         }
 
         [HttpPost]
@@ -156,6 +158,13 @@ namespace Nestin.Api.Controllers
 
             if (request is null)
                 return NotFoundResponse();
+
+            var user = await _identityFactory.UserManager.FindByIdAsync(request.UserId);
+            var roleResult = await _identityFactory.UserManager.AddToRoleAsync(user, "Host");
+            if (!roleResult.Succeeded)
+            {
+                throw new BadHttpRequestException($"Failed to add user to Host role: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+            }
 
             request.ApprovedBy = adminId;
             request.Status = HostUgradeRequestStatus.Approved;
