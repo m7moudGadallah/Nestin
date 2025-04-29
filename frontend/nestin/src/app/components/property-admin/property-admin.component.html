@@ -1,0 +1,80 @@
+<div class="container py-8" id="cards" >
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let prop of property">
+        <div class="card h-100 border-0 shadow rounded-4 overflow-hidden position-relative">
+          <!-- Image container with ratio -->
+          <div class="ratio ratio-4x3 position-relative">
+            <img [src]="prop.photos[0]?.photoUrl" class="card-img-top object-fit-cover rounded-top-4" alt="Property photo" />
+            
+            <!-- Action Icons -->
+          <!-- <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-2"> -->
+            <button class="btn p-1 shadow-sm border-0 bg-transparent dltBtn" (click)="onDelete(prop.id)" title="Delete">
+              <fa-icon [icon]="icons['trash']" class="text-danger"></fa-icon>
+            </button>
+
+            <button class="btn  p-1 shadow-sm border-0 bg-transparent pinBtn" (click)="onPin(prop.id)" title="Pin">
+              <fa-icon [icon]="icons['pin']" class="text-primary"></fa-icon>
+            </button>
+
+            
+          <!-- </div> -->
+          </div>
+  
+          <!-- Card Body -->
+          <div class="card-body d-flex flex-column justify-content-between p-3">
+            <!-- Title and Info -->
+            <div class="mb-2">
+              <h6 class="card-title fw-semibold mb-1 text-truncate" style="font-size: 1rem">
+                {{ prop.title }}
+              </h6>
+              <p class="card-text text-muted small mb-0" style="line-height: 1.4;">
+                {{ prop.distanceFromMe }} km away <br />
+                Jun 16 - 21
+              </p>
+            </div>
+  
+            <!-- Price -->
+             <h6 class="fw-bold text-dark mb-0" style="font-size: 0.95rem;">
+              {{ prop.pricePerNight }} ج.م / night
+            </h6>
+            <button class="btn p-1 shadow-sm border-0 bg-transparent activeBtn" (click)="toggleActive(prop)" title="Toggle Active">
+                <fa-icon [icon]="prop.isActive ? icons['check'] : icons['times']" [ngClass]="prop.isActive ? 'text-success' : 'text-secondary'"></fa-icon>
+              </button>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+
+  <!-- Pagination -->
+ <div class="pagination-container text-center mt-4">
+    <ul class="pagination justify-content-center">
+      <li *ngIf="currentPage > 1" class="page-item">
+        <button (click)="onPageChange(currentPage - 1)" class="page-link rounded-pill">
+          <fa-icon *ngIf="icons && icons['chevron-left']" [icon]="icons['chevron-left']"></fa-icon>
+        </button>
+      </li>
+  
+      <li *ngFor="let page of [].constructor(Math.ceil(totalItems / 2)); let i = index" class="page-item">
+        <button
+          (click)="onPageChange(i + 1)"
+          [class.active]="i + 1 === currentPage"
+          class="page-link rounded-pill px-3"
+        >
+          {{ i + 1 }}
+        </button>
+      </li>
+  
+      <li *ngIf="currentPage < Math.ceil(totalItems / 2)" class="page-item">
+        <button (click)="onPageChange(currentPage + 1)" class="page-link rounded-pill">
+          <fa-icon *ngIf="icons && icons['chevron-right']" [icon]="icons['chevron-right']"></fa-icon>
+        </button>
+      </li>
+    </ul>
+  </div> 
+
+
+
+
+   

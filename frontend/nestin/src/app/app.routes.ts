@@ -10,6 +10,8 @@ import { ProfileComponent } from './pages/profile-page/profile/profile.component
 import { UpdateProfileComponent } from './pages/profile-page/update-profile/update-profile.component';
 import { HostUpgradeAprovalComponent } from './pages/host-upgrade-approval/host-upgrade-aproval.component';
 import { AddPropertyComponent } from './pages/add-property/add-property.component';
+import { UsersAdminComponent } from './components/users-admin/users-admin.component';
+import { PropertyAdminComponent } from './components/property-admin/property-admin.component';
 
 export const routes: Routes = [
   {
@@ -70,6 +72,7 @@ export const routes: Routes = [
           )
         
       },
+
       {
         path:'hostApproval',
         loadComponent: () =>
@@ -85,6 +88,14 @@ export const routes: Routes = [
             m => m.AddPropertyComponent
           ),
       },
+       { path:'admin', loadComponent:()=>
+        import('./pages/admin/admin.component').then(m=>m.AdminComponent),
+        children:[
+          {path:'',redirectTo:'users',pathMatch:'full'},
+          {path:'users',component:UsersAdminComponent},
+          {path:'properties',component:PropertyAdminComponent},
+          {path:'requests',component:HostUpgradeAprovalComponent}
+        ] }
      
     ],
   },

@@ -146,7 +146,7 @@ export class ProfilePromptComponent implements OnInit {
 }
 
 handleAdmintAction(): void {
-  this.router.navigate(['/hostApproval']);
+  this.router.navigate(['/admin']);
 }
 
 showButtonForHost(): boolean {

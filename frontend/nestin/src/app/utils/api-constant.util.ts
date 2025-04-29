@@ -58,5 +58,8 @@ export class ApiConstant {
   public static GuestType = {
     GuestType: `${ApiConstant.baseUrl}/GuestTypes`,
   };
+  public static user = {
+    getAllUsers: `${ApiConstant.baseUrl}/UserProfiles`,
+  };
   // Add other grouped APIs here
 }
