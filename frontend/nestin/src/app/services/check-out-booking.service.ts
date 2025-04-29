@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient , HttpHeaders, HttpResponse} from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
-import { GetBookingsResponse } from '../models/api/request/iget-bookings';
+import { GetBookingsResponse, IGetBookingResponse } from '../models/api/request/iget-bookings';
 import { PropertyDetails } from '../models/api/request/iget-propertiesDetails';
 import { IProperty } from '../models/domain/iproperty';
 
@@ -16,6 +16,10 @@ export class CheckOutBookingService {
 
   getAllBookings(): Observable<HttpResponse<any>> {
     return this.http.get<any>(ApiConstant.booking.getAllBookings, { observe:'response', withCredentials: true })
+}
+getBookingById(id: string): Observable<IGetBookingResponse> {
+  const url = ApiConstant.booking.getBookingById.replace('{id}', id);
+  return this.http.get<IGetBookingResponse>(url, { withCredentials: true });
 }
   createBooking(bookingData: any): Observable<any> {
     return this.http.post(ApiConstant.booking.createBooking, bookingData, { withCredentials: true });

@@ -54,5 +54,9 @@ export interface GetBookingsResponse {
     page: number;
     pageSize: number;
     total: number;
-  };
-}
+  };}
+
+  export interface IGetBookingResponse extends Bookings {
+   
+    };
+  

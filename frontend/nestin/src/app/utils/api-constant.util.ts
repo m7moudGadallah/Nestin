@@ -1,5 +1,5 @@
 export class ApiConstant {
-  public static baseUrl = 'https://localhost:7026/api/v1';
+  public static baseUrl = 'https://a133-197-43-161-110.ngrok-free.app/api/v1';
 
   public static AccountsApi = {
     register: `${ApiConstant.baseUrl}/accounts/register`,
@@ -31,6 +31,7 @@ export class ApiConstant {
   };
   public static booking = {
     getAllBookings: `${ApiConstant.baseUrl}/Bookings`,
+    getBookingById: `${ApiConstant.baseUrl}/Bookings/{id}`,
     createBooking: `${ApiConstant.baseUrl}/Bookings`,
     cancelBooking: `${ApiConstant.baseUrl}/Bookings/{id}/cancel`,
   };

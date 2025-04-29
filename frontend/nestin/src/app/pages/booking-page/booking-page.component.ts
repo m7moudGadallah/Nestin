@@ -91,6 +91,7 @@ export class BookingPageComponent implements OnInit{
 
   //----------------------------------Api Integration----------------------------------------------------------
   bookingId : string;
+  
   constructor (
                 private checkOutService:CheckOutBookingService,
                 private route:ActivatedRoute,
@@ -105,7 +106,8 @@ export class BookingPageComponent implements OnInit{
   selectedBookingId: string = '';
   ngOnInit(): void {
     this.loadBookings();
-    this.loadAllProperties();
+    // this.loadAllProperties();
+
   }
   loadBookings(): void {
     this.checkOutService.getAllBookings().subscribe({
@@ -124,21 +126,32 @@ export class BookingPageComponent implements OnInit{
       }
     });
   }
-  loadAllProperties(): void {
-    this.checkOutService.getAllProperties().subscribe({
+  loadBookingDetails(bookingId: string): void {
+    this.checkOutService.getBookingById(bookingId).subscribe({
       next: (response) => {
-        const properties = response.items; 
-        if (properties.length > 0) {
-          this.propertyId = properties[0].id; 
-          this.loadPropertyDetails(this.propertyId); 
-        }
-      },
+this.bookings=[response];    
+this.loadPropertyDetails(this.bookings[0].property.id);
+  },
       error: (err) => {
-        console.error('Error loading properties', err);
-        alert('Failed to load properties');
+        console.error('Error loading booking details', err);
       }
     });
   }
+  // loadAllProperties(): void {
+  //   this.checkOutService.getAllProperties().subscribe({
+  //     next: (response) => {
+  //       const properties = response.items; 
+  //       if (properties.length > 0) {
+  //         this.propertyId = properties[0].id; 
+  //         this.loadPropertyDetails(this.propertyId); 
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading properties', err);
+       
+  //     }
+  //   });
+  // }
   loadPropertyDetails(propertyId: string) {
     this.checkOutService.getPropertyDetails(propertyId).subscribe({
       next: (response) => {

@@ -222,9 +222,10 @@
           </div>
       </div>
       </div>
-      <button type="button" class="confirm-btn" (click)=" onCheckOut()">Confirm and pay</button>
+      @if(bookings[0].status.toLowerCase() === 'pending'){
+      <button type="button" class="confirm-btn" (click)=" onCheckOut()" >Confirm and pay</button>
  
- 
+      }
  
  
  

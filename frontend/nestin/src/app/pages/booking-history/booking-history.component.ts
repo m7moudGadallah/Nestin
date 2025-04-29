@@ -6,10 +6,11 @@ import { CheckOutBookingService } from '../../services/check-out-booking.service
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastService } from '../../services/toast.service';
 import { IRole } from '../../models/domain/iuser-role';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-booking-history',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterModule],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.scss'
 })
@@ -20,7 +21,7 @@ export class BookingHistoryComponent implements OnInit{
   searchQuery: string = '';
   filteredBookingsSearch : Bookings[] = [];
   userRole: string | undefined;
-  constructor(private checkOutService: CheckOutBookingService, private toastService: ToastService) {}
+  constructor(private checkOutService: CheckOutBookingService, private toastService: ToastService,private route:Router) {}
 
   ngOnInit(): void {
     this.loadBookings();
