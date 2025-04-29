@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nestin.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Nestin.Infrastructure.Data;
 namespace Nestin.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429211637_AddingPropertySpaceSeed")]
+    partial class AddingPropertySpaceSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6073,218 +6076,113 @@ namespace Nestin.Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            PropertySpaceId = "daae3bd2-707e-4374-9b6c-5703f9789c7f",
+                            PropertySpaceId = "3f95f420-21d6-4b2b-b2ef-4b2c92a7f2e9",
                             PropertySpaceItemTypeId = 2,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 2,
-                            PropertySpaceId = "d20a85b2-4019-4714-a63e-e017b4be4e3e",
+                            PropertySpaceId = "96ab72d9-2e0d-42d3-a5e3-1eaafc99b3c3",
                             PropertySpaceItemTypeId = 2,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 3,
-                            PropertySpaceId = "325e05d6-cc5d-4140-b1bc-d96fc52d86b3",
+                            PropertySpaceId = "f84c1d56-cdb4-4ac4-8a4e-1c7f4d1f32a7",
                             PropertySpaceItemTypeId = 10,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 4,
-                            PropertySpaceId = "62b66c76-60d1-4b4b-8e97-bfd0338ea05a",
+                            PropertySpaceId = "6b631776-91e2-4b4c-bd37-cd82b9b4477d",
                             PropertySpaceItemTypeId = 7,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 5,
-                            PropertySpaceId = "b09ce60b-b66b-47df-9985-41d1e7f6b254",
+                            PropertySpaceId = "2450b4fc-b6b1-4b5e-a4e6-e9e297eeb8ff",
                             PropertySpaceItemTypeId = 4,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 6,
-                            PropertySpaceId = "726d598e-c948-41b6-8cc3-c7e1aa4a51e4",
+                            PropertySpaceId = "74f3f8db-0bfc-4c0b-b527-71a326e3f3e1",
                             PropertySpaceItemTypeId = 25,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 7,
-                            PropertySpaceId = "14a66729-9580-472b-9438-dfc7e2440c95",
+                            PropertySpaceId = "f65eb14d-4463-4fa9-a8c6-4b497e20d760",
                             PropertySpaceItemTypeId = 13,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 8,
-                            PropertySpaceId = "f8c7fef3-70f4-4650-baa6-f93db77dfd92",
+                            PropertySpaceId = "0ea8ad1a-78d3-4e4a-831f-fb268e372338",
                             PropertySpaceItemTypeId = 16,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 9,
-                            PropertySpaceId = "c8f09e6f-8c82-4026-b3ec-23be0a378a56",
+                            PropertySpaceId = "c9f0d1e3-54a3-4f03-8b69-c11f3bdf02a6",
                             PropertySpaceItemTypeId = 39,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 10,
-                            PropertySpaceId = "96f6a377-d586-44a2-acc7-fc45c10d999c",
+                            PropertySpaceId = "6a61a1b1-27fd-4f3f-9d8a-9db0b2c35f5e",
                             PropertySpaceItemTypeId = 42,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 11,
-                            PropertySpaceId = "1cc7112f-3bb5-4265-8e0a-b305274c0410",
+                            PropertySpaceId = "e5dc74e1-d3c0-4878-8e9c-c4dc10fdbf0f",
                             PropertySpaceItemTypeId = 18,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 12,
-                            PropertySpaceId = "6c67a41a-8274-4ad0-864e-20fd4866b2d4",
+                            PropertySpaceId = "e1de9d5c-8232-44cc-9abf-9c9a1f0a5e0f",
                             PropertySpaceItemTypeId = 12,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 13,
-                            PropertySpaceId = "846b07ee-bb17-4c94-82df-99f1f7643ea3",
+                            PropertySpaceId = "b038b3db-c74d-4d2d-89a6-1ddf5c9580df",
                             PropertySpaceItemTypeId = 5,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 14,
-                            PropertySpaceId = "1954cfa5-9c89-41a7-a6be-41c71b34efc9",
+                            PropertySpaceId = "961aa4f3-45dc-4933-a47b-cba57c1f726b",
                             PropertySpaceItemTypeId = 19,
                             Quantity = 3
                         },
                         new
                         {
                             Id = 15,
-                            PropertySpaceId = "c6ae89de-0d1a-4e5a-9230-8ef6617a3b53",
+                            PropertySpaceId = "87e0c991-e32c-4e9c-a780-96f5567a9bb1",
                             PropertySpaceItemTypeId = 7,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 16,
-                            PropertySpaceId = "49f23d20-c9ae-4a77-9734-1886d424cb77",
+                            PropertySpaceId = "ed9f2a7b-3e54-403e-b0ae-64ec33eec956",
                             PropertySpaceItemTypeId = 6,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 17,
-                            PropertySpaceId = "5eb1c7e5-efb6-4b3c-983f-d278c1c086e7",
-                            PropertySpaceItemTypeId = 8,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 18,
-                            PropertySpaceId = "9f5f9e6e-0d79-41ad-86a1-06cbff2d0e92",
-                            PropertySpaceItemTypeId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 19,
-                            PropertySpaceId = "30baf72d-9d00-4f3e-9405-2261d6f0dd76",
-                            PropertySpaceItemTypeId = 3,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 20,
-                            PropertySpaceId = "6b09c3a9-e319-45d0-a253-b5d6f4f9de3a",
-                            PropertySpaceItemTypeId = 9,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 21,
-                            PropertySpaceId = "d2e5f682-06d0-40e7-a1e7-002b958d8048",
-                            PropertySpaceItemTypeId = 11,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 22,
-                            PropertySpaceId = "29ac2c68-b4b4-45b8-918a-fbdf11660d7e",
-                            PropertySpaceItemTypeId = 14,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 23,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 15,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 24,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 12,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 25,
-                            PropertySpaceId = "14a66729-9580-472b-9438-dfc7e2440c95",
-                            PropertySpaceItemTypeId = 3,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 26,
-                            PropertySpaceId = "5eb1c7e5-efb6-4b3c-983f-d278c1c086e7",
-                            PropertySpaceItemTypeId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 27,
-                            PropertySpaceId = "9f5f9e6e-0d79-41ad-86a1-06cbff2d0e92",
-                            PropertySpaceItemTypeId = 2,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 28,
-                            PropertySpaceId = "1954cfa5-9c89-41a7-a6be-41c71b34efc9",
-                            PropertySpaceItemTypeId = 9,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 29,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 6,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 30,
-                            PropertySpaceId = "6c67a41a-8274-4ad0-864e-20fd4866b2d4",
-                            PropertySpaceItemTypeId = 5,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 31,
-                            PropertySpaceId = "6b09c3a9-e319-45d0-a253-b5d6f4f9de3a",
-                            PropertySpaceItemTypeId = 7,
                             Quantity = 1
                         });
                 });

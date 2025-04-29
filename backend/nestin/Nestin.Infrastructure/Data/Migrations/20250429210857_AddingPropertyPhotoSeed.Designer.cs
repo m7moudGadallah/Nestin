@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nestin.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Nestin.Infrastructure.Data;
 namespace Nestin.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429210857_AddingPropertyPhotoSeed")]
+    partial class AddingPropertyPhotoSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5851,195 +5854,131 @@ namespace Nestin.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "daae3bd2-707e-4374-9b6c-5703f9789c7f",
-                            IsShared = false,
-                            Name = "Bedroom",
+                            Id = "3f95f420-21d6-4b2b-b2ef-4b2c92a7f2e9",
+                            IsShared = true,
+                            Name = "Bedroom 1",
                             PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
                             PropertySpaceTypeId = 1
                         },
                         new
                         {
-                            Id = "d20a85b2-4019-4714-a63e-e017b4be4e3e",
-                            IsShared = true,
-                            Name = "Kitchen",
+                            Id = "96ab72d9-2e0d-42d3-a5e3-1eaafc99b3c3",
+                            IsShared = false,
+                            Name = "Bedroom 2",
                             PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
-                            PropertySpaceTypeId = 3
-                        },
-                        new
-                        {
-                            Id = "325e05d6-cc5d-4140-b1bc-d96fc52d86b3",
-                            IsShared = true,
-                            Name = "Living Room",
-                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
-                            PropertySpaceTypeId = 4
-                        },
-                        new
-                        {
-                            Id = "62b66c76-60d1-4b4b-8e97-bfd0338ea05a",
-                            IsShared = false,
-                            Name = "Bathroom",
-                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
-                            PropertySpaceTypeId = 2
-                        },
-                        new
-                        {
-                            Id = "b09ce60b-b66b-47df-9985-41d1e7f6b254",
-                            IsShared = true,
-                            Name = "Balcony",
-                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
-                            PropertySpaceTypeId = 9
-                        },
-                        new
-                        {
-                            Id = "726d598e-c948-41b6-8cc3-c7e1aa4a51e4",
-                            IsShared = true,
-                            Name = "Dining Room",
-                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
-                            PropertySpaceTypeId = 5
-                        },
-                        new
-                        {
-                            Id = "14a66729-9580-472b-9438-dfc7e2440c95",
-                            IsShared = false,
-                            Name = "Office",
-                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
-                            PropertySpaceTypeId = 6
-                        },
-                        new
-                        {
-                            Id = "f8c7fef3-70f4-4650-baa6-f93db77dfd92",
-                            IsShared = true,
-                            Name = "Game Room",
-                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
-                            PropertySpaceTypeId = 14
-                        },
-                        new
-                        {
-                            Id = "c8f09e6f-8c82-4026-b3ec-23be0a378a56",
-                            IsShared = false,
-                            Name = "Storage",
-                            PropertyId = "4b04a76a-1608-4a8f-b09c-8d9043b83e16",
-                            PropertySpaceTypeId = 16
-                        },
-                        new
-                        {
-                            Id = "96f6a377-d586-44a2-acc7-fc45c10d999c",
-                            IsShared = true,
-                            Name = "Library",
-                            PropertyId = "2ab6e4d1-79b9-4dba-9109-22ef75a29ff1",
-                            PropertySpaceTypeId = 6
-                        },
-                        new
-                        {
-                            Id = "1cc7112f-3bb5-4265-8e0a-b305274c0410",
-                            IsShared = true,
-                            Name = "Gym",
-                            PropertyId = "ef3b2df2-e539-4cb9-8eb6-4eeb833e694c",
-                            PropertySpaceTypeId = 6
-                        },
-                        new
-                        {
-                            Id = "6c67a41a-8274-4ad0-864e-20fd4866b2d4",
-                            IsShared = true,
-                            Name = "Theater",
-                            PropertyId = "3c0e361a-51df-4e03-b8d0-2d7601aa60f6",
-                            PropertySpaceTypeId = 15
-                        },
-                        new
-                        {
-                            Id = "846b07ee-bb17-4c94-82df-99f1f7643ea3",
-                            IsShared = true,
-                            Name = "Pantry",
-                            PropertyId = "c5c0d4db-b048-4ee4-8835-344900fd35b2",
-                            PropertySpaceTypeId = 11
-                        },
-                        new
-                        {
-                            Id = "1954cfa5-9c89-41a7-a6be-41c71b34efc9",
-                            IsShared = false,
-                            Name = "Sunroom",
-                            PropertyId = "0bb50f31-e322-4b76-97dd-6a7fcf585d33",
-                            PropertySpaceTypeId = 12
-                        },
-                        new
-                        {
-                            Id = "c6ae89de-0d1a-4e5a-9230-8ef6617a3b53",
-                            IsShared = false,
-                            Name = "Hallway",
-                            PropertyId = "a555515a-ff8a-4741-b0a4-db9be729198e",
-                            PropertySpaceTypeId = 10
-                        },
-                        new
-                        {
-                            Id = "188b8c66-66fa-42a2-944c-4fd3f048250c",
-                            IsShared = false,
-                            Name = "Closet",
-                            PropertyId = "c10d2d46-869a-46bc-a46d-90bdd958c252",
-                            PropertySpaceTypeId = 13
-                        },
-                        new
-                        {
-                            Id = "49f23d20-c9ae-4a77-9734-1886d424cb77",
-                            IsShared = true,
-                            Name = "Laundry Room",
-                            PropertyId = "1adca40b-b8ff-4cea-b6e4-8e5f40d29c08",
-                            PropertySpaceTypeId = 7
-                        },
-                        new
-                        {
-                            Id = "5eb1c7e5-efb6-4b3c-983f-d278c1c086e7",
-                            IsShared = true,
-                            Name = "Reception",
-                            PropertyId = "294e2751-203b-4beb-b21e-0bb96f082d7c",
-                            PropertySpaceTypeId = 8
-                        },
-                        new
-                        {
-                            Id = "9f5f9e6e-0d79-41ad-86a1-06cbff2d0e92",
-                            IsShared = false,
-                            Name = "Guest Room",
-                            PropertyId = "06dbae08-bc6b-4ca6-9162-3213784b9971",
                             PropertySpaceTypeId = 1
                         },
                         new
                         {
-                            Id = "30baf72d-9d00-4f3e-9405-2261d6f0dd76",
+                            Id = "f84c1d56-cdb4-4ac4-8a4e-1c7f4d1f32a7",
                             IsShared = true,
-                            Name = "Study",
-                            PropertyId = "f1e8be41-4fd5-47e4-8960-12d8f4afc273",
-                            PropertySpaceTypeId = 6
+                            Name = "Living Room 3",
+                            PropertyId = "cc4e48ea-ca54-4d32-a448-3c2c9d14f936",
+                            PropertySpaceTypeId = 4
                         },
                         new
                         {
-                            Id = "6b09c3a9-e319-45d0-a253-b5d6f4f9de3a",
+                            Id = "6b631776-91e2-4b4c-bd37-cd82b9b4477d",
                             IsShared = true,
-                            Name = "Porch",
-                            PropertyId = "763e6c5f-1ad1-4071-b0e6-55e924624198",
+                            Name = "Kitchen 1",
+                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
+                            PropertySpaceTypeId = 3
+                        },
+                        new
+                        {
+                            Id = "2450b4fc-b6b1-4b5e-a4e6-e9e297eeb8ff",
+                            IsShared = false,
+                            Name = "Bathroom 1",
+                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
+                            PropertySpaceTypeId = 2
+                        },
+                        new
+                        {
+                            Id = "74f3f8db-0bfc-4c0b-b527-71a326e3f3e1",
+                            IsShared = true,
+                            Name = "Balcony",
+                            PropertyId = "d8eecb1f-5583-4d64-a7dc-5aef5e2c498f",
                             PropertySpaceTypeId = 9
                         },
                         new
                         {
-                            Id = "d2e5f682-06d0-40e7-a1e7-002b958d8048",
-                            IsShared = false,
-                            Name = "Workshop",
-                            PropertyId = "efd964ab-dceb-4b96-b113-665c5684a102",
-                            PropertySpaceTypeId = 13
+                            Id = "f65eb14d-4463-4fa9-a8c6-4b497e20d760",
+                            IsShared = true,
+                            Name = "Dining Room",
+                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
+                            PropertySpaceTypeId = 5
                         },
                         new
                         {
-                            Id = "29ac2c68-b4b4-45b8-918a-fbdf11660d7e",
+                            Id = "0ea8ad1a-78d3-4e4a-831f-fb268e372338",
+                            IsShared = false,
+                            Name = "Office",
+                            PropertyId = "8e95f4b1-dc1d-4b4d-8102-09b7fbb88ec4",
+                            PropertySpaceTypeId = 6
+                        },
+                        new
+                        {
+                            Id = "c9f0d1e3-54a3-4f03-8b69-c11f3bdf02a6",
                             IsShared = true,
-                            Name = "Playroom",
-                            PropertyId = "52a8df7d-c0b2-4ee3-8369-9daed4885f9f",
+                            Name = "Game Room",
+                            PropertyId = "3e7f99ab-228a-4d90-91c4-6adf8c12e048",
                             PropertySpaceTypeId = 14
                         },
                         new
                         {
-                            Id = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
+                            Id = "6a61a1b1-27fd-4f3f-9d8a-9db0b2c35f5e",
                             IsShared = false,
-                            Name = "Utility Room",
-                            PropertyId = "c150e428-1c9a-43a2-be07-f4366875f1ce",
-                            PropertySpaceTypeId = 15
+                            Name = "Storage",
+                            PropertyId = "f1cc1b4c-b674-4a1a-89ee-5f7b4d44d2f7",
+                            PropertySpaceTypeId = 16
+                        },
+                        new
+                        {
+                            Id = "e5dc74e1-d3c0-4878-8e9c-c4dc10fdbf0f",
+                            IsShared = true,
+                            Name = "Library",
+                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
+                            PropertySpaceTypeId = 6
+                        },
+                        new
+                        {
+                            Id = "e1de9d5c-8232-44cc-9abf-9c9a1f0a5e0f",
+                            IsShared = true,
+                            Name = "Gym",
+                            PropertyId = "a43ecbfa-7b0a-4f6b-9c88-987be3c4e3d3",
+                            PropertySpaceTypeId = 6
+                        },
+                        new
+                        {
+                            Id = "b038b3db-c74d-4d2d-89a6-1ddf5c9580df",
+                            IsShared = false,
+                            Name = "Bathroom 1",
+                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
+                            PropertySpaceTypeId = 2
+                        },
+                        new
+                        {
+                            Id = "961aa4f3-45dc-4933-a47b-cba57c1f726b",
+                            IsShared = true,
+                            Name = "Laundry Room",
+                            PropertyId = "4e3d342-8e8d-4f1d-8123-2d09cb92b6a2",
+                            PropertySpaceTypeId = 7
+                        },
+                        new
+                        {
+                            Id = "87e0c991-e32c-4e9c-a780-96f5567a9bb1",
+                            IsShared = false,
+                            Name = "Kitchen 1",
+                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
+                            PropertySpaceTypeId = 3
+                        },
+                        new
+                        {
+                            Id = "ed9f2a7b-3e54-403e-b0ae-64ec33eec956",
+                            IsShared = false,
+                            Name = "Bathroom 2",
+                            PropertyId = "5ca2f710-3c1f-4966-a924-7bcdf5ce57aa",
+                            PropertySpaceTypeId = 2
                         });
                 });
 
@@ -6073,218 +6012,113 @@ namespace Nestin.Infrastructure.Data.Migrations
                         new
                         {
                             Id = 1,
-                            PropertySpaceId = "daae3bd2-707e-4374-9b6c-5703f9789c7f",
+                            PropertySpaceId = "3f95f420-21d6-4b2b-b2ef-4b2c92a7f2e9",
                             PropertySpaceItemTypeId = 2,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 2,
-                            PropertySpaceId = "d20a85b2-4019-4714-a63e-e017b4be4e3e",
+                            PropertySpaceId = "96ab72d9-2e0d-42d3-a5e3-1eaafc99b3c3",
                             PropertySpaceItemTypeId = 2,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 3,
-                            PropertySpaceId = "325e05d6-cc5d-4140-b1bc-d96fc52d86b3",
+                            PropertySpaceId = "f84c1d56-cdb4-4ac4-8a4e-1c7f4d1f32a7",
                             PropertySpaceItemTypeId = 10,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 4,
-                            PropertySpaceId = "62b66c76-60d1-4b4b-8e97-bfd0338ea05a",
+                            PropertySpaceId = "6b631776-91e2-4b4c-bd37-cd82b9b4477d",
                             PropertySpaceItemTypeId = 7,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 5,
-                            PropertySpaceId = "b09ce60b-b66b-47df-9985-41d1e7f6b254",
+                            PropertySpaceId = "2450b4fc-b6b1-4b5e-a4e6-e9e297eeb8ff",
                             PropertySpaceItemTypeId = 4,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 6,
-                            PropertySpaceId = "726d598e-c948-41b6-8cc3-c7e1aa4a51e4",
+                            PropertySpaceId = "74f3f8db-0bfc-4c0b-b527-71a326e3f3e1",
                             PropertySpaceItemTypeId = 25,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 7,
-                            PropertySpaceId = "14a66729-9580-472b-9438-dfc7e2440c95",
+                            PropertySpaceId = "f65eb14d-4463-4fa9-a8c6-4b497e20d760",
                             PropertySpaceItemTypeId = 13,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 8,
-                            PropertySpaceId = "f8c7fef3-70f4-4650-baa6-f93db77dfd92",
+                            PropertySpaceId = "0ea8ad1a-78d3-4e4a-831f-fb268e372338",
                             PropertySpaceItemTypeId = 16,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 9,
-                            PropertySpaceId = "c8f09e6f-8c82-4026-b3ec-23be0a378a56",
+                            PropertySpaceId = "c9f0d1e3-54a3-4f03-8b69-c11f3bdf02a6",
                             PropertySpaceItemTypeId = 39,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 10,
-                            PropertySpaceId = "96f6a377-d586-44a2-acc7-fc45c10d999c",
+                            PropertySpaceId = "6a61a1b1-27fd-4f3f-9d8a-9db0b2c35f5e",
                             PropertySpaceItemTypeId = 42,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 11,
-                            PropertySpaceId = "1cc7112f-3bb5-4265-8e0a-b305274c0410",
+                            PropertySpaceId = "e5dc74e1-d3c0-4878-8e9c-c4dc10fdbf0f",
                             PropertySpaceItemTypeId = 18,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 12,
-                            PropertySpaceId = "6c67a41a-8274-4ad0-864e-20fd4866b2d4",
+                            PropertySpaceId = "e1de9d5c-8232-44cc-9abf-9c9a1f0a5e0f",
                             PropertySpaceItemTypeId = 12,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 13,
-                            PropertySpaceId = "846b07ee-bb17-4c94-82df-99f1f7643ea3",
+                            PropertySpaceId = "b038b3db-c74d-4d2d-89a6-1ddf5c9580df",
                             PropertySpaceItemTypeId = 5,
                             Quantity = 1
                         },
                         new
                         {
                             Id = 14,
-                            PropertySpaceId = "1954cfa5-9c89-41a7-a6be-41c71b34efc9",
+                            PropertySpaceId = "961aa4f3-45dc-4933-a47b-cba57c1f726b",
                             PropertySpaceItemTypeId = 19,
                             Quantity = 3
                         },
                         new
                         {
                             Id = 15,
-                            PropertySpaceId = "c6ae89de-0d1a-4e5a-9230-8ef6617a3b53",
+                            PropertySpaceId = "87e0c991-e32c-4e9c-a780-96f5567a9bb1",
                             PropertySpaceItemTypeId = 7,
                             Quantity = 2
                         },
                         new
                         {
                             Id = 16,
-                            PropertySpaceId = "49f23d20-c9ae-4a77-9734-1886d424cb77",
+                            PropertySpaceId = "ed9f2a7b-3e54-403e-b0ae-64ec33eec956",
                             PropertySpaceItemTypeId = 6,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 17,
-                            PropertySpaceId = "5eb1c7e5-efb6-4b3c-983f-d278c1c086e7",
-                            PropertySpaceItemTypeId = 8,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 18,
-                            PropertySpaceId = "9f5f9e6e-0d79-41ad-86a1-06cbff2d0e92",
-                            PropertySpaceItemTypeId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 19,
-                            PropertySpaceId = "30baf72d-9d00-4f3e-9405-2261d6f0dd76",
-                            PropertySpaceItemTypeId = 3,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 20,
-                            PropertySpaceId = "6b09c3a9-e319-45d0-a253-b5d6f4f9de3a",
-                            PropertySpaceItemTypeId = 9,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 21,
-                            PropertySpaceId = "d2e5f682-06d0-40e7-a1e7-002b958d8048",
-                            PropertySpaceItemTypeId = 11,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 22,
-                            PropertySpaceId = "29ac2c68-b4b4-45b8-918a-fbdf11660d7e",
-                            PropertySpaceItemTypeId = 14,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 23,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 15,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 24,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 12,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 25,
-                            PropertySpaceId = "14a66729-9580-472b-9438-dfc7e2440c95",
-                            PropertySpaceItemTypeId = 3,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 26,
-                            PropertySpaceId = "5eb1c7e5-efb6-4b3c-983f-d278c1c086e7",
-                            PropertySpaceItemTypeId = 1,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 27,
-                            PropertySpaceId = "9f5f9e6e-0d79-41ad-86a1-06cbff2d0e92",
-                            PropertySpaceItemTypeId = 2,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 28,
-                            PropertySpaceId = "1954cfa5-9c89-41a7-a6be-41c71b34efc9",
-                            PropertySpaceItemTypeId = 9,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 29,
-                            PropertySpaceId = "8cf76f1f-7f39-4d78-bcc7-2a2a34db54b3",
-                            PropertySpaceItemTypeId = 6,
-                            Quantity = 1
-                        },
-                        new
-                        {
-                            Id = 30,
-                            PropertySpaceId = "6c67a41a-8274-4ad0-864e-20fd4866b2d4",
-                            PropertySpaceItemTypeId = 5,
-                            Quantity = 2
-                        },
-                        new
-                        {
-                            Id = 31,
-                            PropertySpaceId = "6b09c3a9-e319-45d0-a253-b5d6f4f9de3a",
-                            PropertySpaceItemTypeId = 7,
                             Quantity = 1
                         });
                 });
