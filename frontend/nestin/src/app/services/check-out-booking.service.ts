@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
 import {
   GetBookingsResponse,
@@ -43,6 +43,7 @@ export class CheckOutBookingService {
   checkOut(bookingId: string): Observable<any> {
     return this.http.post<any>(
       ApiConstant.Booking.checkout.replace('{bookingId}', bookingId),
+      {},
       {
         withCredentials: true,
       }

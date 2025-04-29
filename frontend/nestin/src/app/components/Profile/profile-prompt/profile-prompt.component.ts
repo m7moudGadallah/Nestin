@@ -74,6 +74,10 @@ export class ProfilePromptComponent implements OnInit {
       });
   }
 
+  public isInRole(role: string): boolean {
+    return Boolean(this.currentUser?.roles?.includes(role));
+  }
+
   private handleError(error: HttpErrorResponse, customMessage?: string): void {
     console.error('Error:', error);
     this.errorMessage = customMessage || this.getErrorMessage(error);

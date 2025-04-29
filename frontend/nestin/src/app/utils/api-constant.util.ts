@@ -1,10 +1,10 @@
 export class ApiConstant {
-  public static baseUrl = 'https://a133-197-43-161-110.ngrok-free.app/api/v1';
+  private static domainUrl = 'https:localhost:7026';
+  public static baseUrl = `${ApiConstant.domainUrl}/api/v1`;
 
   public static AccountsApi = {
     register: `${ApiConstant.baseUrl}/accounts/register`,
     login: `${ApiConstant.baseUrl}/accounts/login`,
-
     logout: `${ApiConstant.baseUrl}/accounts/logout`,
     'change-password': `${ApiConstant.baseUrl}/accounts/change-password`,
   };

@@ -36,6 +36,10 @@ export class ProfileHeaderComponent implements OnInit {
     this.fetchUserProfile();
   }
 
+  public isInRole(role: string): boolean {
+    return Boolean(this.user?.roles?.includes(role));
+  }
+
   private fetchUserProfile(): void {
     this.isLoading = true;
     this.isErrored = false;
