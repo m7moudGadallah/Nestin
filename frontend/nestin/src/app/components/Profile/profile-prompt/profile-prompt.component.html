@@ -32,6 +32,12 @@
       </button>
     </div>
 
+    <div *ngIf="showButtonForHost()" class="admin-button-container">
+      <button class="approve-button" (click)="handleHostAction()">
+         Add Property
+      </button>
+    </div>
+
 
   </div>
   </div>

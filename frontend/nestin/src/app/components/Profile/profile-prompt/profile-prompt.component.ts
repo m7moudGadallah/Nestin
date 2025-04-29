@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { IUserProfile } from '../../../models/domain/iuser-profile';
 import { UserProfileService } from '../../../services/user-profile.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-profile-prompt',
@@ -23,7 +24,7 @@ export class ProfilePromptComponent implements OnInit {
 
   constructor(
     private userService: UserProfileService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -31,25 +32,6 @@ export class ProfilePromptComponent implements OnInit {
    
   }
 
-  // loadUserData(): void {
-  //   this.isLoading = true;
-  //   this.errorMessage = null;
-
-  //   this.userService.getUserProfile().pipe(
-  //     finalize(() => this.isLoading = false)
-  //   ).subscribe({
-  //     next: (user) => {
-  //       console.log('User loaded:', user); // Debug log
-  //       this.currentUser = user;
-        
-  //       console.log('Current User:', this.currentUser); // Log after currentUser is set
-  //       console.log(' Roles:', this.currentUser?.roles); 
-  //     },
-  //     error: (error: HttpErrorResponse) => {
-  //       this.handleError(error);
-  //     }
-  //   });
-  // }
 
   loadUserData(): void {
     this.isLoading = true;
@@ -95,7 +77,6 @@ export class ProfilePromptComponent implements OnInit {
 
   private handleError(error: HttpErrorResponse, customMessage?: string): void {
     console.error('Error:', error);
-    
     this.errorMessage = customMessage || this.getErrorMessage(error);
     this.isErrored = true;
 
@@ -112,6 +93,8 @@ export class ProfilePromptComponent implements OnInit {
         return 'User profile not found.';
       case 500:
         return 'Server error. Please try again later.';
+      case 400:
+        return 'you ha'
       default:
         return 'An unexpected error occurred.';
     }
@@ -162,9 +145,22 @@ export class ProfilePromptComponent implements OnInit {
     );
 }
 
-
 handleAdmintAction(): void {
   this.router.navigate(['/hostApproval']);
 }
+
+showButtonForHost(): boolean {
+  if (!this.currentUser?.roles) return false;
+  return this.currentUser.roles.some(role => 
+      role.toLowerCase() === "host"
+  );
+}
+
+
+handleHostAction(): void {
+  this.router.navigate(['/addproperty']);
+}
+
+
 
 }

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UpgradeServiceService } from '../../../services/upgrade-service.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-upgrade-tohost',
@@ -20,7 +21,7 @@ export class UpgradeTohostComponent {
   submissionError: string | null = null;
   submissionSuccess: boolean = false;
 
-  constructor(private fb: FormBuilder,private upgradeService:UpgradeServiceService) {}
+  constructor(private fb: FormBuilder,private upgradeService:UpgradeServiceService ,private toaster:ToastService) {}
 
   ngOnInit(): void {
     this.upgradeForm = this.fb.group({
@@ -135,6 +136,7 @@ export class UpgradeTohostComponent {
     this.submissionSuccess = true;
     this.upgradeForm.reset();
     this.uploadedFiles = {};
+    this.toaster.showSuccess('Form submitted successfully!');
   }
 
   private handleError(error: any): void {
@@ -142,5 +144,7 @@ export class UpgradeTohostComponent {
       ? 'Please check your information and try again.'
       : 'An error occurred. Please try again later.';
     console.error('Submission error:', error);
+    this.toaster.showError(error.error);
+
   }
 }

@@ -8,6 +8,7 @@ import { AccountService } from '../../../services/account.service';
 import { AuthService } from '../../../services/auth.service';
 import { IUserProfile } from '../../../models/domain/iuser-profile';
 import { ApiUserProfileRequest } from '../../../models/api/request/api-user-profile-request';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-profile-update-modal',
@@ -54,7 +55,8 @@ export class ProfileUpdateModalComponent implements OnInit {
     private router: Router,
     private userProfileService: UserProfileService,
     private accountService: AccountService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toaster: ToastService
   ) {
     this.userForm = this.fb.group({
       firstName: ['', [
@@ -117,7 +119,7 @@ export class ProfileUpdateModalComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        this.errorMessage = err.message || 'Failed to load profile data';
+        this.errorMessage = err.error || 'Failed to load profile data';
         this.isLoading = false;
         console.error(err);
         
@@ -245,9 +247,10 @@ export class ProfileUpdateModalComponent implements OnInit {
         this.isSaving = false;
       },
       error: (err) => {
-        this.errorMessage = err.message || 'Failed to save changes';
+        this.errorMessage = err.error || 'Failed to save changes';
         this.isSaving = false;
-        
+        // this.toaster.showError(err.error);
+
         if (err.status === 401) {
           this.authService.unsetAuthData();
           this.router.navigate(['/login']);
@@ -326,6 +329,7 @@ export class ProfileUpdateModalComponent implements OnInit {
         this.errorMessage = err.error?.message || 'Failed to change password';
         this.isSaving = false;
         console.error(err);
+        // this.toaster.showError(err.error);  
         
         if (err.status === 401) {
           this.authService.unsetAuthData();
