@@ -234,7 +234,6 @@ export class PropertyInfoComponent implements OnInit {
 
   onFavoriteToggle(isFavorite: boolean) {
     this.isFavorite = isFavorite;
-    // Remember    Here you would typically call a service to update favorites in your backend
   }
 
 
@@ -247,8 +246,6 @@ private extractItemsArray<T>(response: any): T[] {
 }
 
 loadAmenitiesDataForPropertyInfo(propertyId: string) {
-
-
   forkJoin({
     propertyAmenities: this.propertyService.getPropertyAmenitiesById(propertyId),
     allAmenities: this.propertyService.getAllAmenities(),
@@ -256,23 +253,13 @@ loadAmenitiesDataForPropertyInfo(propertyId: string) {
   }).subscribe({
     next: ({ propertyAmenities, allAmenities, categories }) => {
       try {
-        // console.log('Raw API Responses (InfoComponent):', {
-        //   propertyAmenities,
-        //   allAmenities,
-        //   categories,
-        // });
-        this.aminaties = propertyAmenities.body.items.map((am: IPropertyAmenity) => am.amenity.name);
-        
-
-        // console.log('Final amenities list (InfoComponent):', this.aminaties);
+        this.aminaties = propertyAmenities.body.items.map((am: IPropertyAmenity) => am.name);
 
       } catch (error) {
-        // console.error('Error processing amenities data in InfoComponent:', error);
         this.error = true;
       }
     },
     error: err => {
-      // console.error('Error loading amenities in InfoComponent:', err);
       this.error = true;
     }
   });

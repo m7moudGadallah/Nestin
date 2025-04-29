@@ -45,5 +45,16 @@ export class ApiConstant {
   public static Booking = {
     createBooking: `${ApiConstant.baseUrl}/Bookings`,
   };
+
+  public static upgrade = {
+    upgrade: `${ApiConstant.baseUrl}/HostUpgradeRequests`,
+  };
+  public static UserProfile = {
+
+    User: `${ApiConstant.baseUrl}/UserProfiles/me`,
+  }
+  public static GuestType = {
+    GuestType: `${ApiConstant.baseUrl}/GuestTypes`,
+  };
   // Add other grouped APIs here
 }

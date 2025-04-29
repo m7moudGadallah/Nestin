@@ -8,13 +8,6 @@
   max-width: 1120px;
   margin: 0 auto 24px;
 
-  .ratings-count {
-    font-size: 16px;
-    color: #222222;
-    margin-bottom: 8px;
-    font-weight: 400;
-  }
-
   .rating-display {
     display: flex;
     align-items: center;
@@ -35,7 +28,6 @@
 
       .star {
         &.filled {
-          /* color: #FF385C; */
           color: #f18b7f;
         }
         &.half {
@@ -48,7 +40,6 @@
             left: 0;
             width: 50%;
             overflow: hidden;
-            /* color: #ff385c; */
             color: #f18b7f;
           }
         }
@@ -76,10 +67,10 @@
     padding: 6px 10px;
     border-radius: 8px;
     margin-top: 8px;
-
-    .emoji {
-      font-size: 18px;
-    }
+  }
+  
+  .fav-icon{
+   color: #ef7768
   }
 }
 

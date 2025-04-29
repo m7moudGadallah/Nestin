@@ -6,6 +6,9 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { authGuard } from './guards/auth.guard';
 import { BookingHistoryComponent } from './pages/booking-history/booking-history.component';
 import { BookingPageComponent } from './pages/booking-page/booking-page.component';
+import { ProfileComponent } from './pages/profile-page/profile/profile.component';
+import { UpdateProfileComponent } from './pages/profile-page/update-profile/update-profile.component';
+import { HostUpgradeAprovalComponent } from './pages/host-upgrade-approval/host-upgrade-aproval.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +48,30 @@ export const routes: Routes = [
             m => m.BookingPageComponent
           ),
       },
+      {
+        path: 'upgrade',
+        loadComponent: () =>
+          import('./pages/upgradeToHost/upgrade-tohost/upgrade-tohost.component').then(
+            m => m.UpgradeTohostComponent
+          ),
+      },
+      {
+        path: 'profile', 
+        component: ProfileComponent
+      },
+      {path:'user',
+        component:UpdateProfileComponent
+        
+      },
+      {
+        path:'hostUpproval',
+        component:HostUpgradeAprovalComponent
+        
+      },
+      {
+        path:'addProperty',
+        component:PropertyInfoComponent
+      }
     ],
   },
   {

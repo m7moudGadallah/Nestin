@@ -1,5 +1,6 @@
+
 :host ::ng-deep .fc .fc-button {
-  background-color: #fc604c !important;
+  background-color: #ef7768 !important;
   border: none !important;
   color: white !important;
   border-radius: 4px !important;
@@ -9,7 +10,7 @@
 }
 
 :host ::ng-deep .fc .fc-button:hover {
-  background-color: #f06b5a !important;
+  background-color: #e06a5a !important;
 }
 
 :host ::ng-deep .fc .fc-button-active {

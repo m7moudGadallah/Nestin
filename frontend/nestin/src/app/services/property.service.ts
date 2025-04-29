@@ -5,13 +5,18 @@ import {
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { expand, Observable, of, reduce } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
 import { IPropertyTypeRes } from '../models/api/response/i-property-type-res';
 import { IpropertyTypeApiResponse } from '../models/api/response/iproperty-type-api-res';
 import { ISmartSearchReq } from '../models/api/request/ismartSearch-req';
 import { ISmartSearchRes } from '../models/api/response/ismartSearch-res';
 import { IGetAllReq } from '../models/api/request/iget-all-req';
+import { IGuestType } from '../models/domain/iguest-type';
+import { IGuestTypeResponse } from '../models/api/response/iguest-type-response';
+import { IPropertyAmenity } from '../models/domain/iproperty-amenity';
+import { IAminityCategory } from '../models/domain/IAminity-category';
+import { IPropertyAmenityItem } from '../models/domain/iproperty-amenity-item';
 
 @Injectable({
   providedIn: 'root',
@@ -107,12 +112,7 @@ export class PropertyService {
     });
   }
 
-  getAllAmenities(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(`${ApiConstant.AmenitiesApi.getAllAmenities}`, {
-      observe: 'response',
-      withCredentials: true,
-    });
-  }
+  
 
   getAmenitiesCategories(): Observable<HttpResponse<any>> {
     return this.http.get<any>(
@@ -122,5 +122,47 @@ export class PropertyService {
         withCredentials: true,
       }
     );
+  }
+  getAllGuestTypes(): Observable<HttpResponse<IGuestTypeResponse>> {
+    return this.http.get<IGuestTypeResponse>(`${ApiConstant.GuestType.GuestType}`, {
+      observe: 'response'
+    });
+  }
+  // amenities
+  getAmenitiesByPropertyId(propertyId: string): Observable<IPropertyAmenityItem> {
+    const url = ApiConstant.PropertiesApi.getPropertyAmenities.replace('{id}', propertyId);
+    return this.http.get<IPropertyAmenityItem>(url);
+   
+  }
+  private getAmenitiesPage(page: number, pageSize: number): Observable<{ items: IPropertyAmenity[], metaData: any }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+    return this.http.get<{ items: IPropertyAmenity[], metaData: any }>(ApiConstant.AmenitiesApi.getAllAmenities, { params });
+  }
+  // get all amenities from all pages
+  getAllAmenities(): Observable<IPropertyAmenity[]> {
+    const initialPage = 1;
+    const pageSize = 10;
+    return this.getAmenitiesPage(initialPage, pageSize).pipe(
+      expand(response => {
+        const currentPage = response.metaData.page;
+        const totalPages = Math.ceil(response.metaData.total / response.metaData.pageSize);
+        
+        
+        if (currentPage < totalPages) {
+          return this.getAmenitiesPage(currentPage + 1, pageSize);
+        }
+      
+        return of();
+      }),
+      
+      reduce((acc: IPropertyAmenity[], response) => {
+        return [...acc, ...response.items];
+      }, [])
+    );
+  }
+  getAmenityCategories(): Observable<IAminityCategory> {
+    return this.http.get<IAminityCategory>(ApiConstant.AmenitiesApi.getAllAmenitiesCategories);
   }
 }

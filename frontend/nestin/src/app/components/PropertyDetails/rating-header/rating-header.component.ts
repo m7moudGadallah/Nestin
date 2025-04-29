@@ -1,15 +1,20 @@
 import { Component, Input } from '@angular/core';
 import { IPropertyInfo } from '../../../models/domain/iproperty-info';
 import { CommonModule } from '@angular/common';
+import { Award, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-rating-header',
-  imports: [CommonModule],
+  imports: [CommonModule,LucideAngularModule],
   templateUrl: './rating-header.component.html',
   styleUrl: './rating-header.component.css',
 })
 export class RatingHeaderComponent {
   @Input({ required: true }) property!: IPropertyInfo;
+
+  icons={
+    award:Award
+  }
 
   get starRating(): string {
     const rating = this.property.averageRating || 0;

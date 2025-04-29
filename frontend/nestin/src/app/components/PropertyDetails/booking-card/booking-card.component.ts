@@ -8,6 +8,10 @@ import { IBookingRequest } from '../../../models/api/request/ibooking-req';
 import { IPropertyFees } from '../../../models/domain/iproperty-fees';
 import { BookingService } from '../../../services/booking.service';
 import { IBookingSendingRequest } from '../../../models/api/request/ibooking-sending-req';
+import { IGuestType } from '../../../models/domain/iguest-type';
+import { IGuestTypeResponse } from '../../../models/api/response/iguest-type-response';
+import { ToastContainerComponent } from '../../toast-container/toast-container.component';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -19,12 +23,15 @@ import { IBookingSendingRequest } from '../../../models/api/request/ibooking-sen
 export class BookingCardComponent implements OnInit {
   @Input({ required: true }) property!: IPropertyInfo;
 
+
   constructor(
     private propertyService: PropertyService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private toaster: ToastService
   ) {}
   ngOnInit(): void {
     this.loadFees(this.property.id);
+    this.loadGuestTypes();
   }
 
   checkInDate: string = '';
@@ -54,23 +61,6 @@ export class BookingCardComponent implements OnInit {
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   }
 
-  // Price calculations
-  // get cleaningFee(): number {
-  //   return this.property.cleaningFee || 50;
-  // }
-
-  // get cleaningFee(): number {
-  //   return   50;
-  // }
-
-  //  get serviceFee(): number {
-  //     return this.subtotal * (this.property.serviceFeePercentage || 0.14);
-  //   }
-
-  // get serviceFee(): number {
-  //   return this.subtotal * (0.14);
-  // }
-
   get subtotal(): number {
     return this.nights * (this.property.pricePerNight || 0);
   }
@@ -79,58 +69,68 @@ export class BookingCardComponent implements OnInit {
     return this.subtotal + this.cleaningFee + this.serviceFee;
   }
 
-  // handleBookNow() {
-  //   console.log('Booking request:', {
-  //     propertyId: this.property.id,
-  //     checkIn: this.checkInDate,
-  //     checkOut: this.checkOutDate,
-  //     guests: this.guests,
-  //     guestType: this.selectedGuestType,
-  //     total: this.total
-  //   });
-  // }
-
   // ======================================Guest selection state=====================================
-  showGuestModal = false;
-  guestCounts = {
-    adults: 1,
-    children: 0,
-    infants: 0,
-    pets: 0,
-  };
+showGuestModal = false;
+guestCounts: Record<number, number> = {}; 
+guestTypes: IGuestType[] = [];
+loadingGuestTypes = false;
 
-  get totalGuests(): number {
-    return this.guestCounts.adults + this.guestCounts.children;
-  }
+// Initialize guest counts to 0 when guest types are loaded
+initializeGuestCounts(guestTypes: IGuestType[]): void {
+  guestTypes.forEach(type => {
+    this.guestCounts[type.id] = 0;
+  });
+}
 
-  get guestSummary(): string {
-    let parts = [];
-    if (this.guestCounts.adults > 0) {
-      parts.push(
-        `${this.guestCounts.adults} ${this.guestCounts.adults === 1 ? 'adult' : 'adults'}`
-      );
+// Fetch guest types from API
+loadGuestTypes(): void {
+  this.loadingGuestTypes = true;
+  this.propertyService.getAllGuestTypes().subscribe({
+    next: (response) => {
+      if (response.body) {
+        this.guestTypes = response.body.items;
+        this.initializeGuestCounts(this.guestTypes);
+      }
+      this.loadingGuestTypes = false;
+    },
+    error: (error) => {
+      console.error('Failed to load guest types:', error);
+      this.loadingGuestTypes = false;
     }
-    if (this.guestCounts.children > 0) {
-      parts.push(
-        `${this.guestCounts.children} ${this.guestCounts.children === 1 ? 'child' : 'children'}`
-      );
-    }
-    if (this.guestCounts.infants > 0) {
-      parts.push(
-        `${this.guestCounts.infants} ${this.guestCounts.infants === 1 ? 'infant' : 'infants'}`
-      );
-    }
-    if (this.guestCounts.pets > 0) {
-      parts.push(
-        `${this.guestCounts.pets} ${this.guestCounts.pets === 1 ? 'pet' : 'pets'}`
-      );
-    }
-    return parts.join(', ') || 'Add guests';
-  }
+  });
+}
 
-  decrementGuestCount(type: keyof typeof this.guestCounts, min: number): void {
-    this.guestCounts[type] = Math.max(min, this.guestCounts[type] - 1);
-  }
+get totalGuests(): number {
+  // Sum all guest counts except infants and pets if they shouldn't count
+  return Object.entries(this.guestCounts).reduce((total, [id, count]) => {
+    const numericId = Number(id);
+    // Only count adults and children (assuming IDs 1 and 2)
+    return numericId === 1 || numericId === 2 ? total + count : total;
+  }, 0);
+}
+
+get guestSummary(): string {
+  if (this.loadingGuestTypes) return 'Loading...';
+  if (this.guestTypes.length === 0) return 'Add guests';
+
+  const parts = this.guestTypes
+    .filter(type => this.guestCounts[type.id] > 0)
+    .map(type => {
+      const count = this.guestCounts[type.id];
+      return `${count} ${type.name.toLowerCase()}${count !== 1 ? 's' : ''}`;
+    });
+
+  return parts.join(', ') || 'Add guests';
+}
+
+decrementGuestCount(typeId: number, min: number = 0): void {
+  this.guestCounts[typeId] = Math.max(min, this.guestCounts[typeId] - 1);
+}
+
+incrementGuestCount(typeId: number, max?: number): void {
+  if (max !== undefined && this.guestCounts[typeId] >= max) return;
+  this.guestCounts[typeId] = (this.guestCounts[typeId] || 0) + 1;
+}
 
   //==========================fees======================================
   cleaningFee: number = 0;
@@ -173,47 +173,42 @@ export class BookingCardComponent implements OnInit {
 
   handleBookNow(): void {
     if (!this.checkInDate || !this.checkOutDate) return;
-
+  
     this.isBooking = true;
     this.bookingError = null;
-
+  
     this.bookingData = {
       propertyId: this.property.id,
       checkIn: this.checkInDate,
       checkOut: this.checkOutDate,
-      guests: [
-        { guestTypeId: 1, guestCount: this.guestCounts.adults },
-        { guestTypeId: 2, guestCount: this.guestCounts.children },
-        { guestTypeId: 3, guestCount: this.guestCounts.infants },
-        { guestTypeId: 4, guestCount: this.guestCounts.pets },
-      ].filter(guest => guest.guestCount > 0),
+      guests: Object.entries(this.guestCounts)
+        .filter(([_, count]) => count > 0)
+        .map(([typeId, count]) => ({
+          guestTypeId: Number(typeId),
+          guestCount: count
+        }))
     };
-
+  
     console.log('Booking data:', this.bookingData);
-
+  
     this.bookingService.createBooking(this.bookingData).subscribe({
       next: (response: any) => {
         this.isBooking = false;
-        console.log('Booking successful:', response);
-
-        const statusCode = response.status;
-
-        if (statusCode === 201) {
-          alert('Booking created!');
+  
+        if (response.status === 201) {
+          this.toaster.showSuccess('Booking created successfully!');
         }
       },
       error: error => {
         this.isBooking = false;
-
-        const statusCode = error.status;
-        console.error('Booking failed:', error);
-
-        if (statusCode === 409) {
-          alert(error.error);
-        } else if (statusCode === 401) {
-          alert('Unauthorized. Please login.');
+        this.toaster.showError('Booking fiald!');
+  
+        if (error.status === 409) {
+          this.toaster.showError(error.error);
+        } else if (error.status === 401) {
+          this.toaster.showError('Unauthorized. Please login.');
         } else {
-          alert('Booking failed. Please try again.');
+          this.toaster.showError('Booking failed. Please try again.');
         }
       },
     });

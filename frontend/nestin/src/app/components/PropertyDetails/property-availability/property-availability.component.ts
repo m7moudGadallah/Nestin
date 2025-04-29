@@ -20,7 +20,7 @@ import { IPropertyAvailability } from '../../../models/domain/iproperty-availabi
   templateUrl: './property-availability.component.html',
   styleUrl: './property-availability.component.css',
 })
-export class PropertyAvailabilityComponent implements OnInit, OnChanges {
+export class PropertyAvailabilityComponent implements OnInit {
   @Input() property!: IPropertyInfo;
   loading = true;
   calendarEvents: any[] = [];
@@ -51,11 +51,6 @@ export class PropertyAvailabilityComponent implements OnInit, OnChanges {
 
   constructor(private propertyService: PropertyService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['property'] && this.property?.id) {
-    //   this.fetchAvailability();
-    // }
-  }
 
   ngOnInit(): void {
     this.fetchAvailability();

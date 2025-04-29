@@ -1,13 +1,11 @@
 
 .property-header {
-  /* margin: 24px 0; */
   padding-bottom: 24px;
   border-bottom: 1px solid #ebebeb;
   
   .property-title {
     font-size: 26px;
     font-weight: 600;
-    /* margin-bottom: 8px; */
     color: #222;
   }
   

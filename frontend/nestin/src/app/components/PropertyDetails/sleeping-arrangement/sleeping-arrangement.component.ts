@@ -18,21 +18,6 @@ export class SleepingArrangementComponent {
     door: DoorOpen,
   };
 
-  // getBedSize(): string {
-  //   // Default to queen if no specific data exists
-  //   return this.property.numBeds > 1 ? 'queen' : 'king';
-  // }
-
-  // hasLivingRoomBeds(): boolean {
-  //   // Check if maxGuests exceeds bedroom capacity
-  //   return (this.property.maxGuestCount || 0) > (this.property.numBeds || 1) * 2;
-  // }
-
-  // getLivingRoomBedSize(): string {
-  //   return 'sofa'; // Default or parse from description
-  // }
-
-  // Add to your component class
 
   hasSpaceItems(spaceTypeId: number): boolean {
     return this.property.spaceItemSummaries?.some(

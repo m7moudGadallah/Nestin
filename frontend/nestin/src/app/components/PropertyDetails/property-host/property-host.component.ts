@@ -20,20 +20,11 @@ import { PropertyService } from '../../../services/property.service';
   styleUrl: './property-host.component.css',
 })
 export class PropertyHostComponent implements OnInit {
-  // private apiUrl = 'http://localhost:3001';
 
   @Input() property!: IPropertyInfo;
 
   constructor(private propertyService: PropertyService) {}
-
-  // propertyId: string = '';
-  // constructor(private route: ActivatedRoute) { }
-  //  private apiUrl = `https://localhost:7026/api/v1/Properties`;
-  //  ngOnInit(): void {
-  //   this.propertyId = this.route.snapshot.paramMap.get('id') || '';
-  //   console.log('Property ID:', this.propertyId);
-  // }
-
+  
   icons = {
     calendar: CalendarDays,
     star: Star,
@@ -42,24 +33,17 @@ export class PropertyHostComponent implements OnInit {
     mail: Mail,
   };
 
-  // get hostingYears(): number {
-  //   if (!this.property.owner?.joinedAt) return 0;
-  //   const joinedDate = new Date(this.property.owner.joinedAt);
-  //   console.log(joinedDate);
-  //   return new Date().getFullYear() - joinedDate.getFullYear();
-  // }
-
   ngOnInit() {
     this.propertyService
       .getPropertyById(this.property?.id)
       .subscribe(property => {
-        // Patch missing owner details if needed
+        
         property.body.owner = {
           ...property.body.owner,
           firstName: property.body.owner.firstName || 'Host',
           photo: {
             id: 'default',
-            photoUrl: property.body.owner.photo?.photoUrl || 'favicon.ico',
+            photoUrl: property.body.owner.photo?.photoUrl || 'logo.png',
           },
           email: '',
           lastName: property.body.owner.lastName,
@@ -77,10 +61,6 @@ export class PropertyHostComponent implements OnInit {
     return `${this.property.owner?.firstName || ''} ${this.property.owner?.lastName || ''}`.trim();
   }
 
-  // get joinDate(): string {
-  //   if (!this.property.owner?.joinedAt) return '';
-  //   return new Date(this.property.owner.joinedAt).toLocaleDateString();
-  // }
 
   get isSuperhost(): boolean {
     return (
@@ -89,7 +69,6 @@ export class PropertyHostComponent implements OnInit {
   }
 
   get responseRate(): number {
-    // You might want to calculate this based on actual data
-    return 95; // Default value or implement actual calculation
+    return 75; 
   }
 }

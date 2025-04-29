@@ -33,71 +33,38 @@
     </div>
   </div>
 
+
+  <!-- guest type  -->
   <div class="guests-selector" (click)="showGuestModal = true">
     <label>GUESTS</label>
     <div class="guest-summary">{{ guestSummary }}</div>
   </div>
-
+  
   <!-- Guest Selection Modal -->
   <div
     class="guest-modal"
     *ngIf="showGuestModal"
     (click)="$event.stopPropagation()">
     <div class="guest-modal-content">
-      <div class="guest-type-row">
+      <!-- Dynamic guest type rows -->
+      <div class="guest-type-row" *ngFor="let type of guestTypes">
         <div>
-          <div class="guest-type-label">Adults</div>
-          <div class="guest-type-description">Ages 13 or above</div>
+          <div class="guest-type-label">{{ type.name }}</div>
+          <div class="guest-type-description">
+            <!-- Add descriptions based on type.id -->
+            <ng-container *ngIf="type.id === 1">Ages 13 or above</ng-container>
+            <ng-container *ngIf="type.id === 2">Ages 2-12</ng-container>
+            <ng-container *ngIf="type.id === 3">Under 2</ng-container>
+            <ng-container *ngIf="type.id === 4">Bringing a service animal?</ng-container>
+          </div>
         </div>
         <div class="guest-counter">
-          <button (click)="decrementGuestCount('adults', 0)">−</button>
-          <span>{{ guestCounts.adults }}</span>
-          <button (click)="guestCounts.adults = guestCounts.adults + 1">
-            +
-          </button>
+          <button (click)="decrementGuestCount(type.id, 0)">−</button>
+          <span>{{ guestCounts[type.id] || 0 }}</span>
+          <button (click)="incrementGuestCount(type.id)">+</button>
         </div>
       </div>
-
-      <div class="guest-type-row">
-        <div>
-          <div class="guest-type-label">Children</div>
-          <div class="guest-type-description">Ages 2-12</div>
-        </div>
-        <div class="guest-counter">
-          <button (click)="decrementGuestCount('children', 0)">−</button>
-          <span>{{ guestCounts.children }}</span>
-          <button (click)="guestCounts.children = guestCounts.children + 1">
-            +
-          </button>
-        </div>
-      </div>
-
-      <div class="guest-type-row">
-        <div>
-          <div class="guest-type-label">Infants</div>
-          <div class="guest-type-description">Under 2</div>
-        </div>
-        <div class="guest-counter">
-          <button (click)="decrementGuestCount('infants', 0)">−</button>
-          <span>{{ guestCounts.infants }}</span>
-          <button (click)="guestCounts.infants = guestCounts.infants + 1">
-            +
-          </button>
-        </div>
-      </div>
-
-      <div class="guest-type-row">
-        <div>
-          <div class="guest-type-label">Pets</div>
-          <div class="guest-type-description">Bringing a service animal?</div>
-        </div>
-        <div class="guest-counter">
-          <button (click)="decrementGuestCount('pets', 0)">−</button>
-          <span>{{ guestCounts.pets }}</span>
-          <button (click)="guestCounts.pets = guestCounts.pets + 1">+</button>
-        </div>
-      </div>
-
+  
       <div class="container mt-5">
         <button
           class="btn w-100 btn-primary fw-semibold"
@@ -108,6 +75,29 @@
     </div>
   </div>
 
+
+  <div class="price-summary" *ngIf="nights > 0">
+    <div class="price-line mb-2">
+      <span>${{ property.pricePerNight | number }} × {{ nights }} nights:  ${{ subtotal | number }}</span>
+    </div>
+    <div class="price-line mb-2">
+      <span>Cleaning fee: ${{ cleaningFee | number: '1.2-2' }}</span>  
+    </div>
+    <div class="price-line mb-2">
+      <span>Service fee: ${{ serviceFee | number: '1.2-2' }}</span>
+    </div>
+    <div class="price-line mb-2" *ngIf="extraGuestFee > 0">
+      <span>Extra guest fee: ${{ extraGuestFee | number: '1.2-2' }}</span>
+    </div>
+    <div class="price-line mb-2" *ngIf="petFee > 0">
+      <span>Pet fee: ${{ petFee | number: '1.2-2' }}</span>
+    </div>
+  
+    <div class="price-line total mb-2">
+      <span>Total before taxes: ${{ total | number: '1.2-2' }}</span>   
+    </div>
+  </div>
+  
   <button
     class="btn btn-primary fw-semibold"
     (click)="handleBookNow()"
@@ -115,31 +105,5 @@
     {{ isBooking ? 'Booking...' : 'Reserve' }}
   </button>
 
-  <div class="price-summary" *ngIf="nights > 0">
-    <div class="price-line">
-      <span>${{ property.pricePerNight | number }} × {{ nights }} nights</span>
-      <span>${{ subtotal | number }}</span>
-    </div>
-    <div class="price-line">
-      <span>Cleaning fee</span>
-      <span>${{ cleaningFee | number: '1.2-2' }}</span>
-    </div>
-    <div class="price-line">
-      <span>Service fee</span>
-      <span>${{ serviceFee | number: '1.2-2' }}</span>
-    </div>
-    <div class="price-line" *ngIf="extraGuestFee > 0">
-      <span>Extra guest fee</span>
-      <span>${{ extraGuestFee | number: '1.2-2' }}</span>
-    </div>
-    <div class="price-line" *ngIf="petFee > 0">
-      <span>Pet fee</span>
-      <span>${{ petFee | number: '1.2-2' }}</span>
-    </div>
-
-    <div class="price-line total">
-      <span>Total before taxes</span>
-      <span>${{ total | number: '1.2-2' }}</span>
-    </div>
-  </div>
+  
 </div>

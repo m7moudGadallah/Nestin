@@ -9,8 +9,6 @@
         </div>
         <div>
           <h3>House rules</h3>
-          <!-- <p>{{ parseRules(property?.houseRules)[0] }}</p>
-          <p>{{ parseRules(property?.houseRules)[1] }}</p> -->
           <div *ngFor="let rule of parseRules(property?.houseRules || '')">
             <p>{{ rule }}</p>
           </div>
