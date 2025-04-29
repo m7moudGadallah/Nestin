@@ -4,6 +4,7 @@ export class ApiConstant {
   public static AccountsApi = {
     register: `${ApiConstant.baseUrl}/accounts/register`,
     login: `${ApiConstant.baseUrl}/accounts/login`,
+
     logout: `${ApiConstant.baseUrl}/accounts/logout`,
     'change-password': `${ApiConstant.baseUrl}/accounts/change-password`,
   };
@@ -16,6 +17,7 @@ export class ApiConstant {
     getPropertyAmenities: `${ApiConstant.baseUrl}/Properties/{id}/Amenities`,
     getPropertyAvailability: `${ApiConstant.baseUrl}/Properties/{id}/Availabilities`,
     getPropertyFees: `${ApiConstant.baseUrl}/Properties/{id}/Fees`,
+    
   };
   public static AmenitiesApi = {
     getAllAmenities: `${ApiConstant.baseUrl}/Amenities`,

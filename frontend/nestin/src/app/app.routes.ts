@@ -9,6 +9,7 @@ import { BookingPageComponent } from './pages/booking-page/booking-page.componen
 import { ProfileComponent } from './pages/profile-page/profile/profile.component';
 import { UpdateProfileComponent } from './pages/profile-page/update-profile/update-profile.component';
 import { HostUpgradeAprovalComponent } from './pages/host-upgrade-approval/host-upgrade-aproval.component';
+import { AddPropertyComponent } from './pages/add-property/add-property.component';
 
 export const routes: Routes = [
   {
@@ -57,21 +58,34 @@ export const routes: Routes = [
       },
       {
         path: 'profile', 
-        component: ProfileComponent
+         loadComponent: () =>
+          import('./pages/profile-page/profile/profile.component').then(
+            m => m.ProfileComponent
+          )
       },
       {path:'user',
-        component:UpdateProfileComponent
+        loadComponent: () =>
+          import('./pages/profile-page/update-profile/update-profile.component').then(
+            m => m.UpdateProfileComponent
+          )
         
       },
       {
-        path:'hostUpproval',
-        component:HostUpgradeAprovalComponent
+        path:'hostApproval',
+        loadComponent: () =>
+          import('./pages/host-upgrade-approval/host-upgrade-aproval.component').then(
+            m => m.HostUpgradeAprovalComponent
+          )
         
       },
       {
-        path:'addProperty',
-        component:PropertyInfoComponent
-      }
+        path: 'addproperty',
+        loadComponent: () =>
+          import('./pages/add-property/add-property.component').then(
+            m => m.AddPropertyComponent
+          ),
+      },
+     
     ],
   },
   {

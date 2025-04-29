@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IPropertyInfo } from '../models/domain/iproperty-info';
-import { IPropertyRequest } from '../models/api/request/iproperty-request';
-import { ApiConstant } from '../utils/api-constant.util';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +12,18 @@ export class AddPropertyService {
 
   constructor(private http: HttpClient) { }
 
-  addProperty(property: IPropertyRequest): Observable<IPropertyRequest> {
-    return this.http.post<IPropertyRequest>(ApiConstant.PropertiesApi.getAll,
-      property,
-      { withCredentials: true });
+  createProperty(property: Partial<IPropertyInfo>, photos: File[]): Observable<IPropertyInfo> {
+    const formData = new FormData();
+    
+    // Append property data as JSON
+    formData.append('property', JSON.stringify(property));
+    
+    // Append each photo file
+    photos.forEach((file, index) => {
+      formData.append(`photos`, file, file.name);
+    });
+    
+    return this.http.post<IPropertyInfo>(this.apiUrl, formData);
   }
-
   
 }

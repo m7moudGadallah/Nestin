@@ -17,12 +17,16 @@ import { IGuestTypeResponse } from '../models/api/response/iguest-type-response'
 import { IPropertyAmenity } from '../models/domain/iproperty-amenity';
 import { IAminityCategory } from '../models/domain/IAminity-category';
 import { IPropertyAmenityItem } from '../models/domain/iproperty-amenity-item';
+import { IAmenitiesResponse } from '../models/api/response/iamenities-response';
+import { IPropertyType } from '../models/domain/iproperty-type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PropertyService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  
+  }
 
   showPropertyType(): Observable<HttpResponse<IpropertyTypeApiResponse>> {
     return this.http.get<IpropertyTypeApiResponse>(
@@ -33,6 +37,12 @@ export class PropertyService {
       }
     );
   }
+
+  currentPage = 1;
+pageSize = 10;
+getAmenitiesPaginated(page: number = 1, pageSize: number = 10): Observable<IAmenitiesResponse> {
+  return this.getAmenitiesPage(page, pageSize);
+}
   getAllProperty(queryParams?: IGetAllReq): Observable<HttpResponse<any>> {
     // Create HttpParams object from the query parameters
     let params = new HttpParams();
@@ -164,5 +174,8 @@ export class PropertyService {
   }
   getAmenityCategories(): Observable<IAminityCategory> {
     return this.http.get<IAminityCategory>(ApiConstant.AmenitiesApi.getAllAmenitiesCategories);
+  }
+  getPropertyTypes(): Observable<IPropertyType[]> {
+    return this.http.get<IPropertyType[]>(ApiConstant.PropertiesApi.getAllPropertyTypes);
   }
 }
