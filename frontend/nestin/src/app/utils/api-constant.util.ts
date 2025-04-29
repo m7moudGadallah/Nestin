@@ -17,7 +17,6 @@ export class ApiConstant {
     getPropertyAmenities: `${ApiConstant.baseUrl}/Properties/{id}/Amenities`,
     getPropertyAvailability: `${ApiConstant.baseUrl}/Properties/{id}/Availabilities`,
     getPropertyFees: `${ApiConstant.baseUrl}/Properties/{id}/Fees`,
-    
   };
   public static AmenitiesApi = {
     getAllAmenities: `${ApiConstant.baseUrl}/Amenities`,
@@ -47,15 +46,16 @@ export class ApiConstant {
 
   public static Booking = {
     createBooking: `${ApiConstant.baseUrl}/Bookings`,
+    checkout: `${ApiConstant.baseUrl}/Bookings/{bookingId}/checkout`,
   };
 
   public static upgrade = {
     upgrade: `${ApiConstant.baseUrl}/HostUpgradeRequests`,
   };
   public static UserProfile = {
-
+    Users: `${ApiConstant.baseUrl}/UserProfiles`,
     User: `${ApiConstant.baseUrl}/UserProfiles/me`,
-  }
+  };
   public static GuestType = {
     GuestType: `${ApiConstant.baseUrl}/GuestTypes`,
   };

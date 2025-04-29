@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
-
-  constructor(private http : HttpClient) { }
-  getUsers():Observable<HttpResponse<UserProfiles>>{
-    return this.http.get<UserProfiles>(ApiConstant.user.getAllUsers,{ observe:'response', withCredentials: true});
+  constructor(private http: HttpClient) {}
+  getUsers(): Observable<HttpResponse<UserProfiles>> {
+    return this.http.get<UserProfiles>(ApiConstant.user.getAllUsers, {
+      observe: 'response',
+      withCredentials: true,
+    });
   }
 }

@@ -5,12 +5,9 @@ import { ApiConstant } from '../utils/api-constant.util';
 import { UpgradeHostRequest } from '../models/api/request/upgrade-host-request';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UpgradeServiceService {
-
-  // private apiUrl = 'https://localhost:7026/api/v1/HostUpgradeRequests'; 
-
   constructor(private http: HttpClient) {}
 
   submitHostUpgrade(formData: FormData): Observable<UpgradeHostRequest> {
@@ -34,14 +31,18 @@ export class UpgradeServiceService {
       httpParams = httpParams.set('documentType', params.documentType);
     }
 
-    return this.http.get<any>(ApiConstant.upgrade.upgrade, { params: httpParams , withCredentials: true }
-      
-
-    );
+    return this.http.get<any>(ApiConstant.upgrade.upgrade, {
+      params: httpParams,
+      withCredentials: true,
+    });
   }
 
   approveRequest(requestId: string): Observable<any> {
-    return this.http.patch(`${ApiConstant.upgrade.upgrade}/${requestId}/approve`, {}, { withCredentials: true });
+    return this.http.patch(
+      `${ApiConstant.upgrade.upgrade}/${requestId}/approve`,
+      {},
+      { withCredentials: true }
+    );
   }
 
   // rejectRequest(requestId: string, reason: string): Observable<any> {
@@ -49,16 +50,14 @@ export class UpgradeServiceService {
   // }
 
   rejectRequest(requestId: string, reason: string): Observable<any> {
-   
     const requestBody = {
-      RejectionReason: reason  
+      RejectionReason: reason,
     };
-    
+
     return this.http.patch(
       `${ApiConstant.upgrade.upgrade}/${requestId}/reject`,
       requestBody,
       { withCredentials: true }
     );
   }
-
 }

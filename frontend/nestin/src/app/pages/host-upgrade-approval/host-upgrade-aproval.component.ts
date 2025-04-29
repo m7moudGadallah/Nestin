@@ -6,9 +6,9 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-host-upgrade-aproval',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './host-upgrade-aproval.component.html',
-  styleUrl: './host-upgrade-aproval.component.css'
+  styleUrl: './host-upgrade-aproval.component.css',
 })
 export class HostUpgradeAprovalComponent implements OnInit {
   requests: any[] = [];
@@ -33,7 +33,7 @@ export class HostUpgradeAprovalComponent implements OnInit {
   constructor(
     private hostUpgradeService: UpgradeServiceService,
     private toastr: ToastService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     console.log('Component initialized');
@@ -45,21 +45,21 @@ export class HostUpgradeAprovalComponent implements OnInit {
       page: this.currentPage,
       pageSize: this.pageSize,
       status: this.statusFilter,
-      documentType: this.documentTypeFilter
+      documentType: this.documentTypeFilter,
     };
-    console.log('Sending params:', params); 
+    console.log('Sending params:', params);
 
     this.hostUpgradeService.getUpgradeRequests(params).subscribe({
-      next: (response) => {
-        console.log('API Response:', response); 
+      next: response => {
+        console.log('API Response:', response);
         this.requests = response.items;
         this.totalItems = response.metaData.total;
         console.log('Updated requests:', this.requests);
       },
-      error: (err) => {
-        this.toastr.showError('Failed to load requests', 5000); 
+      error: err => {
+        this.toastr.showError('Failed to load requests', 5000);
         console.error(err);
-      }
+      },
     });
   }
 
@@ -93,13 +93,12 @@ export class HostUpgradeAprovalComponent implements OnInit {
         this.loadRequests();
         this.closeModal();
       },
-      error: (err) => {
+      error: err => {
         this.toastr.showError('Failed to approve request', 5000);
         console.error(err);
-      }
+      },
     });
   }
-
 
   rejectRequest(): void {
     // Validate rejection reason
@@ -107,30 +106,35 @@ export class HostUpgradeAprovalComponent implements OnInit {
       this.toastr.showWarning('Please provide a valid rejection reason');
       return;
     }
-  
+
     // Show loading state
     const loadingToast = this.toastr.showInfo('Processing rejection...');
-  
-    this.hostUpgradeService.rejectRequest(this.requestToReject.id, this.rejectionReason).subscribe({
-      next: () => {
-        // this.toastr.dismiss(loadingToast);
-        this.toastr.showSuccess('Request rejected successfully');
-        this.loadRequests();
-        this.closeRejectModal();
-        this.closeModal();
-      },
-      error: (err) => {
-        this.toastr.showError('An error occurred while processing the rejection', 5000);
-        
-        if (err.status === 400) {
-          this.toastr.showError('Invalid rejection reason format', 5000);
-        } else {
-          this.toastr.showError('Failed to reject request', 5000);
-        }
-        
-        console.error('Rejection error:', err);
-      }
-    });
+
+    this.hostUpgradeService
+      .rejectRequest(this.requestToReject.id, this.rejectionReason)
+      .subscribe({
+        next: () => {
+          // this.toastr.dismiss(loadingToast);
+          this.toastr.showSuccess('Request rejected successfully');
+          this.loadRequests();
+          this.closeRejectModal();
+          this.closeModal();
+        },
+        error: err => {
+          this.toastr.showError(
+            'An error occurred while processing the rejection',
+            5000
+          );
+
+          if (err.status === 400) {
+            this.toastr.showError('Invalid rejection reason format', 5000);
+          } else {
+            this.toastr.showError('Failed to reject request', 5000);
+          }
+
+          console.error('Rejection error:', err);
+        },
+      });
   }
 
   openImageModal(imageUrl: string): void {
@@ -169,10 +173,8 @@ export class HostUpgradeAprovalComponent implements OnInit {
   get showingFrom(): number {
     return (this.currentPage - 1) * this.pageSize + 1;
   }
-  
+
   get showingTo(): number {
     return Math.min(this.currentPage * this.pageSize, this.totalItems);
   }
-
-
 }

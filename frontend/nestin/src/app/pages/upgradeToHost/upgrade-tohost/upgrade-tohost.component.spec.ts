@@ -8,9 +8,8 @@ describe('UpgradeTohostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UpgradeTohostComponent]
-    })
-    .compileComponents();
+      imports: [UpgradeTohostComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UpgradeTohostComponent);
     component = fixture.componentInstance;

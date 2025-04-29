@@ -1,40 +1,40 @@
-export interface Property{
+export interface Property {
+  id: string;
+  title: string;
+  pricePerNight: number;
+  latitude: number;
+  longitude: number;
+  owner: {
     id: string;
-    title: string;
-    pricePerNight: number;
-    latitude: number;
-    longitude: number;
-    owner: {
-      id: string;
-      userName: string;
-    };
-    location: {
-      id: number;
-      name: string;
-      countryId: number;
-    };
-    propertyType: {
-      id: number;
-      name: string;
-      icon: string;
-    };
-    photos: Array<{
-      id: string;
-      photoUrl: string;
-    }>;
-    averageRating: number;
-    reviewCount: number;
-    isActive: boolean;
-    isDeleted: boolean;
+    userName: string;
+  };
+  location: {
+    id: number;
+    name: string;
+    countryId: number;
+  };
+  propertyType: {
+    id: number;
+    name: string;
+    icon: string;
+  };
+  photos: Array<{
+    id: string;
+    photoUrl: string;
+  }>;
+  averageRating: number;
+  reviewCount: number;
+  isActive: boolean;
+  isDeleted: boolean;
 }
 
-export interface BookingGuest{
-    bookingId: string;
-    guestTypeId: number;
-    guestCount: number;
+export interface BookingGuest {
+  bookingId: string;
+  guestTypeId: number;
+  guestCount: number;
 }
-export interface Bookings{
-    id: string;
+export interface Bookings {
+  id: string;
   userId: string;
   checkIn: string;
   checkOut: string;
@@ -46,7 +46,6 @@ export interface Bookings{
   updatedAt: string;
   bookingGuests: BookingGuest[];
   property: Property;
-
 }
 export interface GetBookingsResponse {
   items: Bookings[];
@@ -54,9 +53,7 @@ export interface GetBookingsResponse {
     page: number;
     pageSize: number;
     total: number;
-  };}
+  };
+}
 
-  export interface IGetBookingResponse extends Bookings {
-   
-    };
-  
+export interface IGetBookingResponse extends Bookings {}

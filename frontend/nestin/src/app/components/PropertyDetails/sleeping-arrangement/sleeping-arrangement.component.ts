@@ -18,7 +18,6 @@ export class SleepingArrangementComponent {
     door: DoorOpen,
   };
 
-
   hasSpaceItems(spaceTypeId: number): boolean {
     return this.property.spaceItemSummaries?.some(
       (item: any) => item.itemType.propertySpaceTypeId === spaceTypeId

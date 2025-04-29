@@ -84,7 +84,6 @@ export class HomePageComponent implements OnInit {
   totalItems: number = 0;
   Math = Math;
 
-
   guests = {
     adults: 2,
     children: 0,
@@ -380,7 +379,6 @@ export class HomePageComponent implements OnInit {
       queryParams.PropertyTypeId = this.selectedPropertyType;
     }
 
-   
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
         this.isLoadingProperties = false;
@@ -412,7 +410,7 @@ export class HomePageComponent implements OnInit {
   SmartSearch(): void {
     if (this.stringAiSearch) {
       this.isLoadingProperties = true;
-      
+
       this.propertyService.smartSearch(this.stringAiSearch).subscribe({
         next: (response: HttpResponse<ISmartSearchRes>) => {
           this.isLoadingProperties = false;
@@ -516,7 +514,8 @@ export class HomePageComponent implements OnInit {
     });
   }
   checkPaymentStatus(): void {
-    const paymentStatus = this.activeroute.snapshot.queryParamMap.get('paymentStatus');
+    const paymentStatus =
+      this.activeroute.snapshot.queryParamMap.get('paymentStatus');
 
     if (!paymentStatus) {
       return;

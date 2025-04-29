@@ -21,8 +21,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'property/:id', component: PropertyInfoComponent },
-    
-      
     ],
   },
   {
@@ -54,32 +52,31 @@ export const routes: Routes = [
       {
         path: 'upgrade',
         loadComponent: () =>
-          import('./pages/upgradeToHost/upgrade-tohost/upgrade-tohost.component').then(
-            m => m.UpgradeTohostComponent
+          import(
+            './pages/upgradeToHost/upgrade-tohost/upgrade-tohost.component'
+          ).then(m => m.UpgradeTohostComponent),
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./pages/profile-page/profile/profile.component').then(
+            m => m.ProfileComponent
           ),
       },
       {
-        path: 'profile', 
-         loadComponent: () =>
-          import('./pages/profile-page/profile/profile.component').then(
-            m => m.ProfileComponent
-          )
-      },
-      {path:'user',
+        path: 'user',
         loadComponent: () =>
-          import('./pages/profile-page/update-profile/update-profile.component').then(
-            m => m.UpdateProfileComponent
-          )
-        
+          import(
+            './pages/profile-page/update-profile/update-profile.component'
+          ).then(m => m.UpdateProfileComponent),
       },
 
       {
-        path:'hostApproval',
+        path: 'hostApproval',
         loadComponent: () =>
-          import('./pages/host-upgrade-approval/host-upgrade-aproval.component').then(
-            m => m.HostUpgradeAprovalComponent
-          )
-        
+          import(
+            './pages/host-upgrade-approval/host-upgrade-aproval.component'
+          ).then(m => m.HostUpgradeAprovalComponent),
       },
       {
         path: 'addproperty',
@@ -88,15 +85,17 @@ export const routes: Routes = [
             m => m.AddPropertyComponent
           ),
       },
-       { path:'admin', loadComponent:()=>
-        import('./pages/admin/admin.component').then(m=>m.AdminComponent),
-        children:[
-          {path:'',redirectTo:'users',pathMatch:'full'},
-          {path:'users',component:UsersAdminComponent},
-          {path:'properties',component:PropertyAdminComponent},
-          {path:'requests',component:HostUpgradeAprovalComponent}
-        ] }
-     
+      {
+        path: 'admin',
+        loadComponent: () =>
+          import('./pages/admin/admin.component').then(m => m.AdminComponent),
+        children: [
+          { path: '', redirectTo: 'users', pathMatch: 'full' },
+          { path: 'users', component: UsersAdminComponent },
+          { path: 'properties', component: PropertyAdminComponent },
+          { path: 'requests', component: HostUpgradeAprovalComponent },
+        ],
+      },
     ],
   },
   {

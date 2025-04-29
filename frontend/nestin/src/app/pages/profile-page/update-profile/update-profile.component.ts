@@ -5,8 +5,6 @@ import { ProfileUpdateModalComponent } from '../../../components/Profile/profile
   selector: 'app-update-profile',
   imports: [ProfileUpdateModalComponent],
   templateUrl: './update-profile.component.html',
-  styleUrl: './update-profile.component.css'
+  styleUrl: './update-profile.component.css',
 })
-export class UpdateProfileComponent {
-
-}
+export class UpdateProfileComponent {}

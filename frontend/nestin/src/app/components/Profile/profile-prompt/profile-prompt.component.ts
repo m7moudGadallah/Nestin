@@ -13,7 +13,7 @@ import { ToastService } from '../../../services/toast.service';
   standalone: true,
   imports: [ProfileUpdateModalComponent, CommonModule],
   templateUrl: './profile-prompt.component.html',
-  styleUrls: ['./profile-prompt.component.css']
+  styleUrls: ['./profile-prompt.component.css'],
 })
 export class ProfilePromptComponent implements OnInit {
   showUpdateModal = false;
@@ -24,55 +24,54 @@ export class ProfilePromptComponent implements OnInit {
 
   constructor(
     private userService: UserProfileService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
-   
   }
-
 
   loadUserData(): void {
     this.isLoading = true;
     this.errorMessage = null;
-  
-    this.userService.getUserProfile().pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe({
-      next: (response: HttpResponse<any>) => {
-        // Extract the body of the response, which should contain the user data
-        const user = response.body;
-  
-        console.log('User loaded:', user); 
-        this.currentUser = user;
-        console.log('Current User:', this.currentUser); 
-        console.log('Roles:', this.currentUser?.roles); 
-      },
-      error: (error: HttpErrorResponse) => {
-        this.handleError(error);
-      }
-    });
+
+    this.userService
+      .getUserProfile()
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (response: HttpResponse<any>) => {
+          // Extract the body of the response, which should contain the user data
+          const user = response.body;
+
+          console.log('User loaded:', user);
+          this.currentUser = user;
+          console.log('Current User:', this.currentUser);
+          console.log('Roles:', this.currentUser?.roles);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.handleError(error);
+        },
+      });
   }
-  
 
   updateProfile(updatedData: IUserProfile): void {
     if (!this.currentUser) return;
 
     this.isLoading = true;
     this.errorMessage = null;
-    
-    this.userService.UpdateUserProfile(updatedData).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe({
-      next: (updatedUser) => {
-        this.currentUser = { ...this.currentUser, ...updatedUser };
-        this.showUpdateModal = false;
-      },
-      error: (error: HttpErrorResponse) => {
-        this.handleError(error, 'Failed to update profile');
-      }
-    });
+
+    this.userService
+      .UpdateUserProfile(updatedData)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: updatedUser => {
+          this.currentUser = { ...this.currentUser, ...updatedUser };
+          this.showUpdateModal = false;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.handleError(error, 'Failed to update profile');
+        },
+      });
   }
 
   private handleError(error: HttpErrorResponse, customMessage?: string): void {
@@ -94,7 +93,7 @@ export class ProfilePromptComponent implements OnInit {
       case 500:
         return 'Server error. Please try again later.';
       case 400:
-        return 'you ha'
+        return 'you ha';
       default:
         return 'An unexpected error occurred.';
     }
@@ -108,59 +107,40 @@ export class ProfilePromptComponent implements OnInit {
     this.showUpdateModal = !this.showUpdateModal;
   }
 
-
-
-
   // =====================upgrade button===============================
-  
-  
+
   showButtonForGuest(): boolean {
     // // Return true if user is guest (doesn't have host or admin roles)
     // if (!this.currentUser?.roles?.some(role => role.toLowerCase() === "guest")) return true; // Default to showing if no roles
-    
+
     // // Check if user has any restricted roles
     // const restrictedRoles = ['host', 'admin'];
-    // return !this.currentUser.roles.some(role => 
+    // return !this.currentUser.roles.some(role =>
     //   restrictedRoles.includes(role.toLowerCase())
     // );
     if (!this.currentUser?.roles) return false;
-    return this.currentUser.roles.some(role => 
-        role.toLowerCase() === "guest"
-    );
+    return this.currentUser.roles.some(role => role.toLowerCase() === 'guest');
   }
-  
-
-
-
 
   handleGuestAction(): void {
     this.router.navigate(['/upgrade']);
   }
 
-
   showButtonForAdmin(): boolean {
     if (!this.currentUser?.roles) return false;
-    return this.currentUser.roles.some(role => 
-        role.toLowerCase() === "admin"
-    );
-}
+    return this.currentUser.roles.some(role => role.toLowerCase() === 'admin');
+  }
 
-handleAdmintAction(): void {
-  this.router.navigate(['/admin']);
-}
+  handleAdmintAction(): void {
+    this.router.navigate(['/admin']);
+  }
 
-showButtonForHost(): boolean {
-  if (!this.currentUser?.roles) return false;
-  return this.currentUser.roles.some(role => 
-      role.toLowerCase() === "host"
-  );
-}
+  showButtonForHost(): boolean {
+    if (!this.currentUser?.roles) return false;
+    return this.currentUser.roles.some(role => role.toLowerCase() === 'host');
+  }
 
-
-handleHostAction(): void {
-  this.router.navigate(['/addproperty']);
-}
-
-
-
+  handleHostAction(): void {
+    this.router.navigate(['/addproperty']);
+  }
 }

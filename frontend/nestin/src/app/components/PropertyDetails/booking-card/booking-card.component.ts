@@ -12,6 +12,7 @@ import { IGuestType } from '../../../models/domain/iguest-type';
 import { IGuestTypeResponse } from '../../../models/api/response/iguest-type-response';
 import { ToastContainerComponent } from '../../toast-container/toast-container.component';
 import { ToastService } from '../../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-booking-card',
@@ -23,11 +24,11 @@ import { ToastService } from '../../../services/toast.service';
 export class BookingCardComponent implements OnInit {
   @Input({ required: true }) property!: IPropertyInfo;
 
-
   constructor(
     private propertyService: PropertyService,
     private bookingService: BookingService,
-    private toaster: ToastService
+    private toaster: ToastService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.loadFees(this.property.id);
@@ -70,67 +71,67 @@ export class BookingCardComponent implements OnInit {
   }
 
   // ======================================Guest selection state=====================================
-showGuestModal = false;
-guestCounts: Record<number, number> = {}; 
-guestTypes: IGuestType[] = [];
-loadingGuestTypes = false;
+  showGuestModal = false;
+  guestCounts: Record<number, number> = {};
+  guestTypes: IGuestType[] = [];
+  loadingGuestTypes = false;
 
-// Initialize guest counts to 0 when guest types are loaded
-initializeGuestCounts(guestTypes: IGuestType[]): void {
-  guestTypes.forEach(type => {
-    this.guestCounts[type.id] = 0;
-  });
-}
-
-// Fetch guest types from API
-loadGuestTypes(): void {
-  this.loadingGuestTypes = true;
-  this.propertyService.getAllGuestTypes().subscribe({
-    next: (response) => {
-      if (response.body) {
-        this.guestTypes = response.body.items;
-        this.initializeGuestCounts(this.guestTypes);
-      }
-      this.loadingGuestTypes = false;
-    },
-    error: (error) => {
-      console.error('Failed to load guest types:', error);
-      this.loadingGuestTypes = false;
-    }
-  });
-}
-
-get totalGuests(): number {
-  // Sum all guest counts except infants and pets if they shouldn't count
-  return Object.entries(this.guestCounts).reduce((total, [id, count]) => {
-    const numericId = Number(id);
-    // Only count adults and children (assuming IDs 1 and 2)
-    return numericId === 1 || numericId === 2 ? total + count : total;
-  }, 0);
-}
-
-get guestSummary(): string {
-  if (this.loadingGuestTypes) return 'Loading...';
-  if (this.guestTypes.length === 0) return 'Add guests';
-
-  const parts = this.guestTypes
-    .filter(type => this.guestCounts[type.id] > 0)
-    .map(type => {
-      const count = this.guestCounts[type.id];
-      return `${count} ${type.name.toLowerCase()}${count !== 1 ? 's' : ''}`;
+  // Initialize guest counts to 0 when guest types are loaded
+  initializeGuestCounts(guestTypes: IGuestType[]): void {
+    guestTypes.forEach(type => {
+      this.guestCounts[type.id] = 0;
     });
+  }
 
-  return parts.join(', ') || 'Add guests';
-}
+  // Fetch guest types from API
+  loadGuestTypes(): void {
+    this.loadingGuestTypes = true;
+    this.propertyService.getAllGuestTypes().subscribe({
+      next: response => {
+        if (response.body) {
+          this.guestTypes = response.body.items;
+          this.initializeGuestCounts(this.guestTypes);
+        }
+        this.loadingGuestTypes = false;
+      },
+      error: error => {
+        console.error('Failed to load guest types:', error);
+        this.loadingGuestTypes = false;
+      },
+    });
+  }
 
-decrementGuestCount(typeId: number, min: number = 0): void {
-  this.guestCounts[typeId] = Math.max(min, this.guestCounts[typeId] - 1);
-}
+  get totalGuests(): number {
+    // Sum all guest counts except infants and pets if they shouldn't count
+    return Object.entries(this.guestCounts).reduce((total, [id, count]) => {
+      const numericId = Number(id);
+      // Only count adults and children (assuming IDs 1 and 2)
+      return numericId === 1 || numericId === 2 ? total + count : total;
+    }, 0);
+  }
 
-incrementGuestCount(typeId: number, max?: number): void {
-  if (max !== undefined && this.guestCounts[typeId] >= max) return;
-  this.guestCounts[typeId] = (this.guestCounts[typeId] || 0) + 1;
-}
+  get guestSummary(): string {
+    if (this.loadingGuestTypes) return 'Loading...';
+    if (this.guestTypes.length === 0) return 'Add guests';
+
+    const parts = this.guestTypes
+      .filter(type => this.guestCounts[type.id] > 0)
+      .map(type => {
+        const count = this.guestCounts[type.id];
+        return `${count} ${type.name.toLowerCase()}${count !== 1 ? 's' : ''}`;
+      });
+
+    return parts.join(', ') || 'Add guests';
+  }
+
+  decrementGuestCount(typeId: number, min: number = 0): void {
+    this.guestCounts[typeId] = Math.max(min, this.guestCounts[typeId] - 1);
+  }
+
+  incrementGuestCount(typeId: number, max?: number): void {
+    if (max !== undefined && this.guestCounts[typeId] >= max) return;
+    this.guestCounts[typeId] = (this.guestCounts[typeId] || 0) + 1;
+  }
 
   //==========================fees======================================
   cleaningFee: number = 0;
@@ -173,10 +174,10 @@ incrementGuestCount(typeId: number, max?: number): void {
 
   handleBookNow(): void {
     if (!this.checkInDate || !this.checkOutDate) return;
-  
+
     this.isBooking = true;
     this.bookingError = null;
-  
+
     this.bookingData = {
       propertyId: this.property.id,
       checkIn: this.checkInDate,
@@ -185,24 +186,27 @@ incrementGuestCount(typeId: number, max?: number): void {
         .filter(([_, count]) => count > 0)
         .map(([typeId, count]) => ({
           guestTypeId: Number(typeId),
-          guestCount: count
-        }))
+          guestCount: count,
+        })),
     };
-  
+
     console.log('Booking data:', this.bookingData);
-  
+
     this.bookingService.createBooking(this.bookingData).subscribe({
       next: (response: any) => {
         this.isBooking = false;
-  
+
         if (response.status === 201) {
           this.toaster.showSuccess('Booking created successfully!');
+          setTimeout(() => {
+            this.router.navigateByUrl(`/booking/${response.body.id}`);
+          }, 1000);
         }
       },
       error: error => {
         this.isBooking = false;
-        this.toaster.showError('Booking fiald!');
-  
+        this.toaster.showError('Booking failed!');
+
         if (error.status === 409) {
           this.toaster.showError(error.error);
         } else if (error.status === 401) {

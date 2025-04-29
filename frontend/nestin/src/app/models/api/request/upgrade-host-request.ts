@@ -1,4 +1,4 @@
-import { FileUploadRequest } from "./file-upload-request";
+import { FileUploadRequest } from './file-upload-request';
 
 export interface UpgradeHostRequest {
   Id?: string;
@@ -12,7 +12,7 @@ export interface UpgradeHostRequest {
   FirstName: string;
   LastName: string;
   ExpiryDate: string;
-  FrontPhoto:FileUploadRequest;
+  FrontPhoto: FileUploadRequest;
   BackPhoto: FileUploadRequest;
   CreatedAt?: Date;
   UpdatedAt?: Date;

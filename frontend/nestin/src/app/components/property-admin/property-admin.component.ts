@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router,RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
@@ -11,42 +11,46 @@ import { HostListener } from '@angular/core';
 import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
 import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
-import { faChevronLeft,
-         faChevronRight,
-         faTrash,
-         faThumbtack,
-          faCheck, 
-          faTimes
-} from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faChevronRight,
+  faTrash,
+  faThumbtack,
+  faCheck,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-property-admin',
-  imports: [CommonModule , FormsModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './property-admin.component.html',
-  styleUrl: './property-admin.component.scss'
+  styleUrl: './property-admin.component.scss',
 })
 export class PropertyAdminComponent implements OnInit {
   searchMode: 'simple' | 'advanced' = 'simple';
   showFilters: boolean = false;
-  property:IPropertyWithDistance[] = [];
+  property: IPropertyWithDistance[] = [];
   allProperties: IPropertyWithDistance[] = [];
   errorMessage: string = '';
-   userLat:number = 30.033333;
-   userLon:number = 31.233334;
+  userLat: number = 30.033333;
+  userLon: number = 31.233334;
   currentPage: number = 1;
-  itemsPerPage: number = 10; 
+  itemsPerPage: number = 10;
   totalItems: number = this.property?.length || 0;
   Math = Math;
 
   icons: { [key: string]: any } = {
     'chevron-left': faChevronLeft,
     'chevron-right': faChevronRight,
-    'trash': faTrash,
-  'pin': faThumbtack,
-  'check': faCheck,
-  'times': faTimes
-  }
-  constructor(private propertyService:PropertyService , private route : Router){}
+    trash: faTrash,
+    pin: faThumbtack,
+    check: faCheck,
+    times: faTimes,
+  };
+  constructor(
+    private propertyService: PropertyService,
+    private route: Router
+  ) {}
   ngOnInit(): void {
     this.getAllProperty();
   }
@@ -64,13 +68,11 @@ export class PropertyAdminComponent implements OnInit {
             ).toFixed(1),
           }));
           this.totalItems = response.body.metaData.total;
-          this.itemsPerPage = response.body.metaData.pageSize; 
+          this.itemsPerPage = response.body.metaData.pageSize;
           this.currentPage = response.body.metaData.page;
           console.log(this.property);
-    
-          } else {
+        } else {
           this.handlePropertyerror('Invalid Loading Property');
-         
         }
       },
       error: error => {
@@ -82,19 +84,26 @@ export class PropertyAdminComponent implements OnInit {
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
   }
-  getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  getDistanceFromLatLonInKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number {
     const R = 6371; // Radius of the earth in km
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; // Distance in km
     return d;
   }
-  
+
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
@@ -126,18 +135,19 @@ export class PropertyAdminComponent implements OnInit {
   //======================================================================
   onDelete(propertyId: string): void {
     console.log('Delete property with ID:', propertyId);
-    
   }
-  
+
   onPin(propertyId: string): void {
     console.log('Pin property with ID:', propertyId);
-   
   }
-  
+
   toggleActive(property: IPropertyWithDistance): void {
     property.isActive = !property.isActive;
-    console.log('Toggle active for property:', property.id, 'Now:', property.isActive);
- 
+    console.log(
+      'Toggle active for property:',
+      property.id,
+      'Now:',
+      property.isActive
+    );
   }
-  
 }

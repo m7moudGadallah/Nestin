@@ -20,11 +20,10 @@ import { PropertyService } from '../../../services/property.service';
   styleUrl: './property-host.component.css',
 })
 export class PropertyHostComponent implements OnInit {
-
   @Input() property!: IPropertyInfo;
 
   constructor(private propertyService: PropertyService) {}
-  
+
   icons = {
     calendar: CalendarDays,
     star: Star,
@@ -37,7 +36,6 @@ export class PropertyHostComponent implements OnInit {
     this.propertyService
       .getPropertyById(this.property?.id)
       .subscribe(property => {
-        
         property.body.owner = {
           ...property.body.owner,
           firstName: property.body.owner.firstName || 'Host',
@@ -61,7 +59,6 @@ export class PropertyHostComponent implements OnInit {
     return `${this.property.owner?.firstName || ''} ${this.property.owner?.lastName || ''}`.trim();
   }
 
-
   get isSuperhost(): boolean {
     return (
       this.property.reviewCount >= 10 && this.property.averageRating >= 4.3
@@ -69,6 +66,6 @@ export class PropertyHostComponent implements OnInit {
   }
 
   get responseRate(): number {
-    return 75; 
+    return 75;
   }
 }

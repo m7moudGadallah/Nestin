@@ -5,16 +5,16 @@ import { Award, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-rating-header',
-  imports: [CommonModule,LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './rating-header.component.html',
   styleUrl: './rating-header.component.css',
 })
 export class RatingHeaderComponent {
   @Input({ required: true }) property!: IPropertyInfo;
 
-  icons={
-    award:Award
-  }
+  icons = {
+    award: Award,
+  };
 
   get starRating(): string {
     const rating = this.property.averageRating || 0;

@@ -1,7 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CountryISO, NgxIntlTelInputModule, SearchCountryField } from 'ngx-intl-tel-input';
+import {
+  CountryISO,
+  NgxIntlTelInputModule,
+  SearchCountryField,
+} from 'ngx-intl-tel-input';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../../../services/user-profile.service';
 import { AccountService } from '../../../services/account.service';
@@ -13,9 +24,14 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
   selector: 'app-profile-update-modal',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, NgxIntlTelInputModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NgxIntlTelInputModule,
+  ],
   templateUrl: './profile-update-modal.component.html',
-  styleUrls: ['./profile-update-modal.component.css']
+  styleUrls: ['./profile-update-modal.component.css'],
 })
 export class ProfileUpdateModalComponent implements OnInit {
   userForm: FormGroup;
@@ -30,7 +46,8 @@ export class ProfileUpdateModalComponent implements OnInit {
 
   // Validation patterns
   readonly namePattern = /^[a-zA-ZÀ-ÿ '-]{3,}$/;
-  readonly passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\W]{8,}$";
+  readonly passwordPattern =
+    '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\W]{8,}$';
 
   // Phone input configuration
   CountryISO = CountryISO;
@@ -39,11 +56,11 @@ export class ProfileUpdateModalComponent implements OnInit {
   autoCountrySelect = true;
   separateDialCode = true;
   searchCountryFlag = true;
-  
+
   searchCountryFields: SearchCountryField[] = [
     SearchCountryField.Iso2,
     SearchCountryField.Name,
-    SearchCountryField.DialCode
+    SearchCountryField.DialCode,
   ];
 
   // File upload
@@ -59,38 +76,53 @@ export class ProfileUpdateModalComponent implements OnInit {
     private toaster: ToastService
   ) {
     this.userForm = this.fb.group({
-      firstName: ['', [
-        Validators.required,
-        Validators.maxLength(50),
-        this.validateName.bind(this)
-      ]],
-      lastName: ['', [
-        Validators.required,
-        Validators.maxLength(50),
-        this.validateName.bind(this)
-      ]],
-      email: [{value: '', disabled: true}],
-      username: ['', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(20),
-        Validators.pattern(/^[a-zA-Z0-9_]+$/)
-      ]],
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          this.validateName.bind(this),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          this.validateName.bind(this),
+        ],
+      ],
+      email: [{ value: '', disabled: true }],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20),
+          Validators.pattern(/^[a-zA-Z0-9_]+$/),
+        ],
+      ],
       bio: ['', [Validators.maxLength(200)]],
       country: [''],
       phoneNumber: [null],
-      birthday: ['']
+      birthday: [''],
     });
 
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(this.passwordPattern)
-      ]],
-      confirmPassword: ['', Validators.required]
-    }, {validator: this.passwordMatchValidator});
+    this.passwordForm = this.fb.group(
+      {
+        currentPassword: ['', Validators.required],
+        newPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(this.passwordPattern),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+      },
+      { validator: this.passwordMatchValidator }
+    );
   }
 
   ngOnInit(): void {
@@ -100,7 +132,7 @@ export class ProfileUpdateModalComponent implements OnInit {
   loadUserData(): void {
     this.isLoading = true;
     this.errorMessage = '';
-  
+
     this.userProfileService.getUserProfile().subscribe({
       next: (response: any) => {
         if (response.body) {
@@ -113,21 +145,23 @@ export class ProfileUpdateModalComponent implements OnInit {
             bio: this.user?.bio,
             country: this.user?.country,
             phoneNumber: this.user?.phoneNumber,
-            birthday: this.user?.birthDate ? new Date(this.user.birthDate) : null
+            birthday: this.user?.birthDate
+              ? new Date(this.user.birthDate)
+              : null,
           });
         }
         this.isLoading = false;
       },
-      error: (err) => {
+      error: err => {
         this.errorMessage = err.error || 'Failed to load profile data';
         this.isLoading = false;
         console.error(err);
-        
+
         if (err.status === 401) {
           this.authService.unsetAuthData();
           this.router.navigate(['/login']);
         }
-      }
+      },
     });
   }
 
@@ -167,7 +201,7 @@ export class ProfileUpdateModalComponent implements OnInit {
   //       this.errorMessage = 'Failed to save changes';
   //       this.isSaving = false;
   //       console.error(err);
-        
+
   //       if (err.status === 401) {
   //         this.authService.unsetAuthData();
   //         this.router.navigate(['/login']);
@@ -184,7 +218,7 @@ export class ProfileUpdateModalComponent implements OnInit {
   //   if (userData.bio) formData.append('bio', userData.bio);
   //   if (userData.country) {
   //     formData.append('country', JSON.stringify(userData.country));
- 
+
   //   }
   //   if (userData.phoneNumber) formData.append('phoneNumber', userData.phoneNumber);
   //   if (userData.birthDate) formData.append('birthday', userData.birthDate.toString());
@@ -194,18 +228,15 @@ export class ProfileUpdateModalComponent implements OnInit {
   //   return formData;
   // }
 
-
-
   // In ProfileUpdateModalComponent
-
 
   onSubmitProfile(): void {
     if (this.userForm.invalid || !this.user) return;
-  
+
     this.isSaving = true;
     this.saveSuccess = false;
     this.errorMessage = '';
-  
+
     // Create request payload with required fields
     const requestData: ApiUserProfileRequest = {
       userId: this.user.userId,
@@ -213,24 +244,28 @@ export class ProfileUpdateModalComponent implements OnInit {
       email: this.user.email,
       firstName: this.userForm.value.firstName,
       lastName: this.userForm.value.lastName,
-      phoneNumber: this.userForm.value.phoneNumber?.e164Number || this.userForm.value.phoneNumber,
+      phoneNumber:
+        this.userForm.value.phoneNumber?.e164Number ||
+        this.userForm.value.phoneNumber,
       bio: this.userForm.value.bio,
       // birthDate: this.userForm.value.birthday ? new Date(this.userForm.value.birthday): new Date(),
-      birthDate:'2025-04-26',
+      birthDate: '2025-04-26',
       country: this.userForm.value.country,
-      photo: this.user.photo
+      photo: this.user.photo,
     };
-  
+
     // Create payload (FormData if file selected, otherwise plain object)
-    const payload = this.selectedFile ? this.createFormData(requestData) : requestData;
-  
+    const payload = this.selectedFile
+      ? this.createFormData(requestData)
+      : requestData;
+
     this.userProfileService.UpdateUserProfile(payload).subscribe({
-      next: (updatedProfile) => {
+      next: updatedProfile => {
         this.user = updatedProfile;
         this.saveSuccess = true;
         this.selectedFile = null;
         this.previewUrl = updatedProfile.photo.photoUrl || null;
-        
+
         // Update form with normalized data
         this.userForm.patchValue({
           firstName: updatedProfile.firstName,
@@ -240,13 +275,13 @@ export class ProfileUpdateModalComponent implements OnInit {
           country: updatedProfile.country,
           phoneNumber: updatedProfile.phoneNumber,
           // birthday: updatedProfile.birthDate ? new Date(updatedProfile.birthDate) : null
-          birthday: '2025-04-26'
+          birthday: '2025-04-26',
         });
-  
+
         // setTimeout(() => this.saveSuccess = false, 3000);
         this.isSaving = false;
       },
-      error: (err) => {
+      error: err => {
         this.errorMessage = err.error || 'Failed to save changes';
         this.isSaving = false;
         // this.toaster.showError(err.error);
@@ -255,33 +290,39 @@ export class ProfileUpdateModalComponent implements OnInit {
           this.authService.unsetAuthData();
           this.router.navigate(['/login']);
         }
-      }
+      },
     });
   }
-  
+
   private createFormData(requestData: ApiUserProfileRequest): FormData {
     const formData = new FormData();
-    
 
     if (requestData.country) {
       // Match the server's expected structure
       formData.append('country[id]', requestData.country.id.toString());
       formData.append('country[name]', requestData.country.name);
-      formData.append('country[regionId]', requestData.country.regionId.toString());
+      formData.append(
+        'country[regionId]',
+        requestData.country.regionId.toString()
+      );
     }
     // Append all fields including undefined ones (API might handle them)
     formData.append('userId', requestData.userId ?? '');
     formData.append('userName', requestData.userName ?? '');
     formData.append('email', requestData.email ?? '');
-    if (requestData.firstName) formData.append('firstName', requestData.firstName);
+    if (requestData.firstName)
+      formData.append('firstName', requestData.firstName);
     if (requestData.lastName) formData.append('lastName', requestData.lastName);
-    if (requestData.phoneNumber) formData.append('phoneNumber', requestData.phoneNumber);
+    if (requestData.phoneNumber)
+      formData.append('phoneNumber', requestData.phoneNumber);
     if (requestData.bio) formData.append('bio', requestData.bio);
     // if (requestData.birthDate) formData.append('birthDate', requestData.birthDate);
-    if (requestData.birthDate) formData.append('birthDate','2025-04-26');
-    if (requestData.country) formData.append('country', JSON.stringify(requestData.country));
-    if (this.selectedFile) formData.append('photo', this.selectedFile, this.selectedFile.name);
-  
+    if (requestData.birthDate) formData.append('birthDate', '2025-04-26');
+    if (requestData.country)
+      formData.append('country', JSON.stringify(requestData.country));
+    if (this.selectedFile)
+      formData.append('photo', this.selectedFile, this.selectedFile.name);
+
     return formData;
   }
 
@@ -289,7 +330,7 @@ export class ProfileUpdateModalComponent implements OnInit {
     const file = event.target.files[0];
     if (file && file.type.match('image.*')) {
       this.selectedFile = file;
-      
+
       const reader = new FileReader();
       reader.onload = () => {
         this.previewUrl = reader.result as string;
@@ -309,65 +350,73 @@ export class ProfileUpdateModalComponent implements OnInit {
 
   onSubmitPassword(): void {
     if (this.passwordForm.invalid) return;
-  
+
     this.isSaving = true;
     this.errorMessage = '';
-  
+
     const passwordData = {
       oldPassword: this.passwordForm.value.currentPassword,
-      newPassword: this.passwordForm.value.newPassword
+      newPassword: this.passwordForm.value.newPassword,
     };
-  
+
     this.accountService.changePassword(passwordData).subscribe({
       next: (response: any) => {
         this.saveSuccess = true;
         this.isSaving = false;
         this.showPasswordModal = false;
-        setTimeout(() => this.saveSuccess = false, 3000);
+        setTimeout(() => (this.saveSuccess = false), 3000);
       },
-      error: (err) => {
+      error: err => {
         this.errorMessage = err.error?.message || 'Failed to change password';
         this.isSaving = false;
         console.error(err);
-        // this.toaster.showError(err.error);  
-        
+        // this.toaster.showError(err.error);
+
         if (err.status === 401) {
           this.authService.unsetAuthData();
           this.router.navigate(['/login']);
         }
-      }
+      },
     });
   }
 
   // Validation helpers
-  validateName(control: AbstractControl): {[key: string]: any} | null {
+  validateName(control: AbstractControl): { [key: string]: any } | null {
     const valid = this.namePattern.test(control.value);
-    return valid ? null : {invalidName: true};
+    return valid ? null : { invalidName: true };
   }
 
   passwordMatchValidator(form: FormGroup) {
-    return form.get('newPassword')?.value === form.get('confirmPassword')?.value 
-      ? null : {mismatch: true};
+    return form.get('newPassword')?.value === form.get('confirmPassword')?.value
+      ? null
+      : { mismatch: true };
   }
 
-  getFormErrors(controlName: string, form: FormGroup = this.userForm): string[] {
+  getFormErrors(
+    controlName: string,
+    form: FormGroup = this.userForm
+  ): string[] {
     const control = form.get(controlName);
     const errors: string[] = [];
-    
+
     if (!control || !control.errors || !control.touched) return errors;
 
     if (control.errors['required']) {
       errors.push('This field is required');
     }
     if (control.errors['maxlength']) {
-      errors.push(`Maximum length is ${control.errors['maxlength'].requiredLength} characters`);
+      errors.push(
+        `Maximum length is ${control.errors['maxlength'].requiredLength} characters`
+      );
     }
     if (control.errors['invalidName']) {
       errors.push('Only letters, spaces, hyphens and apostrophes are allowed');
     }
     if (control.errors['pattern']) {
       if (controlName.includes('password')) {
-        errors.push('Password must contain at least one uppercase letter, one lowercase letter, one number and one special character');
+        errors.push(
+          'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character'
+        );
       }
       if (controlName === 'username') {
         errors.push('Only letters, numbers and underscores are allowed');
@@ -377,7 +426,9 @@ export class ProfileUpdateModalComponent implements OnInit {
       errors.push('Passwords do not match');
     }
     if (control.errors['minlength']) {
-      errors.push(`Minimum length is ${control.errors['minlength'].requiredLength}`);
+      errors.push(
+        `Minimum length is ${control.errors['minlength'].requiredLength}`
+      );
     }
 
     return errors;
@@ -407,13 +458,15 @@ export class ProfileUpdateModalComponent implements OnInit {
   // Country handling
   getAvailableCountries(): string[] {
     return Object.values(CountryISO).filter(
-      (value) => typeof value === 'string'
+      value => typeof value === 'string'
     ) as string[];
   }
 
   // Photo handling
   get photoUrl(): string | null {
-    return this.previewUrl || 
-           (this.user?.photo.photoUrl ? this.user.photo.photoUrl : 'favicon.png');
+    return (
+      this.previewUrl ||
+      (this.user?.photo.photoUrl ? this.user.photo.photoUrl : 'favicon.png')
+    );
   }
 }

@@ -5,7 +5,6 @@ import { IPropertyInfo } from '../../../models/domain/iproperty-info'; // <-- im
 import { ToastService } from '../../../services/toast.service'; // <-- import ToastService
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-favorite-button',
   standalone: true,
@@ -22,7 +21,6 @@ export class FavoriteButtonComponent implements OnInit {
   @Output() toggle = new EventEmitter<boolean>();
   propertyId!: string;
 
-
   icon = {
     heart: Heart,
   };
@@ -37,7 +35,6 @@ export class FavoriteButtonComponent implements OnInit {
     console.log('FavoriteButton loaded with property id:', this.property);
     this.propertyId = this.route.snapshot.paramMap.get('id')!;
     console.log('Property ID from URL:', this.propertyId);
-
   }
 
   onClick(event: Event) {

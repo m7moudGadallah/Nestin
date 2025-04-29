@@ -51,7 +51,6 @@ export class PropertyAvailabilityComponent implements OnInit {
 
   constructor(private propertyService: PropertyService) {}
 
-
   ngOnInit(): void {
     this.fetchAvailability();
   }

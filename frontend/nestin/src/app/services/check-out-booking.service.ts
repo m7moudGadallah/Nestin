@@ -1,44 +1,61 @@
 import { Injectable } from '@angular/core';
-import { HttpClient , HttpHeaders, HttpResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiConstant } from '../utils/api-constant.util';
-import { GetBookingsResponse, IGetBookingResponse } from '../models/api/request/iget-bookings';
+import {
+  GetBookingsResponse,
+  IGetBookingResponse,
+} from '../models/api/request/iget-bookings';
 import { PropertyDetails } from '../models/api/request/iget-propertiesDetails';
 import { IProperty } from '../models/domain/iproperty';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CheckOutBookingService {
-  
-  private checkoutApi = 'https://localhost:7026/api/v1/Bookings/checkout';
-  constructor( private http : HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllBookings(): Observable<HttpResponse<any>> {
-    return this.http.get<any>(ApiConstant.booking.getAllBookings, { observe:'response', withCredentials: true })
-}
-getBookingById(id: string): Observable<IGetBookingResponse> {
-  const url = ApiConstant.booking.getBookingById.replace('{id}', id);
-  return this.http.get<IGetBookingResponse>(url, { withCredentials: true });
-}
+    return this.http.get<any>(ApiConstant.booking.getAllBookings, {
+      observe: 'response',
+      withCredentials: true,
+    });
+  }
+  getBookingById(id: string): Observable<IGetBookingResponse> {
+    const url = ApiConstant.booking.getBookingById.replace('{id}', id);
+    return this.http.get<IGetBookingResponse>(url, { withCredentials: true });
+  }
   createBooking(bookingData: any): Observable<any> {
-    return this.http.post(ApiConstant.booking.createBooking, bookingData, { withCredentials: true });
+    return this.http.post(ApiConstant.booking.createBooking, bookingData, {
+      withCredentials: true,
+    });
   }
-  getPropertyDetails(id: string):Observable<PropertyDetails>{
-    return this.http.get<PropertyDetails>(`${ApiConstant.PropertiesApi.getAll}/${id}`)
-  }  
-  getAllProperties(): Observable<{ items: IProperty [] }> {
-    return this.http.get<{ items: IProperty [] }>(`${ApiConstant.baseUrl}/Properties`);
+  getPropertyDetails(id: string): Observable<PropertyDetails> {
+    return this.http.get<PropertyDetails>(
+      `${ApiConstant.PropertiesApi.getAll}/${id}`
+    );
   }
-  checkOut(body: any, headers: HttpHeaders): Observable<any> {
-    return this.http.post<any>(this.checkoutApi, body, { headers: headers, withCredentials: true });
+  getAllProperties(): Observable<{ items: IProperty[] }> {
+    return this.http.get<{ items: IProperty[] }>(
+      `${ApiConstant.baseUrl}/Properties`
+    );
   }
-  getUserRole():Observable<HttpResponse<any>>{
-    return this.http.get<any>('https://localhost:7026/api/v1/UserProfiles/me',{ observe:'response', withCredentials: true});
+  checkOut(bookingId: string): Observable<any> {
+    return this.http.post<any>(
+      ApiConstant.Booking.checkout.replace('{bookingId}', bookingId),
+      {
+        withCredentials: true,
+      }
+    );
   }
-  cancelBookings(id: string):Observable<any>{
+  getUserRole(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(ApiConstant.UserProfile.User, {
+      observe: 'response',
+      withCredentials: true,
+    });
+  }
+  cancelBookings(id: string): Observable<any> {
     const url2 = ApiConstant.booking.cancelBooking.replace('{id}', id);
-    return this.http.post<any>(url2,{},{withCredentials: true})
+    return this.http.post<any>(url2, {}, { withCredentials: true });
   }
-  
 }

@@ -1,35 +1,50 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UpgradeServiceService } from '../../../services/upgrade-service.service';
 import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-upgrade-tohost',
-  imports: [RouterModule,ReactiveFormsModule,CommonModule,HttpClientModule],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, HttpClientModule],
   templateUrl: './upgrade-tohost.component.html',
-  styleUrl: './upgrade-tohost.component.css'
+  styleUrl: './upgrade-tohost.component.css',
 })
 export class UpgradeTohostComponent {
   upgradeForm!: FormGroup;
   selectedDocumentType: string = 'NationalId';
-  uploadedFiles: { front?: File, back?: File } = {};
+  uploadedFiles: { front?: File; back?: File } = {};
   uploadProgress: number = 0;
   isUploading: boolean = false;
   submissionError: string | null = null;
   submissionSuccess: boolean = false;
 
-  constructor(private fb: FormBuilder,private upgradeService:UpgradeServiceService ,private toaster:ToastService) {}
+  constructor(
+    private fb: FormBuilder,
+    private upgradeService: UpgradeServiceService,
+    private toaster: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.upgradeForm = this.fb.group({
       documentType: ['NationalId', Validators.required],
       firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
       lastName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      documentNumber: ['', [Validators.required,Validators.pattern('^(?!.*(\\d)\\1{3,})\\d{6,14}$')]],
-      expiryDate: ['', Validators.required]
+      documentNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^(?!.*(\\d)\\1{3,})\\d{6,14}$'),
+        ],
+      ],
+      expiryDate: ['', Validators.required],
     });
   }
 
@@ -48,13 +63,13 @@ export class UpgradeTohostComponent {
   // submitForm(): void {
   //   if (this.upgradeForm.valid && this.uploadedFiles.front) {
   //     this.isUploading = true;
-      
+
   //     const interval = setInterval(() => {
   //       this.uploadProgress += 10;
   //       if (this.uploadProgress >= 100) {
   //         clearInterval(interval);
   //         this.isUploading = false;
-         
+
   //         console.log('Form submitted', {
   //           formData: this.upgradeForm.value,
   //           files: this.uploadedFiles
@@ -64,11 +79,18 @@ export class UpgradeTohostComponent {
   //   }
   // }
 
-  get firstName() { return this.upgradeForm.get('firstName'); }
-  get lastName() { return this.upgradeForm.get('lastName'); }
-  get documentNumber() { return this.upgradeForm.get('documentNumber'); }
-  get expiryDate() { return this.upgradeForm.get('expiryDate'); }
-
+  get firstName() {
+    return this.upgradeForm.get('firstName');
+  }
+  get lastName() {
+    return this.upgradeForm.get('lastName');
+  }
+  get documentNumber() {
+    return this.upgradeForm.get('documentNumber');
+  }
+  get expiryDate() {
+    return this.upgradeForm.get('expiryDate');
+  }
 
   //==============================================api management=================================================
   async submitForm(): Promise<void> {
@@ -110,14 +132,12 @@ export class UpgradeTohostComponent {
 
     // Append files with exact field names expected by backend
     formData.append('FrontPhoto', this.uploadedFiles.front!);
-    formData.append('BackPhoto', this.uploadedFiles.back!); 
+    formData.append('BackPhoto', this.uploadedFiles.back!);
     console.log('Front File:', this.uploadedFiles.front);
     console.log('Back File:', this.uploadedFiles.back);
-  
 
     return formData;
   }
-
 
   private async submitFormData(formData: FormData): Promise<void> {
     const interval = setInterval(() => {
@@ -140,11 +160,11 @@ export class UpgradeTohostComponent {
   }
 
   private handleError(error: any): void {
-    this.submissionError = error.status === 400
-      ? 'Please check your information and try again.'
-      : 'An error occurred. Please try again later.';
+    this.submissionError =
+      error.status === 400
+        ? 'Please check your information and try again.'
+        : 'An error occurred. Please try again later.';
     console.error('Submission error:', error);
     this.toaster.showError(error.error);
-
   }
 }

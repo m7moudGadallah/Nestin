@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Bookings, GetBookingsResponse } from '../../models/api/request/iget-bookings';
+import {
+  Bookings,
+  GetBookingsResponse,
+} from '../../models/api/request/iget-bookings';
 import { CheckOutBookingService } from '../../services/check-out-booking.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastService } from '../../services/toast.service';
@@ -10,18 +13,22 @@ import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-booking-history',
-  imports: [CommonModule,FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './booking-history.component.html',
-  styleUrl: './booking-history.component.scss'
+  styleUrl: './booking-history.component.scss',
 })
-export class BookingHistoryComponent implements OnInit{
+export class BookingHistoryComponent implements OnInit {
   bookings: Bookings[] = [];
   selectedStatus: string = 'all';
   selectedFilter: string = 'checkIn-desc';
   searchQuery: string = '';
-  filteredBookingsSearch : Bookings[] = [];
+  filteredBookingsSearch: Bookings[] = [];
   userRole: string | undefined;
-  constructor(private checkOutService: CheckOutBookingService, private toastService: ToastService,private route:Router) {}
+  constructor(
+    private checkOutService: CheckOutBookingService,
+    private toastService: ToastService,
+    private route: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadBookings();
@@ -29,55 +36,53 @@ export class BookingHistoryComponent implements OnInit{
   }
   loadBookings(): void {
     this.checkOutService.getAllBookings().subscribe({
-      next: (response: HttpResponse<GetBookingsResponse>) => { 
-        this.bookings = response?.body?.items || []; 
-        console.log(response,'no response')
+      next: (response: HttpResponse<GetBookingsResponse>) => {
+        this.bookings = response?.body?.items || [];
+        console.log(response, 'no response');
         if (this.bookings.length === 0) {
           console.warn('Received empty bookings array');
         }
       },
       error: (err: HttpErrorResponse) => {
         console.error('Booking load error:', err);
-        this.bookings = [];  // Clear previous data
-        
+        this.bookings = []; // Clear previous data
+
         let errorMessage = 'Failed to load bookings';
         if (err.status === 0) {
           errorMessage += ' (Network error - is backend running?)';
         } else {
           errorMessage += ` (Server error: ${err.status})`;
         }
-        
+
         alert(errorMessage);
-      }
+      },
     });
   }
-  loadUserProfile():void{
-   this.checkOutService.getUserRole().subscribe({
-    next: (response: HttpResponse<IRole>) => { 
-      this.userRole = response?.body?.name|| undefined; 
-      console.log(response,'no role')
-      // if (this.bookings.length === 0) {
-      //   console.warn('Received empty bookings array');
-      // }
-    },
-    error: (err: HttpErrorResponse) => {
-      console.error('Role load error:', err);
-      // this.bookings = [];  // Clear previous data
-      
-      // let errorMessage = 'Failed to load bookings';
-      // if (err.status === 0) {
-      //   errorMessage += ' (Network error - is backend running?)';
-      // } else {
-      //   errorMessage += ` (Server error: ${err.status})`;
-      // }
-      
-      // alert(errorMessage);
-    }
-  });
-  
+  loadUserProfile(): void {
+    this.checkOutService.getUserRole().subscribe({
+      next: (response: HttpResponse<IRole>) => {
+        this.userRole = response?.body?.name || undefined;
+        console.log(response, 'no role');
+        // if (this.bookings.length === 0) {
+        //   console.warn('Received empty bookings array');
+        // }
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Role load error:', err);
+        // this.bookings = [];  // Clear previous data
+
+        // let errorMessage = 'Failed to load bookings';
+        // if (err.status === 0) {
+        //   errorMessage += ' (Network error - is backend running?)';
+        // } else {
+        //   errorMessage += ` (Server error: ${err.status})`;
+        // }
+
+        // alert(errorMessage);
+      },
+    });
   }
-  
- 
+
   get firstGuestCount(): number | null {
     return this.bookings?.[0]?.bookingGuests?.[0]?.guestCount ?? null;
   }
@@ -86,100 +91,119 @@ export class BookingHistoryComponent implements OnInit{
     if (this.selectedStatus === 'all') {
       return this.bookings;
     }
-    return this.bookings.filter(booking => booking?.status === this.selectedStatus);
+    return this.bookings.filter(
+      booking => booking?.status === this.selectedStatus
+    );
   }
-  //ordering filteration 
- 
-applySort(): void {
-  if (!this.filteredBookings) return;
+  //ordering filteration
 
-  switch (this.selectedFilter) {
-    case 'checkIn-desc':
-      this.filteredBookings.sort((a, b) => new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime());
-      break;
-    case 'checkIn-asc':
-      this.filteredBookings.sort((a, b) => new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime());
-      break;
-    case 'price-asc':
-      this.filteredBookings.sort((a, b) => a.pricePerNight - b.pricePerNight);
-      break;
-    case 'price-desc':
-      this.filteredBookings.sort((a, b) => b.pricePerNight - a.pricePerNight);
-      break;
-    default:
-      break;
+  applySort(): void {
+    if (!this.filteredBookings) return;
+
+    switch (this.selectedFilter) {
+      case 'checkIn-desc':
+        this.filteredBookings.sort(
+          (a, b) =>
+            new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime()
+        );
+        break;
+      case 'checkIn-asc':
+        this.filteredBookings.sort(
+          (a, b) =>
+            new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime()
+        );
+        break;
+      case 'price-asc':
+        this.filteredBookings.sort((a, b) => a.pricePerNight - b.pricePerNight);
+        break;
+      case 'price-desc':
+        this.filteredBookings.sort((a, b) => b.pricePerNight - a.pricePerNight);
+        break;
+      default:
+        break;
+    }
   }
-}
   //search============================
   searchBookings(): void {
-    this.bookings = this.bookings.filter((booking) => {
+    this.bookings = this.bookings.filter(booking => {
       const matchesQuery =
-        booking?.property?.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        booking?.property?.location?.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        booking?.property?.owner.userName.toLowerCase().includes(this.searchQuery.toLowerCase());
+        booking?.property?.title
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase()) ||
+        booking?.property?.location?.name
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase()) ||
+        booking?.property?.owner.userName
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase());
 
-  
       return matchesQuery;
     });
   }
-  
-  calculateNumberOfNights(checkIn: string | undefined, checkOut: string | undefined): number | null {
 
+  calculateNumberOfNights(
+    checkIn: string | undefined,
+    checkOut: string | undefined
+  ): number | null {
     if (!checkIn || !checkOut) {
-      return null; 
+      return null;
     }
-  
+
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-  
-    
+
     const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
-  
-  
+
     const numberOfNights = differenceInTime / (1000 * 3600 * 24); // 1000ms * 3600s * 24h
     return numberOfNights;
   }
   // to calculate total price (price per night * number pf nights)
-calculateTotalPrice(pricePerNight: number | undefined, checkIn: string | undefined, checkOut: string | undefined): number | null {
-  if (pricePerNight === undefined) {
-    return null; 
-  }
-  const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
+  calculateTotalPrice(
+    pricePerNight: number | undefined,
+    checkIn: string | undefined,
+    checkOut: string | undefined
+  ): number | null {
+    if (pricePerNight === undefined) {
+      return null;
+    }
+    const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
 
-  if (numberOfNights === null) {
-    return null; 
-  }
+    if (numberOfNights === null) {
+      return null;
+    }
 
-  return pricePerNight * numberOfNights; 
-}
-// to calculate total price
-calculateTotal(pricePerNight: number | undefined, checkIn: string | undefined, checkOut: string | undefined, totalFees: number | undefined): number | null {
- 
-  if (pricePerNight === undefined || totalFees === undefined) {
-    return null; 
+    return pricePerNight * numberOfNights;
   }
-  const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
-  if (numberOfNights === null) {
-    return null; 
+  // to calculate total price
+  calculateTotal(
+    pricePerNight: number | undefined,
+    checkIn: string | undefined,
+    checkOut: string | undefined,
+    totalFees: number | undefined
+  ): number | null {
+    if (pricePerNight === undefined || totalFees === undefined) {
+      return null;
+    }
+    const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
+    if (numberOfNights === null) {
+      return null;
+    }
+    const totalPrice = pricePerNight * numberOfNights;
+    return totalPrice + totalFees;
   }
-  const totalPrice = pricePerNight * numberOfNights;
-  return totalPrice + totalFees; 
-}
-cancelBooking(booking: Bookings) {
-  
-  if (booking.status.toLowerCase() === 'pending') {
-    this.checkOutService.cancelBookings(booking.id).subscribe({
-      next: (response) => {
-        this.toastService.showSuccess('Booking cancelled successfully!');
-      },
-      error: (error) => {
-        this.toastService.showError('Failed to cancel booking!');
-      }
-    });
-  } else {
-    this.toastService.showWarning('Only pending bookings can be cancelled.');
+  cancelBooking(booking: Bookings) {
+    if (booking.status.toLowerCase() === 'pending') {
+      this.checkOutService.cancelBookings(booking.id).subscribe({
+        next: response => {
+          this.toastService.showSuccess('Booking cancelled successfully!');
+        },
+        error: error => {
+          this.toastService.showError('Failed to cancel booking!');
+        },
+      });
+    } else {
+      this.toastService.showWarning('Only pending bookings can be cancelled.');
+    }
   }
-}
-//filteration based on userId 
-
+  //filteration based on userId
 }

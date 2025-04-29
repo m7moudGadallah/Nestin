@@ -1,4 +1,3 @@
-
 export type DocumentType = 'Passport' | 'NationalId';
 
 export interface HostUpgradeFormDto {

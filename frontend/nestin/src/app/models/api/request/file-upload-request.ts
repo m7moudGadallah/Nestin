@@ -1,6 +1,4 @@
 export interface FileUploadRequest {
-
-        Id: string;
-        PhotoUrl: string;
-      
+  Id: string;
+  PhotoUrl: string;
 }

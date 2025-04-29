@@ -9,12 +9,11 @@ import { HttpResponse } from '@angular/common/http';
   selector: 'app-admin',
   imports: [RouterModule, CommonModule],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
 })
-export class AdminComponent  {
-   //collapse sidebar
+export class AdminComponent {
+  //collapse sidebar
   //  isCollapsed = false;
-
   //  toggleSidebar() {
   //    this.isCollapsed = !this.isCollapsed;
   //  }
@@ -31,9 +30,6 @@ export class AdminComponent  {
   //     error:(err) => {
   //       console.error('Error loading data',err);
   //     }
-
-
   //   })
   // }
-
 }

@@ -9,7 +9,7 @@ import { UserProfileService } from '../../../services/user-profile.service';
 @Component({
   selector: 'app-profile-header',
   templateUrl: './profile-header.component.html',
-  styleUrls: ['./profile-header.component.css']
+  styleUrls: ['./profile-header.component.css'],
 })
 export class ProfileHeaderComponent implements OnInit {
   user: IUserProfile | null = null;
@@ -40,37 +40,40 @@ export class ProfileHeaderComponent implements OnInit {
     this.isLoading = true;
     this.isErrored = false;
 
-    this.userProfileService.getUserProfile().pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.handleError(error);
-        return of(null);
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe(response => {
-      if (response && response.body) {
-        this.user = response.body;
-        // Update auth data if needed
-        if (response.body.id && response.body.username) {
-          this.authService.setAuthData(
-            response.body.id,
-            response.body.username,
-            localStorage.getItem('accessToken') || ''
-          );
+    this.userProfileService
+      .getUserProfile()
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.handleError(error);
+          return of(null);
+        }),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe(response => {
+        if (response && response.body) {
+          this.user = response.body;
+          // Update auth data if needed
+          if (response.body.id && response.body.username) {
+            this.authService.setAuthData(
+              response.body.id,
+              response.body.username,
+              localStorage.getItem('accessToken') || ''
+            );
+          }
+        } else {
+          this.user = null;
         }
-      } else {
-        this.user = null;
-      }
-    });
+      });
   }
 
   private handleError(error: HttpErrorResponse): void {
     this.isErrored = true;
     this.errorMessage = this.getErrorMessage(error);
-    
+
     if (error.status === 401) {
       this.authService.unsetAuthData();
     }
-    
+
     console.error('Error loading user profile:', error);
   }
 

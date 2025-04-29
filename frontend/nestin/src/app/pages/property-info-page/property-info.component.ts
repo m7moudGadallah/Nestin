@@ -236,33 +236,32 @@ export class PropertyInfoComponent implements OnInit {
     this.isFavorite = isFavorite;
   }
 
-
- 
-private extractItemsArray<T>(response: any): T[] {
-  if (response?.items && Array.isArray(response.items)) {
-    return response.items;
-  }
-  return [];
-}
-
-loadAmenitiesDataForPropertyInfo(propertyId: string) {
-  forkJoin({
-    propertyAmenities: this.propertyService.getPropertyAmenitiesById(propertyId),
-    allAmenities: this.propertyService.getAllAmenities(),
-    categories: this.propertyService.getAmenitiesCategories(),
-  }).subscribe({
-    next: ({ propertyAmenities, allAmenities, categories }) => {
-      try {
-        this.aminaties = propertyAmenities.body.items.map((am: IPropertyAmenity) => am.name);
-
-      } catch (error) {
-        this.error = true;
-      }
-    },
-    error: err => {
-      this.error = true;
+  private extractItemsArray<T>(response: any): T[] {
+    if (response?.items && Array.isArray(response.items)) {
+      return response.items;
     }
-  });
-}
+    return [];
+  }
 
+  loadAmenitiesDataForPropertyInfo(propertyId: string) {
+    forkJoin({
+      propertyAmenities:
+        this.propertyService.getPropertyAmenitiesById(propertyId),
+      allAmenities: this.propertyService.getAllAmenities(),
+      categories: this.propertyService.getAmenitiesCategories(),
+    }).subscribe({
+      next: ({ propertyAmenities, allAmenities, categories }) => {
+        try {
+          this.aminaties = propertyAmenities.body.items.map(
+            (am: IPropertyAmenity) => am.name
+          );
+        } catch (error) {
+          this.error = true;
+        }
+      },
+      error: err => {
+        this.error = true;
+      },
+    });
+  }
 }

@@ -8,9 +8,8 @@ describe('PropertyAdminComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PropertyAdminComponent]
-    })
-    .compileComponents();
+      imports: [PropertyAdminComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PropertyAdminComponent);
     component = fixture.componentInstance;
