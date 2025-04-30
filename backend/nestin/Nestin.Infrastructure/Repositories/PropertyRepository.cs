@@ -156,14 +156,13 @@ namespace Nestin.Infrastructure.Repositories
             {
                 "price_asc" => query.OrderByDescending(x => x.PricePerNight),
                 "price_dec" => query.OrderBy(x => x.PricePerNight),
-                "rating" => query.OrderByDescending(x =>
+                _ => query.OrderByDescending(x =>
                     x.Bookings
                      .Where(b => b.Review != null)
                      .Average(b =>
                          (b.Review.Cleanliness + b.Review.Accuracy + b.Review.CheckIn +
                           b.Review.Communication + b.Review.Location + b.Review.Value) / 6m)
-                ),
-                _ => query.OrderByDescending(x => x.PricePerNight)
+                )
             };
 
             // Pagination
