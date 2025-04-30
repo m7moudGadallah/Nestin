@@ -43,6 +43,7 @@
             class="form-control border-0 bg-transparent py-1 ps-3 pe-2 w-100 transition-all"
             [style.font-size]="scrollY > 50 ? '0.8rem' : '1rem'"
             placeholder="Example: 'Beachfront villa with pool for family of 4 in Bali next month'"
+            (keyup.enter)="SmartSearch()"
             [(ngModel)]="stringAiSearch" />
         </div>
         <button
