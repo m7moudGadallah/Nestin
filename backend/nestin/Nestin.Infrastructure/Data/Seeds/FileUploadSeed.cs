@@ -55,7 +55,7 @@ namespace Nestin.Infrastructure.Data.Seeds
             new FileUpload { Id = "3588517b-0a71-4d29-ad8c-906a8e545d00", Path = "images/Belg2.avif" },
             new FileUpload { Id = "da734851-2db8-4541-a788-b675b7560eec", Path = "images/Belg3.avif" },
             new FileUpload { Id = "9ea371c2-fefe-423f-953c-c744a33d5fb9", Path = "images/Arg1.avif" },
-            new FileUpload { Id = "4c376b94-d74f-4472-b1a5-4c3d51df56d8", Path = "images/Arg2.avif" },
+            new FileUpload { Id = "4c376b94-d74f-4472-b1a5-4c3d51df56d8", Path = "images/Arg2.jpg" },
             new FileUpload { Id = "e56c967f-ee64-4e53-b0e6-1b1342baf2da", Path = "images/Arg3.jpg" },
             new FileUpload { Id = "9b0d97e4-6dad-4e5b-893c-38aaff4a50e2", Path = "images/Nig1.avif" },
             new FileUpload { Id = "9201fad7-d63f-4dbf-84f1-adb25c451e9e", Path = "images/Nig2.avif" },

@@ -122,9 +122,9 @@ namespace Nestin.Infrastructure.Data.Seeds
             new PropertyPhoto { PhotoId = "e019ead5-3b99-4f78-a84b-23b34ba27e26", PropertyId = "52a8df7d-c0b2-4ee3-8369-9daed4885f9f", TouchedAt = new DateTime(2025, 5, 10) },
 
             // Property: 52a8df7d-c0b2-4ee3-8369-9daed4885f9f (Bali)
-            new PropertyPhoto { PhotoId = "f4b528d3-1204-4ccc-af05-2a39346d7ace", PropertyId = "52a8df7d-c0b2-4ee3-8369-9daed4885f9f", TouchedAt = new DateTime(2025, 5, 10) },
-            new PropertyPhoto { PhotoId = "a73860df-b173-4d4d-b834-124f19d93a20e", PropertyId = "52a8df7d-c0b2-4ee3-8369-9daed4885f9f", TouchedAt = new DateTime(2025, 5, 10) },
-            new PropertyPhoto { PhotoId = "3cb5e765-921f-4e0e-97be-b6d1e4c762cf", PropertyId = "52a8df7d-c0b2-4ee3-8369-9daed4885f9f", TouchedAt = new DateTime(2025, 5, 10) },
+            new PropertyPhoto { PhotoId = "f4b528d3-1204-4ccc-af05-2a39346d7ace", PropertyId = "c150e428-1c9a-43a2-be07-f4366875f1ce", TouchedAt = new DateTime(2025, 5, 10) },
+            new PropertyPhoto { PhotoId = "a73860df-b173-4d4d-b834-124f19d93a20e", PropertyId = "c150e428-1c9a-43a2-be07-f4366875f1ce", TouchedAt = new DateTime(2025, 5, 10) },
+            new PropertyPhoto { PhotoId = "3cb5e765-921f-4e0e-97be-b6d1e4c762cf", PropertyId = "c150e428-1c9a-43a2-be07-f4366875f1ce", TouchedAt = new DateTime(2025, 5, 10) },
 
             // Property: 2e3ed231-a2a6-4961-a1ba-f232d56c6f35 (Bodrum Hotel)
             new PropertyPhoto { PhotoId = "ec263c4f-fcc3-4d72-805e-d0b116e2cdd7", PropertyId = "2e3ed231-a2a6-4961-a1ba-f232d56c6f35", TouchedAt = new DateTime(2025, 5, 10) },
