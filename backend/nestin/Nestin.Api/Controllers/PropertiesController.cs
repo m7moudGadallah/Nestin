@@ -6,6 +6,7 @@ using Nestin.Core.Dtos.PropertyAmenities;
 using Nestin.Core.Dtos.PropertyAvailabilities;
 using Nestin.Core.Dtos.PropertyFees;
 using Nestin.Core.Dtos.PropertyGuests;
+using Nestin.Core.Dtos.Reviews;
 using Nestin.Core.Entities;
 using Nestin.Core.Interfaces;
 using Nestin.Core.Mappings;
@@ -153,6 +154,18 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> GetSpacesById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
         {
             var result = await _unitOfWork.PropertySpaceRepository.GetByPropertyIdAsync(id, dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/Reviews")]
+        [EndpointSummary("Fetch property Reviews by id.")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(PaginatedResult<ReviewDto>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(List<string>))]
+        public async Task<IActionResult> GetReviewsById([FromRoute] string id, [FromQuery] GetAllQueryDto dto)
+        {
+            var result = await _unitOfWork.ReviewRepository.GetPropertyReviews(id, dto);
 
             return Ok(result);
         }
