@@ -23,7 +23,12 @@ namespace Nestin.Api.Controllers
         [ProducesResponseType(typeof(PropertyAmenityDto), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] PropertyAmenityCreateDto dto)
         {
-            CheckPropertyAuthority(dto.PropertyId);
+            await CheckPropertyAuthority(dto.PropertyId);
+
+            if (await _unitOfWork.AmenityRepository.IsExistAsync(dto.PropertyId, dto.AmenityId))
+            {
+                throw new ConflictException("Amenity is already added to property.");
+            }
 
             var newAmenity = new PropertyAmenity
             {
