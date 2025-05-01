@@ -35,7 +35,7 @@ namespace Nestin.Infrastructure.Data.Configurations
 
 
             builder.HasOne(x => x.AppUser)
-                .WithOne()
+                .WithOne(x => x.UserProfile)
                 .HasForeignKey<UserProfile>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
