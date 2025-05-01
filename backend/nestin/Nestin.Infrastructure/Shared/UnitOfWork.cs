@@ -30,6 +30,7 @@ namespace Nestin.Infrastructure.Shared
         private IHostUpgradeRequestRepository? _hostUpgradeRequestRepository;
         private IPropertyPhotoRepository? _propertyPhotoRepository;
         private IPaymentRepository? _paymentRepository;
+        private IReviewRepository? _reviewRepository;
 
         public UnitOfWork(AppDbContext dbContext)
         {
@@ -60,6 +61,7 @@ namespace Nestin.Infrastructure.Shared
         public IPropertyPhotoRepository PropertyPhotoRepository => _propertyPhotoRepository ??= new PropertyPhotoRepository(_dbContext);
         public IPaymentRepository PaymentRepository =>
             _paymentRepository ??= new PaymentRepository(_dbContext);
+        public IReviewRepository ReviewRepository => _reviewRepository ??= new ReviewRepository(_dbContext);
 
         public async Task SaveChangesAsync()
         {

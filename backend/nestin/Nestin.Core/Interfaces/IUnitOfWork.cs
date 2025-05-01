@@ -25,6 +25,7 @@
         public IHostUpgradeRequestRepository HostUpgradeRequestRepository { get; }
         public IPropertyPhotoRepository PropertyPhotoRepository { get; }
         public IPaymentRepository PaymentRepository { get; }
+        public IReviewRepository ReviewRepository { get; }
         public Task SaveChangesAsync();
     }
 }
