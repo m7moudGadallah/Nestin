@@ -8,5 +8,6 @@ namespace Nestin.Core.Interfaces
     public interface IReviewRepository : IGenericRepository<Review, string>
     {
         public Task<PaginatedResult<ReviewDto>> GetPropertyReviews(string propertyId, GetAllQueryDto dto);
+        public Task<ReviewDto?> GetReviewDetails(string reviewId);
     }
 }

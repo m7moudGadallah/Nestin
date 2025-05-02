@@ -46,5 +46,20 @@ namespace Nestin.Infrastructure.Repositories
                 }
             };
         }
+
+        public async Task<ReviewDto?> GetReviewDetails(string reviewId)
+        {
+            var query = _dbContext.Reviews
+            .Include(x => x.Booking)
+            .ThenInclude(x => x.User)
+            .ThenInclude(x => x.UserProfile)
+            .ThenInclude(x => x.Photo)
+            .Include(x => x.Booking)
+            .ThenInclude(x => x.Property)
+            .Where(x => x.Id == reviewId)
+            .AsQueryable();
+
+            return await query.Select(x => x.ToDto()).FirstOrDefaultAsync();
+        }
     }
 }
