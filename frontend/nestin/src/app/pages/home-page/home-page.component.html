@@ -187,7 +187,8 @@
                   min="0"
                   max="1000"
                   step="10"
-                  [(ngModel)]="minPrice" />
+                  [(ngModel)]="minPrice" 
+                  (ngModelChange)="onFilterChange()"/>
               </div>
               <div class="d-flex justify-content-between">
                 <span>$0</span>
@@ -201,7 +202,8 @@
                   min="0"
                   max="1000"
                   step="10"
-                  [(ngModel)]="maxPrice" />
+                  [(ngModel)]="maxPrice" 
+                  (ngModelChange)="onFilterChange()"/>
               </div>
 
               <div class="d-flex justify-content-between">
@@ -220,7 +222,8 @@
                 name="rating"
                 [id]="'rating-' + rating"
                 [(ngModel)]="selectedRating"
-                [value]="rating" />
+                [value]="rating" 
+                (ngModelChange)="onFilterChange()"/>
               <label class="form-check-label" [for]="'rating-' + rating">
                 <span
                   class="text-secondary"

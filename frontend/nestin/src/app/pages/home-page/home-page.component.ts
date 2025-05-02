@@ -157,6 +157,39 @@ export class HomePageComponent implements OnInit {
 
   selectPropertyType(id: number): void {
     this.selectedPropertyType = this.selectedPropertyType === id ? null : id;
+    const queryParams: any = {
+      page: this.currentPage,
+      pageSize: this.itemsPerPage,
+    };
+  if (this.selectedPropertyType) {
+      queryParams.PropertyTypeId = this.selectedPropertyType;
+    }
+    this.propertyService.searchProperty(queryParams).subscribe({
+      next: (response: HttpResponse<IpropertyRes>) => {
+        this.isLoadingProperties = false;
+        if (response.status === 200 && response.body) {
+          this.property = response.body.items.map(prop => ({
+            ...prop,
+            distanceFromMe: this.getDistanceFromLatLonInKm(
+              this.userLat,
+              this.userLon,
+              prop.latitude,
+              prop.longitude
+            ).toFixed(1),
+          }));
+          this.totalItems = response.body.metaData.total;
+          this.currentPage = response.body.metaData.page;
+        } else {
+          this.handlePropertyerror('Invalid search result');
+        }
+      },
+      error: error => {
+        this.isLoadingProperties = false;
+        console.error('Search error:', error);
+        this.handlePropertyerror('Failed to search properties');
+      },
+    });
+
   }
 
   getGuestSummary(): string {
@@ -359,25 +392,25 @@ export class HomePageComponent implements OnInit {
       queryParams.GuestCount = this.guestsCount;
     }
 
-    // Add price range
-    if (this.minPrice >= 0) {
-      queryParams.PriceMin = this.minPrice;
-    }
+    // // Add price range
+    // if (this.minPrice >= 0) {
+    //   queryParams.PriceMin = this.minPrice;
+    // }
 
-    // Add maxPrice if it's greater than 0
-    if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
-      queryParams.PriceMax = this.maxPrice;
-    }
+    // // Add maxPrice if it's greater than 0
+    // if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
+    //   queryParams.PriceMax = this.maxPrice;
+    // }
 
-    // Add propertyRating if it's greater than 0
-    if (this.selectedRating > 0) {
-      queryParams.MinAvgRating = this.selectedRating;
-    }
+    // // Add propertyRating if it's greater than 0
+    // if (this.selectedRating > 0) {
+    //   queryParams.MinAvgRating = this.selectedRating;
+    // }
 
-    // Add propertyTypeId if it's greater than 0
-    if (this.selectedPropertyType) {
-      queryParams.PropertyTypeId = this.selectedPropertyType;
-    }
+    // // Add propertyTypeId if it's greater than 0
+    // if (this.selectedPropertyType) {
+    //   queryParams.PropertyTypeId = this.selectedPropertyType;
+    // }
 
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
@@ -527,4 +560,57 @@ export class HomePageComponent implements OnInit {
       this.toastService.showError('Payment canceled, please try again');
     }
   }
+  onFilterChange() {
+    const queryParams: any = {
+      page: this.currentPage,
+      pageSize: this.itemsPerPage,
+    };
+  
+    // Add minPrice if it's >= 0
+    if (this.minPrice >= 0) {
+      queryParams.PriceMin = this.minPrice;
+    }
+      if (this.selectedPropertyType) {
+      queryParams.PropertyTypeId = this.selectedPropertyType;
+    }
+  
+    // Add maxPrice if valid
+    if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
+      queryParams.PriceMax = this.maxPrice;
+    }
+  
+    // Add property rating if selected
+    if (this.selectedRating > 0) {
+      queryParams.MinAvgRating = this.selectedRating;
+    }
+  
+    this.isLoadingProperties = true;
+  
+    this.propertyService.searchProperty(queryParams).subscribe({
+      next: (response: HttpResponse<IpropertyRes>) => {
+        this.isLoadingProperties = false;
+        if (response.status === 200 && response.body) {
+          this.property = response.body.items.map(prop => ({
+            ...prop,
+            distanceFromMe: this.getDistanceFromLatLonInKm(
+              this.userLat,
+              this.userLon,
+              prop.latitude,
+              prop.longitude
+            ).toFixed(1),
+          }));
+          this.totalItems = response.body.metaData.total;
+          this.currentPage = response.body.metaData.page;
+        } else {
+          this.handlePropertyerror('Invalid search result');
+        }
+      },
+      error: error => {
+        this.isLoadingProperties = false;
+        console.error('Search error:', error);
+        this.handlePropertyerror('Failed to search properties');
+      },
+    });
+  }
+  
 }
