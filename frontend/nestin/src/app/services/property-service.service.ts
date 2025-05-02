@@ -5,6 +5,7 @@ import {
   HttpEventType,
   HttpHeaders,
   HttpParams,
+  HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -33,6 +34,9 @@ import { IBookingResponse } from '../models/api/response/ibooking-response';
 import { IFeesResponse } from '../models/api/response/ifees-res';
 import { ILocation } from '../models/domain/ilocation';
 import { ApiConstant } from '../utils/api-constant.util';
+import { IGuestTypeResponse } from '../models/api/response/iguest-type-response';
+import { IPropertySpaces, IPropertySpacesRes } from '../models/domain/iproperty-spaces';
+import { IPropertySpaceItem } from '../models/domain/iproperty-space-item';
 
 @Injectable({
   providedIn: 'root',
@@ -283,4 +287,92 @@ export class PropertyService {
   loadMoreAmenities(): Observable<IAmenitiesResponse> {
     return this.getAmenitiesPage(this.currentPage + 1, this.pageSize);
   }
+
+
+
+  // ================get property Guests==================
+
+  getAllGuestTypes(): Observable<IGuestTypeResponse> {
+    return this.http.get<IGuestTypeResponse>(
+      `${ApiConstant.GuestType.GuestType}`    
+    );
+  }
+
+  // ======================property spaces=============================
+  private getSpacesPage(
+    page: number,
+    pageSize: number
+  ): Observable<{ items: IPropertySpaces[]; metaData: any }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<{ items: IPropertySpaces[]; metaData: any }>(
+      ApiConstant.propertySpaces.spaces,
+      { params }
+    );
+  }
+
+  getPropertySpaces(): Observable<IPropertySpaces[]> {
+    const initialPage = 1;
+    const pageSize = 10;
+
+    return this.getSpacesPage(initialPage, pageSize).pipe(
+      expand(response => {
+        const currentPage = response.metaData.page;
+        const totalPages = Math.ceil(
+          response.metaData.total / response.metaData.pageSize
+        );
+
+        if (currentPage < totalPages) {
+          return this.getSpacesPage(currentPage + 1, pageSize);
+        }
+
+        return of();
+      }),
+
+      reduce((acc: IPropertySpaces[], response) => {
+        return [...acc, ...response.items];
+      }, [])
+    );
+  }
+
+  private getSpacesItemPage(
+    page: number,
+    pageSize: number
+  ): Observable<{ items: IPropertySpaceItem[]; metaData: any }> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<{ items: IPropertySpaceItem[]; metaData: any }>(
+      ApiConstant.propertySpacesItems.spaceItems,
+      { params }
+    );
+  }
+  
+  getPropertySpaceItem(): Observable<IPropertySpaceItem[]> {
+    const initialPage = 1;
+    const pageSize = 10;
+
+    return this.getSpacesItemPage(initialPage, pageSize).pipe(
+      expand(response => {
+        const currentPage = response.metaData.page;
+        const totalPages = Math.ceil(
+          response.metaData.total / response.metaData.pageSize
+        );
+
+        if (currentPage < totalPages) {
+          return this.getSpacesItemPage(currentPage + 1, pageSize);
+        }
+
+        return of();
+      }),
+
+      reduce((acc: IPropertySpaceItem[], response) => {
+        return [...acc, ...response.items];
+      }, [])
+    );
+  }
+  
 }

@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { IUserProfile } from '../../../models/domain/iuser-profile';
 import { UserProfileService } from '../../../services/user-profile.service';
-import { ToastService } from '../../../services/toast.service';
+
 
 @Component({
   selector: 'app-profile-prompt',
@@ -114,14 +114,6 @@ export class ProfilePromptComponent implements OnInit {
   // =====================upgrade button===============================
 
   showButtonForGuest(): boolean {
-    // // Return true if user is guest (doesn't have host or admin roles)
-    // if (!this.currentUser?.roles?.some(role => role.toLowerCase() === "guest")) return true; // Default to showing if no roles
-
-    // // Check if user has any restricted roles
-    // const restrictedRoles = ['host', 'admin'];
-    // return !this.currentUser.roles.some(role =>
-    //   restrictedRoles.includes(role.toLowerCase())
-    // );
     if (!this.currentUser?.roles) return false;
     return this.currentUser.roles.some(role => role.toLowerCase() === 'guest');
   }

@@ -1,369 +1,616 @@
 
-<form [formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="property-form">
-    <div class="form-section">
-      <h2>Basic Information</h2>
-      
-      <div class="form-group">
-        <label for="title">Property Title <span class="required-asterisk" [class.invalid]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">*</span></label>
-        <input id="title" type="text" formControlName="title" placeholder="e.g. Beautiful Beachfront Villa">
-        <div *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched" class="error-message">
-          Title is required
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Add New Property</h3>
         </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="description">Description <span class="required-asterisk" [class.invalid]="propertyForm.get('description')?.invalid && propertyForm.get('description')?.touched">*</span></label>
-        <textarea id="description" formControlName="description" rows="5" placeholder="Describe your property in detail"></textarea>
-        <div *ngIf="propertyForm.get('description')?.invalid && propertyForm.get('description')?.touched" class="error-message">
-          Description is required and should be at least 50 characters
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="propertyType">Property Type <span class="required-asterisk" [class.invalid]="propertyForm.get('propertyType')?.invalid && propertyForm.get('propertyType')?.touched">*</span></label>
-        <select id="propertyType" formControlName="propertyType">
-          <option value="">Select property type</option>
-          <option *ngFor="let type of propertyTypes" [value]="type.id">{{type.name}}</option>
-        </select>
-        <div *ngIf="propertyForm.get('propertyType')?.invalid && propertyForm.get('propertyType')?.touched" class="error-message">
-          Property type is required
-        </div>
-      </div>
-    </div>
-    
-    <div class="form-section">
-      <h2>Location</h2>
-      <div formGroupName="location">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="country">Country <span class="required-asterisk" [class.invalid]="propertyForm.get('location.country')?.invalid && propertyForm.get('location.country')?.touched">*</span></label>
-            <input id="country" type="text" formControlName="country">
-            <div *ngIf="propertyForm.get('location.country')?.invalid && propertyForm.get('location.country')?.touched" class="error-message">
-              Country is required
+        <div class="card-body">
+          
+          <!-- Loading State -->
+          <div *ngIf="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
+            <p class="mt-3">Loading form data...</p>
           </div>
           
-          <div class="form-group">
-            <label for="city">City <span class="required-asterisk" [class.invalid]="propertyForm.get('location.city')?.invalid && propertyForm.get('location.city')?.touched">*</span></label>
-            <input id="city" type="text" formControlName="city">
-            <div *ngIf="propertyForm.get('location.city')?.invalid && propertyForm.get('location.city')?.touched" class="error-message">
-              City is required
-            </div>
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="state">State/Region</label>
-            <input id="state" type="text" formControlName="state">
+          <!-- Error State -->
+          <div *ngIf="loadError && !isLoading" class="alert alert-danger">
+            {{ loadError }}
+            <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadFormData()">Retry</button>
           </div>
           
-          <!-- <div class="form-group">
-            <label for="postalCode">Postal Code</label>
-            <input id="postalCode" type="text" formControlName="postalCode">
-          </div> -->
-        </div>
-        
-        <div class="form-group">
-          <label for="address">Street Address <span class="required-asterisk" [class.invalid]="propertyForm.get('location.address')?.invalid && propertyForm.get('location.address')?.touched">*</span></label>
-          <input id="address" type="text" formControlName="address">
-          <div *ngIf="propertyForm.get('location.address')?.invalid && propertyForm.get('location.address')?.touched" class="error-message">
-            Address is required
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label for="neighborhood">Neighborhood (optional)</label>
-          <input id="neighborhood" type="text" formControlName="neighborhood">
-        </div>
-    </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="latitude">Latitude <span class="required-asterisk" [class.invalid]="propertyForm.get('latitude')?.invalid && propertyForm.get('latitude')?.touched">*</span>
-            </label>
-            <input id="latitude" type="number" step="0.000001" formControlName="latitude">
-            <div *ngIf="propertyForm.get('latitude')?.invalid && propertyForm.get('latitude')?.touched" class="error-message">
-              Latitude is required
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="longitude">Longitude <span class="required-asterisk" [class.invalid]="propertyForm.get('longitude')?.invalid && propertyForm.get('longitude')?.touched">*</span></label>
-            <input id="longitude" type="number" step="0.000001" formControlName="longitude">
-            <div *ngIf="propertyForm.get('longitude')?.invalid && propertyForm.get('longitude')?.touched" class="error-message">
-              Longitude is required
-            </div>
-          </div>
-        </div>
-    </div>
-    
-
-    <!-- add photos -->
-    <div class="form-section">
-        <h2>Photos <small>({{ previewUrls.length }}/{{ maxPhotos }})</small></h2>
-        
-        <div class="photo-upload-container">
-          <input type="file" id="propertyPhotos" 
-                 (change)="onFileSelected($event)" 
-                 multiple accept="image/*" 
-                 [disabled]="previewUrls.length >= maxPhotos"
-                 class="file-input">
-          <label for="propertyPhotos" class="upload-button">
-            <i class="fas fa-camera"></i> Choose Photos
-          </label>
-          
-          <div class="upload-requirements">
-            <p>Upload at least 1 photos (max {{ maxPhotos }})</p>
-            <p>Supported formats: JPG, PNG</p>
-            <p>Max file size: 5MB</p>
-          </div>
-          
-          <div class="photo-preview-grid" *ngIf="previewUrls.length > 0">
-            <div class="photo-preview-item"
-                 *ngFor="let url of previewUrls || []; let i = index"
-                 [class.primary]="i === 0">
-                 
-              <img [src]="url" alt="Preview" class="preview-image" *ngIf="url">
+          <!-- Form Content -->
+          <form *ngIf="!isLoading && !loadError" [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+            <!-- Basic Information Section -->
+            <div class="mb-4">
+              <h5 class="mb-3 border-bottom pb-2">Basic Information</h5>
               
-              <div class="photo-actions">
-                <button type="button" (click)="setPrimaryImage(i)" 
-                        class="action-btn primary-btn" *ngIf="i !== 0">
-                  <i class="fas fa-star"></i> Make Primary
-                </button>
-                <button type="button" (click)="removeImage(i)" 
-                        class="action-btn danger-btn">
-                  <i class="fas fa-trash"></i> Remove
-                </button>
+              <div class="mb-3">
+                <label for="title" class="form-label">Property Title*</label>
+                <input type="text" class="form-control" id="title" formControlName="title" 
+                       placeholder="Give your property a descriptive title">
+                <div *ngIf="propertyForm.get('title')?.invalid && (propertyForm.get('title')?.dirty || propertyForm.get('title')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('title')?.hasError('required')">
+                    Title is required
+                  </div>
+                  <div *ngIf="propertyForm.get('title')?.hasError('minlength')">
+                    Title must be at least 5 characters long
+                  </div>
+                  <div *ngIf="propertyForm.get('title')?.hasError('maxlength')">
+                    Title cannot exceed 100 characters
+                  </div>
+                  <div *ngIf="propertyForm.get('title')?.hasError('pattern')">
+                    Only letters, numbers, spaces and basic punctuation (.,!?&-') are allowed
+                  </div>
+                </div>
               </div>
-          
-              <div class="upload-progress" *ngIf="isUploading">
-                <div class="progress-bar" [style.width.%]="uploadProgress[i]"></div>
-                <span class="progress-text">{{ uploadProgress[i] }}%</span>
-              </div>
-          
-              <div class="primary-badge" *ngIf="i === 0">
-                <i class="fas fa-check"></i> Primary
+              
+              <div class="mb-3">
+                <label for="description" class="form-label">Description*</label>
+                <textarea class="form-control" id="description" formControlName="description" rows="4"
+                          placeholder="Describe your property in detail"></textarea>
+                <div *ngIf="propertyForm.get('description')?.invalid && (propertyForm.get('description')?.dirty || propertyForm.get('description')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('description')?.hasError('required')">
+                    Description is required
+                  </div>
+                  <div *ngIf="propertyForm.get('description')?.hasError('minlength')">
+                    Description must be at least 10 characters long
+                  </div>
+                  <div *ngIf="propertyForm.get('description')?.hasError('maxlength')">
+                    Description cannot exceed 1000 characters
+                  </div>
+                  <div *ngIf="propertyForm.get('description')?.hasError('pattern')">
+                    Only letters, numbers, spaces and basic punctuation (.,!?&-'():;) are allowed
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          
+            
+            <!-- Property Details Section -->
+            <div class="mb-4">
+              <h5 class="mb-3 border-bottom pb-2">Property Details</h5>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="propertyTypeId" class="form-label">Property Type*</label>
+                  <select class="form-select" id="propertyTypeId" formControlName="propertyTypeId">
+                    <option value="" disabled selected>Select property type</option>
+                    <option *ngFor="let type of propertyTypes" [value]="type.id">
+                      {{type.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="propertyForm.get('propertyTypeId')?.invalid && (propertyForm.get('propertyTypeId')?.dirty || propertyForm.get('propertyTypeId')?.touched)"
+                       class="text-danger">
+                    Property type is required
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="locationId" class="form-label">Location*</label>
+                  <select class="form-select" id="locationId" formControlName="locationId">
+                    <option value="" disabled selected>Select location</option>
+                    <option *ngFor="let location of locations" [value]="location.id">
+                      {{location.name}}
+                    </option>
+                  </select>
+                  <div *ngIf="propertyForm.get('locationId')?.invalid && (propertyForm.get('locationId')?.dirty || propertyForm.get('locationId')?.touched)"
+                       class="text-danger">
+                    Location is required
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="pricePerNight" class="form-label">Price Per Night (USD)*</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="pricePerNight" formControlName="pricePerNight" 
+                         min="0.01" step="0.01" placeholder="0.01">
+                </div>
+                <div *ngIf="propertyForm.get('pricePerNight')?.invalid && (propertyForm.get('pricePerNight')?.dirty || propertyForm.get('pricePerNight')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('pricePerNight')?.hasError('required')">
+                    Price is required
+                  </div>
+                  <div *ngIf="propertyForm.get('pricePerNight')?.hasError('min')">
+                    Price must be at least $0.01
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Location Coordinates Section -->
+            <div class="mb-4">
+              <h5 class="mb-3 border-bottom pb-2">Location Coordinates</h5>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="latitude" class="form-label">Latitude*</label>
+                  <input type="number" class="form-control" id="latitude" formControlName="latitude" 
+                         min="-90" max="90" step="0.000001" placeholder="Between -90 and 90">
+                  <div *ngIf="propertyForm.get('latitude')?.invalid && (propertyForm.get('latitude')?.dirty || propertyForm.get('latitude')?.touched)"
+                       class="text-danger">
+                    <div *ngIf="propertyForm.get('latitude')?.hasError('required')">
+                      Latitude is required
+                    </div>
+                    <div *ngIf="propertyForm.get('latitude')?.hasError('min') || propertyForm.get('latitude')?.hasError('max')">
+                      Must be between -90 and 90
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="longitude" class="form-label">Longitude*</label>
+                  <input type="number" class="form-control" id="longitude" formControlName="longitude" 
+                         min="-180" max="180" step="0.000001" placeholder="Between -180 and 180">
+                  <div *ngIf="propertyForm.get('longitude')?.invalid && (propertyForm.get('longitude')?.dirty || propertyForm.get('longitude')?.touched)"
+                       class="text-danger">
+                    <div *ngIf="propertyForm.get('longitude')?.hasError('required')">
+                      Longitude is required
+                    </div>
+                    <div *ngIf="propertyForm.get('longitude')?.hasError('min') || propertyForm.get('longitude')?.hasError('max')">
+                      Must be between -180 and 180
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Policies Section -->
+            <div class="mb-4">
+              <h5 class="mb-3 border-bottom pb-2">Policies & Rules</h5>
+              
+              <div class="mb-3">
+                <label for="safetyInfo" class="form-label">Safety Information*</label>
+                <textarea class="form-control" id="safetyInfo" formControlName="safetyInfo" rows="3"
+                placeholder="Important safety information for guests"></textarea>
+                <div *ngIf="propertyForm.get('safetyInfo')?.invalid && (propertyForm.get('safetyInfo')?.dirty || propertyForm.get('safetyInfo')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('safetyInfo')?.hasError('required')">
+                    Safety information is required
+                  </div>
+                  <div *ngIf="propertyForm.get('safetyInfo')?.hasError('minlength')">
+                    Must be at least 10 characters long
+                  </div>
+                  <div *ngIf="propertyForm.get('safetyInfo')?.hasError('maxlength')">
+                    Cannot exceed 500 characters
+                  </div>
+                  <div *ngIf="propertyForm.get('safetyInfo')?.hasError('pattern')">
+                    Only letters, numbers, spaces and basic punctuation (.,!?'"-) are allowed
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="houseRules" class="form-label">House Rules*</label>
+                <textarea class="form-control" id="houseRules" formControlName="houseRules" rows="3"
+                          placeholder="Rules guests must follow"></textarea>
+                <div *ngIf="propertyForm.get('houseRules')?.invalid && (propertyForm.get('houseRules')?.dirty || propertyForm.get('houseRules')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('houseRules')?.hasError('required')">
+                    House rules are required
+                  </div>
+                  <div *ngIf="propertyForm.get('houseRules')?.hasError('minlength')">
+                    Must be at least 10 characters long
+                  </div>
+                  <div *ngIf="propertyForm.get('houseRules')?.hasError('maxlength')">
+                    Cannot exceed 500 characters
+                  </div>
+                  <div *ngIf="propertyForm.get('houseRules')?.hasError('pattern')">
+                    Only letters, numbers, spaces and basic punctuation (.,!?'"-) are allowed
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="cancellationPolicy" class="form-label">Cancellation Policy*</label>
+                <textarea class="form-control" id="cancellationPolicy" formControlName="cancellationPolicy" rows="3"
+                          placeholder="Your cancellation policy"></textarea>
+                <div *ngIf="propertyForm.get('cancellationPolicy')?.invalid && (propertyForm.get('cancellationPolicy')?.dirty || propertyForm.get('cancellationPolicy')?.touched)"
+                     class="text-danger">
+                  <div *ngIf="propertyForm.get('cancellationPolicy')?.hasError('required')">
+                    Cancellation policy is required
+                  </div>
+                  <div *ngIf="propertyForm.get('cancellationPolicy')?.hasError('minlength')">
+                    Must be at least 10 characters long
+                  </div>
+                  <div *ngIf="propertyForm.get('cancellationPolicy')?.hasError('maxlength')">
+                    Cannot exceed 500 characters
+                  </div>
+                  <div *ngIf="propertyForm.get('cancellationPolicy')?.hasError('pattern')">
+                    Only letters, numbers, spaces and basic punctuation (.,!?'"-) are allowed
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-outline-secondary me-md-2" (click)="onCancel()">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!propertyForm.valid">Submit Property</button>
+            </div>
+          </form>
         </div>
       </div>
 
-
- <!-- avelability -->
-
- <div class="form-section">
-  <h3>Availability</h3>
-  <div formGroupName="availability" class="availability-group">
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="checkInDate" class="form-label">Check-in Date 
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('startDate')?.invalid && propertyForm.get('startDate')?.touched">*</span>
-        </label>
-        <input 
-          type="date" 
-          id="checkInDate" 
-          class="form-control" 
-          formControlName="startDate" 
-          [min]="today | date:'yyyy-MM-dd'"
-          [class.is-invalid]="availability?.get('startDate')?.invalid && (availability?.get('startDate')?.dirty || availability?.get('startDate')?.touched)"
-        >
-        <div *ngIf="availability?.get('startDate')?.hasError('required') && (availability?.get('startDate')?.dirty || availability?.get('startDate')?.touched)" class="invalid-feedback">
-          Check-in date is required
-        </div>
-      </div>
-  
-      <div class="col-md-6 mb-3">
-        <label for="checkOutDate" class="form-label">Check-out Date 
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('endDate')?.invalid && propertyForm.get('endDate')?.touched">*</span>
-        </label>
-        <input 
-          type="date" 
-          id="checkOutDate" 
-          class="form-control" 
-          formControlName="endDate"
-          [min]="(availability?.get('startDate')?.value ? (availability?.get('startDate')?.value | date:'yyyy-MM-dd') : (today | date:'yyyy-MM-dd'))"
-          [class.is-invalid]="availability?.get('endDate')?.invalid && (availability?.get('endDate')?.dirty || availability?.get('endDate')?.touched)"
-        >
-        <div *ngIf="availability?.get('endDate')?.hasError('required') && (availability?.get('endDate')?.dirty || availability?.get('endDate')?.touched)" class="invalid-feedback">
-          Check-out date is required
-        </div>
-      </div>
-    </div>
-    
-    <!-- Display form group errors -->
-    <div *ngIf="availability?.errors && (availability?.dirty || availability?.touched)" class="alert alert-danger">
-      <div *ngIf="availability?.errors?.['pastDate']">
-        <i class="bi bi-exclamation-circle"></i> Check-in date cannot be in the past
-      </div>
-      <div *ngIf="availability?.errors?.['dateRange']">
-        <i class="bi bi-exclamation-circle"></i> Check-out date must be after check-in date
-      </div>
-    </div>
+<!-- ---------------------------- amenity propriy ------------------------------------>
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4>Select Amenities</h4>
   </div>
-  </div>
-  
-      
-  
-      <!-- amenity -->
-      <!-- <div class="form-section">
-        <h2>Amenities</h2>
-        <div class="amenities-grid">
-          <div *ngFor="let amenity of amenities" class="amenity-item">
-            <input type="checkbox" 
-                   [id]="'amenity-' + amenity.id" 
-                   (change)="onAmenityChange($event, amenity)">
-            <label [for]="'amenity-' + amenity.id">{{amenity.name}}</label>
-          </div>
-        </div>
-      </div> -->
-
-
-      <div class="form-section">
-        <h2>Amenities</h2>
-        
-        <!-- Amenities Grid -->
-        <div class="amenities-grid">
-          <div *ngFor="let amenity of amenities" class="amenity-item">
-            <input type="checkbox" 
-                   [id]="'amenity-' + amenity.id" 
-                   (change)="onAmenityChange($event, amenity)">
-            <label [for]="'amenity-' + amenity.id">
-              <i [class]="amenity.icon"></i> {{amenity.name}}
-            </label>
-          </div>
-        </div>
-      
-        <!-- Pagination Controls -->
-        <div class="pagination" *ngIf="totalPages > 1">
-          <button (click)="goToPage(1)" [disabled]="currentPage === 1">
-            &laquo;
-          </button>
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            &lsaquo;
-          </button>
-          
-          <ng-container *ngFor="let page of getPageNumbers()">
-            <button (click)="goToPage(page)" 
-                    [class.active]="page === currentPage">
-              {{page}}
-            </button>
-          </ng-container>
-          
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            &rsaquo;
-          </button>
-          <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">
-            &raquo;
-          </button>
-        </div>
-      
-        <!-- Loading Indicator -->
-        <div *ngIf="loading" class="loading-indicator">
-          Loading amenities...
-        </div>
-      </div>
-
-    <!-- spaces -->
-    <div class="form-section">
-      <h2>Spaces</h2>
-      <h3>Space Summaries (e.g., bedrooms, bathrooms)</h3>
-      <div formArrayName="spaceSummaries">
-        <div *ngFor="let space of spaceSummariesArray.controls; let i = index" 
-          [formGroupName]="i" class="space-item">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" formControlName="name" placeholder="e.g. Bedrooms">
-            </div>
-            <div class="form-group">
-              <label>Count</label>
-              <input type="number" formControlName="count" min="1">
-            </div>
-            <button type="button" (click)="removeSpaceSummary(i)" class="remove-button">Remove</button>
-          </div>
-        </div>
-        <button type="button" (click)="addSpaceSummary()" class="add-button">Add Space</button>
-      </div>
-      
-      <h3>Space Item Summaries (e.g., beds, baths)</h3>
-      <div formArrayName="spaceItemSummaries">
-        <div *ngFor="let item of spaceItemSummariesArray.controls; let i = index" 
-        [formGroupName]="i" class="space-item">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" formControlName="name" placeholder="e.g. Queen Beds">
-            </div>
-            <div class="form-group">
-              <label>Count</label>
-              <input type="number" formControlName="count" min="1">
-            </div>
-            <button type="button" (click)="removeSpaceItemSummary(i)" class="remove-button">Remove</button>
-          </div>
-        </div>
-        <button type="button" (click)="addSpaceItemSummary()" class="add-button">Add Space Item</button>
+  <div class="card-body">
+    <!-- Loading state for amenities -->
+    <div *ngIf="isLoadingAmenities" class="text-center py-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading amenities...</span>
       </div>
     </div>
-    
-    <div class="form-section">
-      <h2>Details</h2>
-      
-      <div class="form-group">
-        <label for="maxGuestCount">Maximum Guests 
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('maxGuestCount')?.invalid && propertyForm.get('maxGuestCount')?.touched">*</span>
-        </label>
-        <input id="maxGuestCount" type="number" formControlName="maxGuestCount" min="1">
-        <div *ngIf="propertyForm.get('maxGuestCount')?.invalid && propertyForm.get('maxGuestCount')?.touched" class="error-message">
-          Max Guests is required
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="pricePerNight">Price Per Night ($)
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('pricePerNight')?.invalid && propertyForm.get('pricePerNight')?.touched">*</span>
-        </label>
-        <input id="pricePerNight" type="number" formControlName="pricePerNight" min="0">
-        <div *ngIf="propertyForm.get('pricePerNight')?.invalid && propertyForm.get('pricePerNight')?.touched" class="error-message">
-          Price Per Night is required
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="safetyInfo">Safety Information 
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('safetyInfo')?.invalid && propertyForm.get('safetyInfo')?.touched">*</span>
-        </label>
-        <textarea id="safetyInfo" formControlName="safetyInfo" rows="3"></textarea>
-        <div *ngIf="propertyForm.get('safetyInfo')?.invalid && propertyForm.get('safetyInfo')?.touched" class="error-message">
-          Safe Info is required
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="houseRules">House Rules
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('houseRules')?.invalid && propertyForm.get('houseRules')?.touched">*</span>
-        </label>
-        <textarea id="houseRules" formControlName="houseRules" rows="3"></textarea>
-        <div *ngIf="propertyForm.get('houseRules')?.invalid && propertyForm.get('houseRules')?.touched" class="error-message">
-          House Rules is required
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="cancellationPolicy">Cancellation Policy
-          <span class="required-asterisk" [class.invalid]="propertyForm.get('cancellationPolicy')?.invalid && propertyForm.get('cancellationPolicy')?.touched">*</span>
-        </label>
-        <textarea id="cancellationPolicy" formControlName="cancellationPolicy" rows="3"></textarea>
-        <div *ngIf="propertyForm.get('cancellationPolicy')?.invalid && propertyForm.get('cancellationPolicy')?.touched" class="error-message">
-          cancellation Policy is required
+
+    <!-- Amenities Grid -->
+    <div *ngIf="!isLoadingAmenities" class="row">
+      <div class="col-md-4 mb-3" *ngFor="let amenity of filteredAmenities">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                     [id]="'amenity-' + amenity.id"
+                     [checked]="isSelected(amenity.id)"
+                     (change)="toggleAmenity(amenity)">
+              <label class="form-check-label" [for]="'amenity-' + amenity.id">
+                <i [class]="amenity.icon"></i> {{ amenity.name }}
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    
-    <div class="form-actions">
-      <button type="submit" [disabled]="propertyForm.invalid || isLoading" class="submit-button">
-      ADD
+
+    <!-- No amenities message -->
+    <div *ngIf="!isLoadingAmenities && filteredAmenities.length === 0" class="alert alert-info">
+      No amenities found for this category.
+    </div>
+
+    <!-- Pagination -->
+    <nav *ngIf="!isLoadingAmenities && totalPages > 1">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="prevPage()">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of getPageNumbers()" 
+            [class.active]="page === currentPage">
+          <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Selected Amenities -->
+    <div class="mt-4" *ngIf="selectedAmenities.length > 0">
+      <h5>Selected Amenities</h5>
+      <div class="d-flex flex-wrap gap-2">
+        <span class="badge bg-primary p-2" *ngFor="let amenity of selectedAmenities">
+          <i [class]="amenity.icon"></i> {{ amenity.name }}
+          <button class="btn-close btn-close-white ms-2" (click)="toggleAmenity(amenity)"></button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="mt-4" *ngIf="unsavedChanges">
+      <button class="btn btn-primary" (click)="saveAmenities()" [disabled]="isLoadingAmenities">
+        <span *ngIf="isLoadingAmenities" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Save Amenities
       </button>
     </div>
-  </form>
+  </div>
+</div>
+
+
+<!---------------------- add availability ------------------------>
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4>Set Availability</h4>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="availabilityForm" (ngSubmit)="availabilitySubmit()">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" 
+                 class="form-control" 
+                 id="startDate"
+                 formControlName="startDate"
+                 [min]="minDate | date:'yyyy-MM-dd'">
+          <div *ngIf="availabilityForm.get('startDate')?.invalid && 
+                     (availabilityForm.get('startDate')?.dirty) || 
+                     availabilityForm.get('startDate')?.touched" 
+               class="text-danger">
+            <small *ngIf="availabilityForm.get('startDate')?.hasError('required')">
+              Start date is required
+            </small>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" 
+                 class="form-control" 
+                 id="endDate"
+                 formControlName="endDate"
+                 [min]="availabilityForm.value.startDate || minDate | date:'yyyy-MM-dd'">
+          <div *ngIf="availabilityForm.get('endDate')?.invalid && 
+                     (availabilityForm.get('endDate')?.dirty || 
+                     availabilityForm.get('endDate')?.touched)" 
+               class="text-danger">
+            <small *ngIf="availabilityForm.get('endDate')?.hasError('required')">
+              End date is required
+            </small>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="availabilityForm.errors?.['dateRange']" class="alert alert-danger mt-3">
+        End date must be after start date
+      </div>
+      
+      <div class="mt-3">
+        <button type="submit" 
+                class="btn btn-primary"
+                [disabled]="!availabilityForm.valid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+          Add Availability Period
+        </button>
+      </div>
+    </form>
+    
+    <!-- Display saved availability periods -->
+    <div class="mt-4" *ngIf="availabilityPeriods.length > 0">
+      <h5>Current Availability Periods</h5>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Start Date</th>
+              <th>End Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let period of availabilityPeriods">
+              <td>{{ period.startDate | date:'mediumDate' }}</td>
+              <td>{{ period.endDate | date:'mediumDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- add property guests -->
+ <!-- Add this after the availability section -->
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4>Guest Policy</h4>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="guestForm" (ngSubmit)="onGuestSubmit()">
+      <div class="row g-3">
+        <!-- Guest Type Selection -->
+        <div class="col-md-6">
+          <label for="guestTypeId" class="form-label">Guest Type*</label>
+          <select class="form-select" id="guestTypeId" formControlName="guestTypeId">
+            <option value="" disabled selected>Select guest type</option>
+            <option *ngFor="let type of guestTypes" [value]="type.id">
+              {{type.name}}
+            </option>
+          </select>
+          <div *ngIf="guestForm.get('guestTypeId')?.invalid && 
+                     (guestForm.get('guestTypeId')?.dirty || 
+                      guestForm.get('guestTypeId')?.touched)" 
+               class="text-danger">
+            <small *ngIf="guestForm.get('guestTypeId')?.hasError('required')">
+              Guest type is required
+            </small>
+          </div>
+          <div *ngIf="guestTypes.length === 0 && !isLoading" class="text-warning">
+            No guest types available
+          </div>
+        </div>
+
+        <!-- Guest Count -->
+        <div class="col-md-6">
+          <label for="guestCount" class="form-label">Number of Guests*</label>
+          <div class="input-group">
+            <button class="btn btn-outline-secondary" type="button" 
+                    (click)="decrementGuestCount()" 
+                    [disabled]="guestForm.get('guestCount')?.value <= 1">
+              -
+            </button>
+            <input type="number" class="form-control text-center" 
+                   id="guestCount" formControlName="guestCount"
+                   min="1" [max]="maxGuests" readonly>
+            <button class="btn btn-outline-secondary" type="button" 
+                    (click)="incrementGuestCount()"
+                    [disabled]="guestForm.get('guestCount')?.value >= maxGuests">
+              +
+            </button>
+          </div>
+          <div *ngIf="guestForm.get('guestCount')?.invalid && 
+                     (guestForm.get('guestCount')?.dirty || 
+                      guestForm.get('guestCount')?.touched)" 
+               class="text-danger">
+            <small *ngIf="guestForm.get('guestCount')?.hasError('required')">
+              Guest count is required
+            </small>
+            <small *ngIf="guestForm.get('guestCount')?.hasError('min')">
+              Minimum 1 guest
+            </small>
+            <small *ngIf="guestForm.get('guestCount')?.hasError('max')">
+              Maximum {{maxGuests}} guests
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary"
+                [disabled]="!guestForm.valid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></span>
+          Save Guest Policy
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- add property photos  -->
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4>Property Photos</h4>
+  </div>
+  <div class="card-body">
+    <!-- Drag and drop area -->
+    <div class="dropzone" 
+         (drop)="onFileDropped($event)"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         [class.drag-over]="isDragOver">
+      <div class="text-center py-5">
+        <i class="bi bi-cloud-upload display-4 text-muted"></i>
+        <p class="mt-3">Drag & drop photos here or click to browse</p>
+        <input type="file" #fileInput (change)="onFileSelected($event)" 
+               multiple accept="image/*" class="d-none">
+        <button class="btn btn-outline-primary" (click)="fileInput.click()">
+          Select Photos
+        </button>
+      </div>
+    </div>
+
+    <!-- Upload progress -->
+    <div *ngIf="isUploading" class="mt-3">
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" 
+             [style.width]="uploadProgress + '%'">
+          {{uploadProgress}}%
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo preview grid -->
+    <div class="row mt-3" *ngIf="uploadedPhotos.length > 0">
+      <div class="col-6 col-md-4 col-lg-3 mb-3" 
+           *ngFor="let photo of uploadedPhotos; let i = index" 
+           cdkDrag>
+        <div class="card h-100">
+          <img [src]="photo.url" class="card-img-top" style="height: 150px; object-fit: cover;">
+          <div class="card-body p-2 text-center">
+            <button class="btn btn-sm btn-outline-danger" 
+                    (click)="removePhoto(i)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="d-flex justify-content-between mt-3">
+      <button class="btn btn-primary" 
+              (click)="uploadPhotos()"
+              [disabled]="uploadedPhotos.length === 0 || isUploading">
+        <span *ngIf="isUploading" class="spinner-border spinner-border-sm"></span>
+        Upload Photos
+      </button>
+      
+    </div>
+  </div>
+</div>
+
+<!---------------------------add property spaces and space items----------------------->
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h4>Property Spaces</h4>
+  </div>
+  <div class="card-body">
+    <!-- Add New Space Form -->
+    <div class="mb-4">
+      <h5 class="mb-3">Add New Space</h5>
+      <form [formGroup]="newSpaceForm" (ngSubmit)="addSpace()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Space Type*</label>
+            <select class="form-select" formControlName="propertySpaceTypeId">
+              <option value="" disabled selected>Select space type</option>
+              <option *ngFor="let type of spaceTypes" [value]="type.id">
+                {{type.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Space Name*</label>
+            <input type="text" class="form-control" formControlName="name" 
+                   placeholder="Enter space name (e.g., Master Bedroom)">
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" 
+                     id="isShared" formControlName="isShared">
+              <label class="form-check-label" for="isShared">
+                Shared Space (like shared bathroom)
+              </label>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary" 
+                    [disabled]="!newSpaceForm.valid">
+              Add Space
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Items to Space -->
+    <div class="mb-4" *ngIf="selectedSpaceId">
+      <!-- <h5 class="mb-3">Add Items to {{ getSelectedSpace()?.name || 'Selected Space' }}</h5> -->
+      <form [formGroup]="addSpaceItemForm" (ngSubmit)="addSpaceItem()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Item Type*</label>
+            <select class="form-select" formControlName="propertySpaceItemTypeId">
+              <option value="" disabled selected>Select item type</option>
+              <option *ngFor="let item of spaceItemTypes" [value]="item.id">
+                {{item.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Quantity*</label>
+            <input type="number" class="form-control" 
+                   formControlName="quantity" min="1">
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary" 
+                    [disabled]="!addSpaceItemForm.valid">
+              Add Item
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Status Messages -->
+    <div *ngIf="selectedSpaceId && getSelectedSpace()?.items?.length === 0" class="alert alert-info">
+      No items added to selected space yet
+    </div>
+  </div>
+</div>

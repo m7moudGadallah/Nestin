@@ -62,5 +62,38 @@ export class ApiConstant {
   public static user = {
     getAllUsers: `${ApiConstant.baseUrl}/UserProfiles`,
   };
+
+  public static propertyAmenity = {
+    addAmenity: `${ApiConstant.baseUrl}/PropertyAmenities`,
+  };
+
+  public static propertyAvailability = {
+    addAvailability: `${ApiConstant.baseUrl}/PropertyAvailabilities`,
+  };
+
+  public static propertyGuest = {
+    addGuest: `${ApiConstant.baseUrl}/PropertyGuests`,
+  };
+
+  public static propertyPhoto = {
+    addPhoto: `${ApiConstant.baseUrl}/PropertyPhotos`,
+  };
+
+  public static photoReorder = {
+    reorder: `${ApiConstant.propertyPhoto.addPhoto}/reorder`,
+  };
+
+  public static propertySpaces = {
+    addSpaces: `${ApiConstant.baseUrl}/PropertySpaces`,
+    spaces:`${ApiConstant.baseUrl}/PropertySpaceTypes`
+  };
+
+  public static propertySpacesItems = {
+    addSpacesItem: `${ApiConstant.baseUrl}/propertySpaceItems`,
+    spaceItems:`${ApiConstant.baseUrl}/PropertySpaceItemTypes`
+  };
+
+
+
   // Add other grouped APIs here
 }

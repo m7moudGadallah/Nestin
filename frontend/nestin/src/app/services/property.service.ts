@@ -162,6 +162,8 @@ export class PropertyService {
       { params }
     );
   }
+
+
   // get all amenities from all pages
   getAllAmenities(): Observable<IPropertyAmenity[]> {
     const initialPage = 1;
@@ -185,11 +187,13 @@ export class PropertyService {
       }, [])
     );
   }
+
   getAmenityCategories(): Observable<IAminityCategory> {
     return this.http.get<IAminityCategory>(
       ApiConstant.AmenitiesApi.getAllAmenitiesCategories
     );
   }
+  
   getPropertyTypes(): Observable<IPropertyType[]> {
     return this.http.get<IPropertyType[]>(
       ApiConstant.PropertiesApi.getAllPropertyTypes
