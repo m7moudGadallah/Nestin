@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestin.Core.Entities;
+using Nestin.Infrastructure.Data.Seeds;
 
 namespace Nestin.Infrastructure.Data.Configurations
 {
@@ -48,6 +49,8 @@ namespace Nestin.Infrastructure.Data.Configurations
                 .WithOne()
                 .HasForeignKey<UserProfile>(x => x.PhotoId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasData(UserProfileSeed.Data);
         }
     }
 }
