@@ -163,7 +163,6 @@ export class PropertyService {
     );
   }
 
-
   // get all amenities from all pages
   getAllAmenities(): Observable<IPropertyAmenity[]> {
     const initialPage = 1;
@@ -193,7 +192,7 @@ export class PropertyService {
       ApiConstant.AmenitiesApi.getAllAmenitiesCategories
     );
   }
-  
+
   getPropertyTypes(): Observable<IPropertyType[]> {
     return this.http.get<IPropertyType[]>(
       ApiConstant.PropertiesApi.getAllPropertyTypes
@@ -201,7 +200,7 @@ export class PropertyService {
   }
   deleteProperty(id: string): Observable<any> {
     const url = `${ApiConstant.PropertiesApi.getAll}/${id}`;
-    console.log('DELETE URL:', url); 
-    return this.http.delete(url , {withCredentials:true});
+    console.log('DELETE URL:', url);
+    return this.http.delete(url, { withCredentials: true });
   }
 }

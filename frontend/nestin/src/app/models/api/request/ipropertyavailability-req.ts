@@ -1,5 +1,5 @@
 export interface IPropertyavailabilityReq {
-    propertyId: string;
-    startDate: Date; 
-    endDate: Date;  
+  propertyId: string;
+  startDate: Date;
+  endDate: Date;
 }

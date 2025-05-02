@@ -1,4 +1,3 @@
-
 export interface IPropertyAmenity {
   id: number;
   name: string;

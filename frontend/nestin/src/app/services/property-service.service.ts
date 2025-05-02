@@ -35,7 +35,10 @@ import { IFeesResponse } from '../models/api/response/ifees-res';
 import { ILocation } from '../models/domain/ilocation';
 import { ApiConstant } from '../utils/api-constant.util';
 import { IGuestTypeResponse } from '../models/api/response/iguest-type-response';
-import { IPropertySpaces, IPropertySpacesRes } from '../models/domain/iproperty-spaces';
+import {
+  IPropertySpaces,
+  IPropertySpacesRes,
+} from '../models/domain/iproperty-spaces';
 import { IPropertySpaceItem } from '../models/domain/iproperty-space-item';
 
 @Injectable({
@@ -288,13 +291,11 @@ export class PropertyService {
     return this.getAmenitiesPage(this.currentPage + 1, this.pageSize);
   }
 
-
-
   // ================get property Guests==================
 
   getAllGuestTypes(): Observable<IGuestTypeResponse> {
     return this.http.get<IGuestTypeResponse>(
-      `${ApiConstant.GuestType.GuestType}`    
+      `${ApiConstant.GuestType.GuestType}`
     );
   }
 
@@ -350,7 +351,7 @@ export class PropertyService {
       { params }
     );
   }
-  
+
   getPropertySpaceItem(): Observable<IPropertySpaceItem[]> {
     const initialPage = 1;
     const pageSize = 10;
@@ -374,5 +375,4 @@ export class PropertyService {
       }, [])
     );
   }
-  
 }

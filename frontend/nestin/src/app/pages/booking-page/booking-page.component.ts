@@ -32,6 +32,7 @@ export class BookingPageComponent implements OnInit {
   savedChildren = 0;
   savedInfants = 0;
   savedPets = 0;
+  isCheckingOut = false;
 
   openOverlay(type: 'guest' | 'date'): void {
     // this.isOverlayOpen = true;
@@ -135,28 +136,31 @@ export class BookingPageComponent implements OnInit {
   }
 
   onCheckOut() {
-    const token = localStorage.getItem('accessToken');
+    this.isCheckingOut = true; // Show spinner when checkout starts
 
+    const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('Access token is missing');
       alert('You must be logged in to checkout.');
+      this.isCheckingOut = false;
       return;
     }
     if (!this.selectedBookingId) {
       console.error('Booking ID is missing');
       alert('Please select a booking before proceeding to checkout.');
+      this.isCheckingOut = false;
       return;
     }
 
     this.checkOutService.checkOut(this.selectedBookingId).subscribe({
       next: response => {
         console.log('Checkout successful', response);
-
         const sessionUrl = response?.sessionUrl;
 
         if (!sessionUrl) {
           console.error('Session ID or URL is missing from response');
           alert('Invalid checkout session, please try again');
+          this.isCheckingOut = false;
           return;
         }
 
@@ -165,6 +169,7 @@ export class BookingPageComponent implements OnInit {
       error: err => {
         console.error('Checkout failed', err);
         alert('Failed to proceed to checkout, please try again');
+        this.isCheckingOut = false;
       },
     });
   }
@@ -205,13 +210,14 @@ export class BookingPageComponent implements OnInit {
   }
   // to calculate total price (price per night * number pf nights)
   calculateTotalPrice(
-    pricePerNight: number | undefined,
     checkIn: string | undefined,
     checkOut: string | undefined
   ): number | null {
-    if (pricePerNight === undefined) {
+    if (!this.bookings.length || !this.bookings[0].property?.pricePerNight) {
       return null;
     }
+
+    const pricePerNight = this.bookings[0].property.pricePerNight;
     const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
 
     if (numberOfNights === null) {
@@ -222,20 +228,26 @@ export class BookingPageComponent implements OnInit {
   }
   // to calculate total price
   calculateTotal(
-    pricePerNight: number | undefined,
     checkIn: string | undefined,
-    checkOut: string | undefined,
-    totalFees: number | undefined
+    checkOut: string | undefined
   ): number | null {
+    if (!this.bookings.length) {
+      return null;
+    }
+
+    const pricePerNight = this.bookings[0].property?.pricePerNight;
+    const totalFees = this.bookings[0].totalFees;
+
     if (pricePerNight === undefined || totalFees === undefined) {
       return null;
     }
+
     const numberOfNights = this.calculateNumberOfNights(checkIn, checkOut);
     if (numberOfNights === null) {
       return null;
     }
-    const totalPrice = pricePerNight * numberOfNights;
-    return totalPrice + totalFees;
+
+    return pricePerNight * numberOfNights + totalFees;
   }
   createBooking() {
     if (!this.checkInDate || !this.checkOutDate) {

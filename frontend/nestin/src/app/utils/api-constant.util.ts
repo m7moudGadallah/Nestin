@@ -85,15 +85,13 @@ export class ApiConstant {
 
   public static propertySpaces = {
     addSpaces: `${ApiConstant.baseUrl}/PropertySpaces`,
-    spaces:`${ApiConstant.baseUrl}/PropertySpaceTypes`
+    spaces: `${ApiConstant.baseUrl}/PropertySpaceTypes`,
   };
 
   public static propertySpacesItems = {
     addSpacesItem: `${ApiConstant.baseUrl}/propertySpaceItems`,
-    spaceItems:`${ApiConstant.baseUrl}/PropertySpaceItemTypes`
+    spaceItems: `${ApiConstant.baseUrl}/PropertySpaceItemTypes`,
   };
-
-
 
   // Add other grouped APIs here
 }

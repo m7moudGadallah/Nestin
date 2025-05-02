@@ -69,25 +69,25 @@
     class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     <div class="flex flex-wrap gap-2">
       <button
-        (click)="selectedStatus = 'all'"
+        (click)="selectedStatus = 'all'; applyFilters()"
         class="px-4 py-2 font-medium btn btn-outline-primary rounded-pill"
         [ngClass]="{ active: selectedStatus == 'all' }">
         All Bookings
       </button>
       <button
-        (click)="selectedStatus = 'Confirmed'"
+        (click)="selectedStatus = 'Confirmed'; applyFilters()"
         class="px-4 py-2 font-medium btn btn-outline-primary rounded-pill"
         [ngClass]="{ active: selectedStatus == 'Confirmed' }">
         Confirmed
       </button>
       <button
-        (click)="selectedStatus = 'Pending'"
+        (click)="selectedStatus = 'Pending'; applyFilters()"
         class="px-4 py-2 font-medium btn btn-outline-primary rounded-pill"
         [ngClass]="{ active: selectedStatus == 'Pending' }">
         Pending
       </button>
       <button
-        (click)="selectedStatus = 'Canceled'"
+        (click)="selectedStatus = 'Canceled'; applyFilters()"
         class="px-4 py-2 font-medium btn btn-outline-primary rounded-pill"
         [ngClass]="{ active: selectedStatus == 'Canceled' }">
         Canceled
@@ -97,7 +97,7 @@
     <div class="relative w-full md:w-auto">
       <select
         [(ngModel)]="selectedFilter"
-        (change)="applySort()"
+        (change)="applyFilters()"
         class="block w-full px-4 py-2 pr-8 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500">
         <option value="checkIn-desc">Check-in Date (Newest first)</option>
         <option value="checkIn-asc">Check-in Date (Oldest first)</option>
@@ -121,7 +121,12 @@
 
   <!-- Booking List -->
   <div class="space-y-6">
-    <!-- Booking 1 -->
+    <!-- No bookings message -->
+    <div *ngIf="filteredBookings.length === 0" class="text-center py-10">
+      <p class="text-gray-500">No bookings found matching your criteria.</p>
+    </div>
+
+    <!-- Booking Cards -->
     <div
       *ngFor="let booking of filteredBookings"
       class="bg-white rounded-xl shadow-md overflow-hidden transition-all hover:shadow-lg">
@@ -129,11 +134,19 @@
         <!-- Property Image -->
         <div class="md:w-1/3 h-48 md:h-auto relative">
           <img
-            [src]="booking?.property?.photos?.[0]?.photoUrl"
-            alt="Sunny and cozy Apartment Sagrada Familia"
+            [src]="
+              booking?.property?.photos?.[0]?.photoUrl ||
+              'assets/default-property.jpg'
+            "
+            alt="Property image"
             class="w-full h-full object-cover" />
           <span
-            class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+            class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold"
+            [ngClass]="{
+              'bg-green-100 text-green-800': booking?.status === 'Confirmed',
+              'bg-yellow-100 text-yellow-800': booking?.status === 'Pending',
+              'bg-red-100 text-red-800': booking?.status === 'Canceled',
+            }">
             {{ booking?.status }}
           </span>
         </div>
@@ -170,16 +183,20 @@
                     <path
                       d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
                   </svg>
+                  <span class="text-gray-600 text-sm ml-1">
+                    {{ booking?.property?.averageRating || 'No ratings' }} ({{
+                      booking?.property?.reviewCount || 0
+                    }}
+                    reviews)
+                  </span>
                 </div>
-                <!-- number of reviews -->
-                <span class="text-gray-600 text-sm ml-1"
-                  >({{ booking?.property?.reviewCount }}review)</span
-                >
               </div>
             </div>
             <div class="text-right">
-              <p class="text-gray-600 text-sm">Booking {{ booking?.id }}</p>
-              <p class="text-gray-500 text-xs">{{ booking?.createdAt }}</p>
+              <p class="text-gray-600 text-sm">Booking #{{ booking?.id }}</p>
+              <p class="text-gray-500 text-xs">
+                {{ booking?.createdAt | date }}
+              </p>
             </div>
           </div>
 
@@ -188,15 +205,19 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <p class="text-sm text-gray-500">Check-in</p>
-              <p class="font-medium">{{ booking?.checkIn }}</p>
+              <p class="font-medium">{{ booking?.checkIn | date }}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Check-out</p>
-              <p class="font-medium">{{ booking?.checkOut }}</p>
+              <p class="font-medium">{{ booking?.checkOut | date }}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Guests</p>
-              <p class="font-medium">{{ firstGuestCount }}guest</p>
+              <p class="font-medium">
+                {{ getGuestCount(booking) }} guest{{
+                  getGuestCount(booking) !== 1 ? 's' : ''
+                }}
+              </p>
             </div>
           </div>
 
@@ -206,27 +227,18 @@
             <div>
               <p class="text-sm text-gray-500">Total</p>
               <p class="text-xl font-bold text-primary-600">
-                ${{
-                  calculateTotalPrice(
-                    bookings[0]?.pricePerNight,
-                    bookings[0]?.checkIn,
-                    bookings[0]?.checkOut
-                  )
-                }}
+                ${{ calculateTotalWithFees(booking) | number: '1.2-2' }}
               </p>
               <p class="text-xs text-gray-500">
-                ${{ booking?.pricePerNight }} per night ×
-                {{
-                  calculateNumberOfNights(
-                    bookings[0]?.checkIn,
-                    bookings[0]?.checkOut
-                  )
-                }}
+                ${{ booking?.property?.pricePerNight | number: '1.2-2' }} per
+                night ×
+                {{ calculateNumberOfNights(booking.checkIn, booking.checkOut) }}
                 nights
               </p>
             </div>
             <div class="space-x-2">
               <button
+                *ngIf="booking.status === 'Pending'"
                 class="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition-colors"
                 (click)="cancelBooking(booking)">
                 Cancel

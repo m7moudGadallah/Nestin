@@ -1,4 +1,4 @@
 export interface IPropertyAmenityReq {
-    propertyId: string;
-    amenityId: number;
+  propertyId: string;
+  amenityId: number;
 }

@@ -15,7 +15,7 @@ import {
   faThumbtack,
   faCheck,
   faTimes,
-  faCheckCircle
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -45,12 +45,12 @@ export class PropertyAdminComponent implements OnInit {
     pin: faThumbtack,
     check: faCheck,
     times: faTimes,
-    checkCircle: faCheckCircle
+    checkCircle: faCheckCircle,
   };
   constructor(
     private propertyService: PropertyService,
     private route: Router,
-    private toastService : ToastService
+    private toastService: ToastService
   ) {}
   ngOnInit(): void {
     this.getAllProperty();
@@ -138,8 +138,8 @@ export class PropertyAdminComponent implements OnInit {
   //   this.currentPage = pageNumber;
   //   this.updatePageData();
   // }
-   //Pagination--------------------------------------------------------------
-   updatePageData(): void {
+  //Pagination--------------------------------------------------------------
+  updatePageData(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.allProperties = this.property.slice(startIndex, endIndex);
@@ -179,7 +179,7 @@ export class PropertyAdminComponent implements OnInit {
     // Scroll to top of results
     this.scrollToResults();
   }
-    private scrollToResults(): void {
+  private scrollToResults(): void {
     const cardsElement = document.getElementById('cards');
     if (cardsElement) {
       cardsElement.scrollIntoView({ behavior: 'smooth' });
@@ -193,23 +193,22 @@ export class PropertyAdminComponent implements OnInit {
       this.toastService.showWarning('This property is already deleted.');
       return;
     }
-  
-    if (confirm('Are you sure you want to delete this property?')){
+
+    if (confirm('Are you sure you want to delete this property?')) {
       this.propertyService.deleteProperty(propertyId).subscribe({
-        next: ()=>{
+        next: () => {
           console.log('Trying to delete property with ID:', propertyId); // to test
           this.property = this.property.filter(p => p.id !== propertyId);
-          //show toast 
-          this.toastService.showSuccess('Property deleted successfully')
+          //show toast
+          this.toastService.showSuccess('Property deleted successfully');
         },
-        error: (err) => {
-          console.error('Error deleting property',err);
-          this.toastService.showError('Failed to delete property')
-        }
-      })
+        error: err => {
+          console.error('Error deleting property', err);
+          this.toastService.showError('Failed to delete property');
+        },
+      });
     }
   }
-
 
   toggleActive(property: IPropertyWithDistance): void {
     property.isActive = !property.isActive;

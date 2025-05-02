@@ -1,7 +1,5 @@
 export interface IPropertyGuestReq {
-
-    propertyId: string;
-    guestTypeId: number;
-    guestCount: number;
-    
+  propertyId: string;
+  guestTypeId: number;
+  guestCount: number;
 }

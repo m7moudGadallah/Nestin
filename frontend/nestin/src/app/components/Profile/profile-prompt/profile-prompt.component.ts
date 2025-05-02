@@ -7,7 +7,6 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { IUserProfile } from '../../../models/domain/iuser-profile';
 import { UserProfileService } from '../../../services/user-profile.service';
 
-
 @Component({
   selector: 'app-profile-prompt',
   standalone: true,

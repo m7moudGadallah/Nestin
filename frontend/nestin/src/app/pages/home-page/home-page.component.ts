@@ -161,7 +161,7 @@ export class HomePageComponent implements OnInit {
       page: this.currentPage,
       pageSize: this.itemsPerPage,
     };
-  if (this.selectedPropertyType) {
+    if (this.selectedPropertyType) {
       queryParams.PropertyTypeId = this.selectedPropertyType;
     }
     this.propertyService.searchProperty(queryParams).subscribe({
@@ -189,7 +189,6 @@ export class HomePageComponent implements OnInit {
         this.handlePropertyerror('Failed to search properties');
       },
     });
-
   }
 
   getGuestSummary(): string {
@@ -565,27 +564,27 @@ export class HomePageComponent implements OnInit {
       page: this.currentPage,
       pageSize: this.itemsPerPage,
     };
-  
+
     // Add minPrice if it's >= 0
     if (this.minPrice >= 0) {
       queryParams.PriceMin = this.minPrice;
     }
-      if (this.selectedPropertyType) {
+    if (this.selectedPropertyType) {
       queryParams.PropertyTypeId = this.selectedPropertyType;
     }
-  
+
     // Add maxPrice if valid
     if (this.maxPrice > 0 && this.maxPrice > this.minPrice) {
       queryParams.PriceMax = this.maxPrice;
     }
-  
+
     // Add property rating if selected
     if (this.selectedRating > 0) {
       queryParams.MinAvgRating = this.selectedRating;
     }
-  
+
     this.isLoadingProperties = true;
-  
+
     this.propertyService.searchProperty(queryParams).subscribe({
       next: (response: HttpResponse<IpropertyRes>) => {
         this.isLoadingProperties = false;
@@ -612,5 +611,4 @@ export class HomePageComponent implements OnInit {
       },
     });
   }
-  
 }

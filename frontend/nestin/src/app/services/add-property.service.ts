@@ -11,79 +11,91 @@ import { IPropertyavailabilityReq } from '../models/api/request/ipropertyavailab
 import { IPropertyGuestReq } from '../models/api/request/iproperty-guest-req';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AddPropertyService {
+  private apiUrl = 'api/properties';
 
-  private apiUrl = 'api/properties'; 
-
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient) {}
 
   // add property info
   addProperty(property: IPropertyRequest): Observable<IPropertyResponse> {
-    return this.http.post<IPropertyResponse>(ApiConstant.PropertiesApi.getAll,
+    return this.http.post<IPropertyResponse>(
+      ApiConstant.PropertiesApi.getAll,
       property,
-      { withCredentials: true });
+      { withCredentials: true }
+    );
   }
 
   // add property amenity
-  addPropertyAmenity(data:IPropertyAmenityReq): Observable<any> {
-    return this.http.post<IPropertyResponse>(ApiConstant.propertyAmenity.addAmenity,
+  addPropertyAmenity(data: IPropertyAmenityReq): Observable<any> {
+    return this.http.post<IPropertyResponse>(
+      ApiConstant.propertyAmenity.addAmenity,
       data,
-      { withCredentials: true });
+      { withCredentials: true }
+    );
   }
 
-  // add property availabity 
-  addPropertyAvailability(data:IPropertyavailabilityReq): Observable<any> {
-    return this.http.post(ApiConstant.propertyAvailability.addAvailability,
+  // add property availabity
+  addPropertyAvailability(data: IPropertyavailabilityReq): Observable<any> {
+    return this.http.post(
+      ApiConstant.propertyAvailability.addAvailability,
       data,
-      { withCredentials: true });
+      { withCredentials: true }
+    );
   }
 
-// add property Guest
+  // add property Guest
 
-addPropertyGuests(data:IPropertyGuestReq): Observable<any> {
-  return this.http.post(ApiConstant.propertyAvailability.addAvailability,
-    data,
-    { withCredentials: true });
-}
+  addPropertyGuests(data: IPropertyGuestReq): Observable<any> {
+    return this.http.post(
+      ApiConstant.propertyAvailability.addAvailability,
+      data,
+      { withCredentials: true }
+    );
+  }
 
+  // add property photos
 
+  uploadPropertyPhotos(formData: FormData): Observable<HttpEvent<any>> {
+    return this.http.post(ApiConstant.propertyPhoto.addPhoto, formData, {
+      reportProgress: true,
+      observe: 'events',
+      withCredentials: true,
+    });
+  }
 
-// add property photos
+  reorderPropertyPhotos(data: {
+    propertyId: string;
+    photoIds: string[];
+  }): Observable<any> {
+    return this.http.post(ApiConstant.photoReorder.reorder, data, {
+      withCredentials: true,
+    });
+  }
 
-uploadPropertyPhotos(formData: FormData): Observable<HttpEvent<any>> {
-  return this.http.post(ApiConstant.propertyPhoto.addPhoto , formData, {
-    reportProgress: true,
-    observe: 'events',
-    withCredentials: true 
-  });
-}
+  // add property & property space items
 
-reorderPropertyPhotos(data: {propertyId: string, photoIds: string[]}): Observable<any> {
-  return this.http.post(ApiConstant.photoReorder.reorder, data,
-    { withCredentials: true }
-  );
-}
+  addPropertySpace(space: {
+    name: string;
+    propertySpaceTypeId: number;
+    propertyId: string;
+    isShared: boolean;
+  }): Observable<any> {
+    return this.http.post(`${ApiConstant.propertySpaces.addSpaces}`, space, {
+      withCredentials: true,
+    });
+  }
 
-// add property & property space items 
-
-addPropertySpace(space: {
-  name: string;
-  propertySpaceTypeId: number;
-  propertyId: string;
-  isShared: boolean;
-}): Observable<any> {
-  return this.http.post(`${ApiConstant.propertySpaces.addSpaces}`, space , {withCredentials: true});
-}
-
-addSpaceItem(item: {
-  propertySpaceItemTypeId: number;
-  propertySpaceId: string;
-  quantity: number;
-}): Observable<any> {
-  return this.http.post(`${ApiConstant.propertySpacesItems.addSpacesItem}`, item ,{withCredentials: true});
-}
-  
+  addSpaceItem(item: {
+    propertySpaceItemTypeId: number;
+    propertySpaceId: string;
+    quantity: number;
+  }): Observable<any> {
+    return this.http.post(
+      `${ApiConstant.propertySpacesItems.addSpacesItem}`,
+      item,
+      { withCredentials: true }
+    );
+  }
 }
