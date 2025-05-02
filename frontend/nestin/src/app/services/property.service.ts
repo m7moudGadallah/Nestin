@@ -195,4 +195,9 @@ export class PropertyService {
       ApiConstant.PropertiesApi.getAllPropertyTypes
     );
   }
+  deleteProperty(id: string): Observable<any> {
+    const url = `${ApiConstant.PropertiesApi.getAll}/${id}`;
+    console.log('DELETE URL:', url); 
+    return this.http.delete(url , {withCredentials:true});
+  }
 }

@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
-import { IPropertyTypeRes } from '../../models/api/response/i-property-type-res';
 import { HttpResponse } from '@angular/common/http';
-import { IpropertyTypeApiResponse } from '../../models/api/response/iproperty-type-api-res';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HostListener } from '@angular/core';
 import { IPropertyWithDistance } from '../../models/domain/iproperty-with-distance';
-import { IProperty } from '../../models/domain/iproperty';
 import { IpropertyRes } from '../../models/api/response/iproperty-res';
+import { ToastService } from '../../services/toast.service';
 import {
   faChevronLeft,
   faChevronRight,
@@ -18,6 +15,7 @@ import {
   faThumbtack,
   faCheck,
   faTimes,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -38,6 +36,7 @@ export class PropertyAdminComponent implements OnInit {
   itemsPerPage: number = 10;
   totalItems: number = this.property?.length || 0;
   Math = Math;
+  isLoadingProperties: boolean = true;
 
   icons: { [key: string]: any } = {
     'chevron-left': faChevronLeft,
@@ -46,40 +45,48 @@ export class PropertyAdminComponent implements OnInit {
     pin: faThumbtack,
     check: faCheck,
     times: faTimes,
+    checkCircle: faCheckCircle
   };
   constructor(
     private propertyService: PropertyService,
-    private route: Router
+    private route: Router,
+    private toastService : ToastService
   ) {}
   ngOnInit(): void {
     this.getAllProperty();
   }
   getAllProperty(): void {
-    this.propertyService.getAllProperty().subscribe({
-      next: (response: HttpResponse<IpropertyRes>) => {
-        if (response.status === 200 && response.body) {
-          this.property = response.body.items.map(prop => ({
-            ...prop,
-            distanceFromMe: this.getDistanceFromLatLonInKm(
-              this.userLat,
-              this.userLon,
-              prop.latitude,
-              prop.longitude
-            ).toFixed(1),
-          }));
-          this.totalItems = response.body.metaData.total;
-          this.itemsPerPage = response.body.metaData.pageSize;
-          this.currentPage = response.body.metaData.page;
-          console.log(this.property);
-        } else {
-          this.handlePropertyerror('Invalid Loading Property');
-        }
-      },
-      error: error => {
-        console.error('Error fetching property:', error);
-        this.handlePropertyerror('Failed to load property');
-      },
-    });
+    this.isLoadingProperties = true;
+    this.propertyService
+      .getAllProperty({
+        page: this.currentPage,
+        pageSize: this.itemsPerPage,
+      })
+      .subscribe({
+        next: (response: HttpResponse<IpropertyRes>) => {
+          this.isLoadingProperties = false;
+          if (response.status === 200 && response.body) {
+            this.property = response.body.items.map(prop => ({
+              ...prop,
+              distanceFromMe: this.getDistanceFromLatLonInKm(
+                this.userLat,
+                this.userLon,
+                prop.latitude,
+                prop.longitude
+              ).toFixed(1),
+            }));
+            this.totalItems = response.body.metaData.total;
+            this.currentPage = response.body.metaData.page;
+          } else {
+            this.handlePropertyerror('Invalid Loading Property');
+          }
+        },
+        error: error => {
+          this.isLoadingProperties = false;
+          console.error('Error fetching property:', error);
+          this.handlePropertyerror('Failed to load property');
+        },
+      });
   }
   handlePropertyerror(message: string): void {
     this.errorMessage = message;
@@ -116,30 +123,93 @@ export class PropertyAdminComponent implements OnInit {
       return 100; // 100px if Simple search mode
     }
   }
-  updatePageData(): void {
-    // const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    // const endIndex = startIndex + this.itemsPerPage;
-    // this.allProperties = this.property.slice(startIndex, endIndex);
-    if (this.itemsPerPage <= 0) {
-      this.itemsPerPage = 10; // Set a default value
-    }
+  // updatePageData(): void {
+  //   // const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  //   // const endIndex = startIndex + this.itemsPerPage;
+  //   // this.allProperties = this.property.slice(startIndex, endIndex);
+  //   if (this.itemsPerPage <= 0) {
+  //     this.itemsPerPage = 10; // Set a default value
+  //   }
+  //   const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  //   const endIndex = startIndex + this.itemsPerPage;
+  //   this.allProperties = this.property.slice(startIndex, endIndex);
+  // }
+  // onPageChange(pageNumber: number): void {
+  //   this.currentPage = pageNumber;
+  //   this.updatePageData();
+  // }
+   //Pagination--------------------------------------------------------------
+   updatePageData(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.allProperties = this.property.slice(startIndex, endIndex);
   }
-  onPageChange(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.updatePageData();
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
   }
 
+  getPages(): number[] {
+    const pages = [];
+    const maxVisiblePages = 5; // Show max 5 page numbers at a time
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+
+    let startPage = Math.max(1, this.currentPage - halfVisible);
+    let endPage = startPage + maxVisiblePages - 1;
+
+    if (endPage > this.totalPages) {
+      endPage = this.totalPages;
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+  onPageChange(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) return;
+
+    this.currentPage = pageNumber;
+
+    // Fetch new data for the page (server-side pagination)
+    this.getAllProperty();
+
+    // Scroll to top of results
+    this.scrollToResults();
+  }
+    private scrollToResults(): void {
+    const cardsElement = document.getElementById('cards');
+    if (cardsElement) {
+      cardsElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
   //======================================================================
   onDelete(propertyId: string): void {
-    console.log('Delete property with ID:', propertyId);
+    const propToDelete = this.property.find(p => p.id === propertyId);
+    if (!propToDelete) return;
+    if (propToDelete.isDeleted) {
+      this.toastService.showWarning('This property is already deleted.');
+      return;
+    }
+  
+    if (confirm('Are you sure you want to delete this property?')){
+      this.propertyService.deleteProperty(propertyId).subscribe({
+        next: ()=>{
+          console.log('Trying to delete property with ID:', propertyId); // to test
+          this.property = this.property.filter(p => p.id !== propertyId);
+          //show toast 
+          this.toastService.showSuccess('Property deleted successfully')
+        },
+        error: (err) => {
+          console.error('Error deleting property',err);
+          this.toastService.showError('Failed to delete property')
+        }
+      })
+    }
   }
 
-  onPin(propertyId: string): void {
-    console.log('Pin property with ID:', propertyId);
-  }
 
   toggleActive(property: IPropertyWithDistance): void {
     property.isActive = !property.isActive;
