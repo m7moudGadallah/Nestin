@@ -26,7 +26,7 @@
     {
         public decimal PricePerNight { get; set; }
         public decimal TotalFees { get; set; }
-        public decimal TotalAmount => PricePerNight + TotalFees;
+        public decimal TotalAmount { get; set; }
     }
 
 
@@ -38,6 +38,7 @@
         public BookingPeriod BookingPeriod { get; set; }
         public PricingDetails Pricing { get; set; }
         public Dictionary<string, string> Metadata { get; set; } = new();
+        public decimal TotalAmount => Pricing.TotalAmount * BookingPeriod.Nights;
     }
 
     public class CreateCheckoutResult

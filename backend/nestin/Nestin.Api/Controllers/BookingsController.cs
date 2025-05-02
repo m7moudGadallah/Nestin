@@ -132,8 +132,7 @@ namespace Nestin.Api.Controllers
                 },
                 Pricing = new PricingDetails
                 {
-                    PricePerNight = booking.PricePerNight,
-                    TotalFees = booking.TotalFees
+                    TotalAmount = booking.TotalAmount
                 }
             };
 
