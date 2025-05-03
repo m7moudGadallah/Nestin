@@ -57,6 +57,9 @@ namespace Nestin.Api.Controllers
         public async Task<IActionResult> Search([FromBody] string query)
         {
             var dto = await _serviceFactory.PropertyFilterExtractorService.ExtractFiltersAsync(query);
+
+            dto.PropertyTypeId = null;
+
             var propertiesResult = await _unitOfWork.PropertyRepository.GetFilteredPropertiesAsync(dto, CurrentUser);
 
             var result = new PropertySearchResultDto

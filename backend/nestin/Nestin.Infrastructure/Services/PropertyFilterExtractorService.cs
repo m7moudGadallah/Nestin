@@ -105,10 +105,19 @@ Return a VALID JSON object with ONLY these fields (all nullable):
   ""checkOut"": string,
   ""guestCount"": number,
   ""sort"": string,
-  ""propertyTypeId"": int
+  ""propertyTypeId"": int,
+  ""priceMin"": decimal,
+  ""priceMax"": decimal
 }}
 
 Important rules:
+- For prices:
+  * Extract numerical values after terms like 'under $X', 'below €Y', 'more than £Z'
+  * Convert all currencies to numbers (ignore currency symbols)
+  * For ranges: 'between X and Y' → priceMin: X, priceMax: Y
+  * For single limits: 'under 500' → priceMax: 500
+  * 'cheap' → priceMax: 100 (example threshold)
+  * 'luxury' → priceMin: 500 (example threshold)
 - Only include fields that are explicitly mentioned
 - Use the exact field names specified
 - For dates, use YYYY-MM-DD format
@@ -119,6 +128,23 @@ Important rules:
 - Never invent or guess values that aren't in the provided lists
 - ALWAYS return valid JSON
 
+Price Extraction Examples:
+- ""Apartments under $200"" → priceMax: 200
+- ""Villas between €1000 and €2000"" → priceMin: 1000, priceMax: 2000
+- ""Cheap hostels"" → priceMax: 100
+- ""Luxury resorts over $500"" → priceMin: 500
+- ""Properties around 300-400 dollars"" → priceMin: 300, priceMax: 400
+
+Location Matching Priority:
+1. First look for explicit country names
+2. If no country found, look for region-like terms and match to closest region ID
+3. If neither is clearly specified, leave both fields null
+
+Examples:
+- ""Villas in Dubai"" → regionId for Dubai (if in list), countryName: ""United Arab Emirates""
+- ""Middle East vacations"" → regionId for closest matching Middle East region
+- ""France apartments"" → countryName: ""France""
+- ""Paris hotels"" → countryName: ""France"" (assuming Paris is in France)
 
 IMPORTANT:
 - DO NOT wrap the JSON response in triple backticks or any markdown formatting.
@@ -153,7 +179,9 @@ IMPORTANT:
                     CheckIn = TryGetNullableDateOnly(root, "checkIn"),
                     CheckOut = TryGetNullableDateOnly(root, "checkOut"),
                     GuestCount = root.TryGetProperty("guestCount", out var gc) && gc.ValueKind != JsonValueKind.Null ? gc.GetInt32() : null,
-                    Sort = root.TryGetProperty("sort", out var s) ? s.GetString() : null
+                    Sort = root.TryGetProperty("sort", out var s) ? s.GetString() : null,
+                    PriceMin = root.TryGetProperty("priceMin", out var pmin) && pmin.ValueKind != JsonValueKind.Null ? pmin.GetDecimal() : null,
+                    PriceMax = root.TryGetProperty("priceMax", out var pmax) && pmax.ValueKind != JsonValueKind.Null ? pmax.GetDecimal() : null
                 };
             }
             catch (Exception ex)
