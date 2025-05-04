@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Bookings, GetBookingsResponse } from '../../models/api/request/iget-bookings';
+import {
+  Bookings,
+  GetBookingsResponse,
+} from '../../models/api/request/iget-bookings';
 import { CheckOutBookingService } from '../../services/check-out-booking.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ToastService } from '../../services/toast.service';
@@ -71,16 +74,19 @@ export class BookingHistoryComponent implements OnInit {
 
     // Apply status filter
     if (this.selectedStatus !== 'all') {
-      filtered = filtered.filter(booking => booking?.status === this.selectedStatus);
+      filtered = filtered.filter(
+        booking => booking?.status === this.selectedStatus
+      );
     }
 
     // Apply search filter
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(booking => 
-        booking?.property?.title?.toLowerCase().includes(query) ||
-        booking?.property?.location?.name?.toLowerCase().includes(query) ||
-        booking?.property?.owner?.userName?.toLowerCase().includes(query)
+      filtered = filtered.filter(
+        booking =>
+          booking?.property?.title?.toLowerCase().includes(query) ||
+          booking?.property?.location?.name?.toLowerCase().includes(query) ||
+          booking?.property?.owner?.userName?.toLowerCase().includes(query)
       );
     }
 
@@ -94,16 +100,28 @@ export class BookingHistoryComponent implements OnInit {
   applySort(bookings: Bookings[]): void {
     switch (this.selectedFilter) {
       case 'checkIn-desc':
-        bookings.sort((a, b) => new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime());
+        bookings.sort(
+          (a, b) =>
+            new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime()
+        );
         break;
       case 'checkIn-asc':
-        bookings.sort((a, b) => new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime());
+        bookings.sort(
+          (a, b) =>
+            new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime()
+        );
         break;
       case 'price-asc':
-        bookings.sort((a, b) => (a.property?.pricePerNight || 0) - (b.property?.pricePerNight || 0));
+        bookings.sort(
+          (a, b) =>
+            (a.property?.pricePerNight || 0) - (b.property?.pricePerNight || 0)
+        );
         break;
       case 'price-desc':
-        bookings.sort((a, b) => (b.property?.pricePerNight || 0) - (a.property?.pricePerNight || 0));
+        bookings.sort(
+          (a, b) =>
+            (b.property?.pricePerNight || 0) - (a.property?.pricePerNight || 0)
+        );
         break;
     }
   }
@@ -114,23 +132,30 @@ export class BookingHistoryComponent implements OnInit {
 
   calculateNumberOfNights(checkIn: string, checkOut: string): number {
     if (!checkIn || !checkOut) return 0;
-    
+
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    
+
     // Ensure valid dates and check-out is after check-in
-    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime()) || checkOutDate <= checkInDate) {
+    if (
+      isNaN(checkInDate.getTime()) ||
+      isNaN(checkOutDate.getTime()) ||
+      checkOutDate <= checkInDate
+    ) {
       return 0;
     }
-    
+
     const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
     return Math.max(1, Math.floor(timeDiff / (1000 * 3600 * 24))); // At least 1 night
   }
 
   calculateTotalPrice(booking: Bookings): number {
     if (!booking?.property?.pricePerNight) return 0;
-    
-    const nights = this.calculateNumberOfNights(booking.checkIn, booking.checkOut);
+
+    const nights = this.calculateNumberOfNights(
+      booking.checkIn,
+      booking.checkOut
+    );
     return booking.property.pricePerNight * nights;
   }
 
