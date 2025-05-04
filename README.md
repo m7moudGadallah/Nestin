@@ -65,14 +65,55 @@ _Review Project File Structure [here](#file-structure)_.
 
 6. Start the backend server by pressing `F5` or clicking on the "Start" button in Visual Studio.
 
+#### Stripe Integration Setup
+
+To enable payment functionality and support webhooks locally, you'll need to setup and configure the **Stripe CLI**.
+
+##### Stripe Integration Prerequisites
+
+- Ensure you have a [Stripe account](https://dashboard.stripe.com/register).
+- Install the [Stripe CLI](https://stripe.com/docs/stripe-cli) for your operating system.
+
+##### Stripe CLI Setup
+
+1. Login to Stripe CLI
+   Run the following command and follow the prompt to authenticate:
+
+   ```bash
+   stripe login
+   ```
+
+2. Forward Webhooks to Local Backend
+   In a new terminal window, run the following command to forward Stripe webhook events to your local backend:
+
+   ```bash
+   stripe listen --forward-to https://localhost:7026/api/v1/Payments/stripe/webhook
+   ```
+
+3. Use the Webhook Secret key in Development Env Variables
+
+   ```json
+   "Stripe": {
+    "SecretApiKey": "sk-your-api-key", // set your secret api key of stripe here
+    "WebHookSecretKey": "whsec_...", // set your stripe webhook secrect key
+    "SuccessUrl": "http://localhost:4200/home?paymentStatus=success", // The page URL used to redirect to it on success
+    "CancelUrl": "http://localhost:4200/home?paymentStatus=canceled" // The page URL used to redirect to it on cancel
+   }
+   ```
+
+4. Read More
+
+   For detailed setup and additional usage, refer to the official Stripe documentation:
+   👉 https://stripe.com/docs/stripe-cli
+
 ### Frontend Setup
 
 1. Navigate to the `frontend` directory.
 2. Install the required packages by running the following command:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. Start the Angular development server by running the following command:
 
